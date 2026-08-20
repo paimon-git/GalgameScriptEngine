@@ -1,0 +1,10 @@
+qlwt.exe
+settings.cfg
+build/
+out/
+saves/
+progress.dat
+shot_*.png
+.vs/
+*.o
+*.obj
