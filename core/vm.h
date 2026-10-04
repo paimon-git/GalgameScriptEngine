@@ -10,7 +10,8 @@
 class VM
 {
 public:
-    enum class State { Running, WaitSay, WaitChoice, WaitTimer, WaitNarrate, WaitCard, WaitHide, WaitCg, Ended, Error };
+    enum class State { Running, WaitSay, WaitChoice, WaitTimer, WaitNarrate, WaitCard, WaitHide, WaitCg,
+                       WaitBattle, Ended, Error };
 
     void load(const Script& script);
     void step(Game& game);
@@ -27,6 +28,7 @@ public:
     const std::string& hideName() const { return hideName_; }
     float waitRemaining() const { return waitRemaining_; }
     const std::string& error() const { return error_; }
+    bool battleWon() const { return battleWon_; }
     size_t ip() const { return ip_; }
     size_t steps() const { return steps_; }
 
@@ -42,4 +44,7 @@ private:
     std::string hideName_;
     float waitRemaining_ = 0.0f;
     std::string error_;
+    bool battleWon_ = true;
+    std::string battleWinLabel_;
+    std::string battleLoseLabel_;
 };

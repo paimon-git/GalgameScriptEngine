@@ -118,11 +118,28 @@ void DialogueBox::draw(const Font& font, float screenW, float screenH, float tim
     Rectangle panel{panelX, panelY, panelW, panelH};
 
     // 面板背景随说话角色颜色主题化（千恋万花风格）
-    Color panelFill = lerpColor(curTheme_, Color{10, 12, 22, 255}, 0.82f);
+    // 面板底色以【主题面板色】为主，只掺一点点说话角色的颜色（先降饱和，
+    // 否则角色色偏蓝时会把整块面板带偏，和设置/章节界面看起来不像一套）。
+    // "谁在说话"主要靠名字框和面板顶部细线——它们仍然是完整的角色色。
+    Color charTint = renderer::mix(curTheme_, renderer::palette().surface, 0.55f);
+    Color panelFill = renderer::mix(renderer::palette().surface, charTint, 0.16f);
     panelFill.a = 255;
     Color borderColor = lerpColor(curTheme_, Color{255, 255, 255, 255}, 0.55f);
     borderColor.a = 60;
-    renderer::drawPanel(panel, panelFill, renderer::kCornerRadius, borderColor, 2.0f);
+    // 毛玻璃：面板内部是「背后场景的高斯模糊 + 主题色叠加」，边框另外画（保持原样）。
+    // 叠加色的 alpha 控制通透度：越大越接近原来的实心面板（越小越透、背景越明显）。
+    // 190 ≈ 七五成面板色：主体仍是面板（文字对比够），同时能看出一层模糊的背景。
+    if (renderer::blurBackdropReady())
+    {
+        Color glassTint = panelFill;
+        glassTint.a = 190;
+        renderer::drawBlurPanel(panel, glassTint, renderer::kCornerRadius, 3, 6.0f);
+        renderer::drawRoundedBorder(panel, renderer::kCornerRadius, 2.0f, borderColor);
+    }
+    else
+    {
+        renderer::drawPanel(panel, panelFill, renderer::kCornerRadius, borderColor, 2.0f);
+    }
     renderer::drawAccentLine({panel.x, panel.y + 8.0f, panel.width, 4.0f}, curTheme_, 3.0f);
 
     // 名字牌

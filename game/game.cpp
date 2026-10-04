@@ -1,4 +1,5 @@
 #include "game.h"
+#include "../core/canvas.h"
 
 #include <algorithm>
 #include <cctype>
@@ -7,6 +8,21 @@
 
 #include "../core/gif.h"
 #include "../renderer/renderer.h"
+
+namespace
+{
+// 贴图统一走 renderer::loadSmoothTexture（见 renderer.cpp）：
+// raylib 的 LoadTexture 默认是最近邻采样，而角色立绘是 480x900 画到 720*0.88 ≈ 634 高，
+// 每边都缩到 0.7 倍——不设过滤就会掉像素，边缘出现硬阶梯（"人物没有抗锯齿"）。
+// GIF / 视频这类逐帧贴图不是从磁盘读的，单独在这里补一次同样的设置。
+void applySmoothFilter(Texture2D& tex)
+{
+    if (tex.id == 0) return;
+    if (std::getenv("QLWT_NO_SMOOTH")) return;
+    GenTextureMipmaps(&tex);
+    SetTextureFilter(tex, TEXTURE_FILTER_TRILINEAR);
+}
+}
 
 Game::Game(bool loadAssets)
     : loadAssets_(loadAssets)
@@ -57,8 +73,8 @@ bool Game::prepareCg(const std::string& file)
                    "可设置环境变量 QLWT_FFMPEG 或改用 GIF/APNG)\n");
             return false;
         }
-        int sw = GetScreenWidth();
-        int sh = GetScreenHeight();
+        int sw = canvas::width();
+        int sh = canvas::height();
         if (sw <= 0) sw = 1280;
         if (sh <= 0) sh = 720;
         if (!cgVideo_.open(ffmpeg, file, sw, sh))
@@ -74,6 +90,7 @@ bool Game::prepareCg(const std::string& file)
         img.format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
         img.data = cgVideoRgba_.data();
         cgVideoTex_ = LoadTextureFromImage(img);
+        applySmoothFilter(cgVideoTex_);
         cgVideoMode_ = true;
         cgVideoFramesRead_ = 0;
         cgFrameTimer_ = 0.0f;   // 重置播放计时，否则第二次播放同一视频会直接跳到结尾
@@ -110,6 +127,7 @@ bool Game::prepareCg(const std::string& file)
             img.format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
             img.data = const_cast<unsigned char*>(fr.rgba.data());
             Texture2D tex = LoadTextureFromImage(img);
+            applySmoothFilter(tex);
             cgFrames_.push_back(tex);
             cgFrameDelays_.push_back(fr.delay);
         }
@@ -133,6 +151,7 @@ bool Game::prepareCg(const std::string& file)
                                                 static_cast<float>(anim.width),
                                                 static_cast<float>(fh)});
             Texture2D tex = LoadTextureFromImage(frame);
+            applySmoothFilter(tex);
             UnloadImage(frame);
             cgFrames_.push_back(tex);
         }
@@ -159,7 +178,7 @@ Texture2D Game::loadTexture(const std::string& path)
         printf("[game] WARNING: texture not found: %s\n", path.c_str());
         return Texture2D{};
     }
-    return LoadTexture(path.c_str());
+    return renderer::loadSmoothTexture(path);
 }
 
 Texture2D Game::cachedTexture(const std::string& path)
@@ -437,6 +456,31 @@ void Game::stopBgm()
     if (bgm_.frameCount > 0) StopMusicStream(bgm_);
 }
 
+// ---------------------------------------------------------------- 观测战
+void Game::startBattle(const BattleDef& def)
+{
+    if (!loadAssets_) return;            // 无头自检：不真的打，让 VM 直接按胜利往下走
+    battle_ = std::make_unique<Battle>();
+    battle_->setup(def);
+    printf("[battle] start '%s' (%zu 敌人 / %zu 出战)\n", def.id.c_str(),
+           def.enemies.size(), def.party.size());
+}
+
+void Game::updateBattle(float dt)
+{
+    if (battle_) battle_->update(dt);
+}
+
+void Game::drawBattle(const FontManager& fonts)
+{
+    if (battle_) battle_->draw(fonts);
+}
+
+void Game::battleDebugAuto(int frame)
+{
+    if (battle_) battle_->debugAuto(frame);
+}
+
 void Game::playSe(const std::string& file)
 {
     if (!loadAssets_ || !IsAudioDeviceReady()) return;
@@ -617,8 +661,8 @@ void Game::draw() const
     if (bit != backgrounds.end() && bit->second.id)
     {
         Texture2D tex = bit->second;
-        float sw = static_cast<float>(GetScreenWidth());
-        float sh = static_cast<float>(GetScreenHeight());
+        float sw = static_cast<float>(canvas::width());
+        float sh = static_cast<float>(canvas::height());
         float scale = sw / static_cast<float>(tex.width);
         float h = static_cast<float>(tex.height) * scale;
         DrawTexturePro(tex,
@@ -631,8 +675,8 @@ void Game::draw() const
         ClearBackground(Color{16, 18, 28, 255});
     }
 
-    float sw = static_cast<float>(GetScreenWidth());
-    float sh = static_cast<float>(GetScreenHeight());
+    float sw = static_cast<float>(canvas::width());
+    float sh = static_cast<float>(canvas::height());
 
     // 角色：非说话者先画，说话者最后（置顶）
     for (const auto& name : drawOrder)

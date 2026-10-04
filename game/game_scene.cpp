@@ -1,4 +1,5 @@
 #include "game_scene.h"
+#include "../core/canvas.h"
 
 #include <algorithm>
 #include <cmath>
@@ -6,9 +7,17 @@
 #include <ctime>
 
 #include "../core/engine.h"
+#include "../core/lang.h"
 #include "../renderer/renderer.h"
 #include "chapter_select.h"
 #include "title_scene.h"
+
+namespace
+{
+// 统一调色：面板 / 描边 / 文字都取主题调色板
+const renderer::Palette& pal() { return renderer::palette(); }
+Color withAlpha(Color c, unsigned char a) { c.a = a; return c; }
+}
 
 GameScene::GameScene(Engine* e, std::string scriptPath,
                      std::shared_ptr<Script> script, std::string parseError,
@@ -61,6 +70,7 @@ void GameScene::queueShot(const std::string& tag)
     int delay = 3;
     if (tag == "card") delay = 24;                          // 等待卡片淡入完成
     else if (tag == "narrate") delay = 16;                  // 旁白淡入约 0.3 秒
+    else if (tag == "dialogue") delay = 8;                  // 先等对话框淡入，再等打字完成
     else if (tag.rfind("cg", 0) == 0) delay = 30;           // CG 淡入 0.5 秒
     else if (tag == "choice") delay = 38;                   // 等待提问打完字 + 选项完全淡入
     shotAtFrame_ = engine()->time.frame() + delay;
@@ -69,7 +79,7 @@ void GameScene::queueShot(const std::string& tag)
 void GameScene::syncToVM()
 {
     const Font& font = engine()->fonts.font();
-    float w = static_cast<float>(GetScreenWidth());
+    float w = static_cast<float>(canvas::width());
 
     switch (vm_.state())
     {
@@ -78,7 +88,13 @@ void GameScene::syncToVM()
         {
             dlg_.open(vm_.say()->character, vm_.say()->text,
                       game_.colorOf(vm_.say()->character), font, w);
-            if (dlgShotCount_++ == 0) queueShot("dialogue");   // 只截第一句，保证是明亮场景
+            // 只截第一句对话（保证是明亮场景）；若此刻已有待拍截图就先跳过，
+            // 等下一句再拍——否则请求会被 queueShot 丢掉，永久失去对话框截图
+            if (dlgShotCount_ == 0 && pendingShot_.empty())
+            {
+                ++dlgShotCount_;
+                queueShot("dialogue");
+            }
         }
         break;
     case VM::State::WaitChoice:
@@ -103,9 +119,30 @@ void GameScene::userAdvance()
     if (dlg_.advance())   // 打字已完成，推进剧情
     {
         addLog(dlg_.name(), dlg_.text());
+        stepKeepDialogue();
+    }
+}
+
+// 推进一条语句；如果下一条还是"要显示在对话框里"的内容（对话 / 分支提问），
+// 就在同一帧把新内容填进去，让对话框一直保持可见。
+// 以前是 dlg_.close() 之后等下一帧 WaitSay 才 open()，中间会空一帧（对话框闪没）。
+void GameScene::stepKeepDialogue()
+{
+    vm_.step(game_);
+    autoTimer_ = 0.0f;
+
+    const SayStmt* say = vm_.state() == VM::State::WaitSay ? vm_.say() : nullptr;
+    const ChoiceStmt* choice = vm_.state() == VM::State::WaitChoice ? vm_.choice() : nullptr;
+    if (say || choice)
+    {
+        const std::string& who = say ? say->character : choice->character;
+        const std::string& what = say ? say->text : choice->text;
+        dlg_.open(who, what, game_.colorOf(who), engine()->fonts.font(),
+                  static_cast<float>(canvas::width()));
+    }
+    else
+    {
         dlg_.close();
-        vm_.step(game_);
-        autoTimer_ = 0.0f;
     }
 }
 
@@ -129,6 +166,14 @@ void GameScene::addLog(const std::string& name, const std::string& text)
 
 void GameScene::update(float dt)
 {
+    // 观测战：战斗期间不响应剧情推进，只跑战斗；每帧顺便问一次 VM 有没有打完
+    if (game_.battleActive())
+    {
+        game_.updateBattle(dt);
+        vm_.step(game_);       // 打完这一帧 VM 会跳 win/lose 标签并结束战斗
+        return;
+    }
+
     // 章节结束：自动淡出并进入下一章
     if (chapterAdvancing_)
     {
@@ -148,8 +193,11 @@ void GameScene::update(float dt)
     // 章节结束询问：继续下一章 / 返回章节选择
     if (chapterPrompt_)
     {
-        float w = static_cast<float>(GetScreenWidth());
-        float h = static_cast<float>(GetScreenHeight());
+        // 入场动画：未播完之前不响应点击/按键，避免手快误触
+        chapterPromptT_ = std::min(1.0f, chapterPromptT_ + dt / 0.22f);
+        bool ready = chapterPromptT_ > 0.85f;
+        float w = static_cast<float>(canvas::width());
+        float h = static_cast<float>(canvas::height());
         Vector2 mouse = GetMousePosition();
         Rectangle btn1{(w - 430.0f) * 0.5f, h * 0.5f + 42.0f, 190.0f, 54.0f};
         Rectangle btn2{(w + 50.0f) * 0.5f, h * 0.5f + 42.0f, 190.0f, 54.0f};
@@ -171,7 +219,7 @@ void GameScene::update(float dt)
             }
         }
 
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+        if (ready && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         {
             if (h1)
             {
@@ -186,13 +234,13 @@ void GameScene::update(float dt)
                     engine(), scriptPath_, parseError_));
             }
         }
-        if (IsKeyPressed(KEY_ENTER))
+        if (ready && IsKeyPressed(KEY_ENTER))
         {
             chapterPrompt_ = false;
             chapterAdvancing_ = true;
             chapterAdvanceFade_ = 0.0f;
         }
-        if (IsKeyPressed(KEY_ESCAPE))
+        if (ready && IsKeyPressed(KEY_ESCAPE))
         {
             chapterPrompt_ = false;
             engine()->switchScene(std::make_shared<ChapterSelectScene>(
@@ -454,6 +502,7 @@ void GameScene::update(float dt)
             if (!chapterPrompt_ && !chapterAdvancing_)
             {
                 chapterPrompt_ = true;
+                chapterPromptT_ = 0.0f;      // 从头播入场动画
                 printf("[scene] chapter %d end -> prompt\n", currentChapter_ + 1);
                 if (engine()->selftest && pendingShot_.empty())
                 {
@@ -471,13 +520,29 @@ void GameScene::update(float dt)
     }
 }
 
+// 对话框用毛玻璃：只在对话框可见时让引擎多渲染一遍「背景 + 立绘」快照
+bool GameScene::needsBackdrop() const
+{
+    return dlg_.active() && !ended_;
+}
+
+void GameScene::drawBackdropOnly()
+{
+    game_.draw();
+}
+
 void GameScene::draw()
 {
     const Font& font = engine()->fonts.font();
-    float w = static_cast<float>(GetScreenWidth());
-    float h = static_cast<float>(GetScreenHeight());
+    float w = static_cast<float>(canvas::width());
+    float h = static_cast<float>(canvas::height());
 
     game_.draw();
+    if (game_.battleActive())
+    {
+        game_.drawBattle(engine()->fonts);
+        return;
+    }
     if (narrateActive_) drawNarrate();
     if (cardActive_) drawCard();
     if (dlg_.active()) dlg_.draw(font, w, h, static_cast<float>(engine()->time.elapsed()));
@@ -488,24 +553,24 @@ void GameScene::draw()
     if (autoMode_ && dlg_.active() && !choice_.active())
     {
         renderer::drawPanel({w - 172.0f, 22.0f, 148.0f, 40.0f},
-                            Color{20, 24, 40, 190}, renderer::kCornerRadius,
-                            Color{120, 160, 255, 120}, 1.5f);
-        engine()->fonts.draw("自动播放", w - 150.0f, 31.0f, 20.0f,
-                             Color{170, 200, 255, 255}, 2.0f);
+                            withAlpha(renderer::palette().surface, 225), renderer::kCornerRadius,
+                            withAlpha(renderer::accent(), 140), 1.5f);
+        engine()->fonts.draw(lang::tr("game.autoplay"), w - 150.0f, 31.0f, 20.0f,
+                             renderer::palette().text, 2.0f);
     }
     if (engine()->input.ctrlDown() && dlg_.active() && !choice_.active())
     {
         renderer::drawPanel({22.0f, 22.0f, 148.0f, 40.0f},
-                            Color{20, 24, 40, 190}, renderer::kCornerRadius,
-                            Color{255, 170, 90, 150}, 1.5f);
-        engine()->fonts.draw("快进中", 44.0f, 31.0f, 20.0f,
-                             Color{255, 200, 150, 255}, 2.0f);
+                            withAlpha(renderer::palette().surface, 225), renderer::kCornerRadius,
+                            withAlpha(renderer::palette().highlight, 150), 1.5f);
+        engine()->fonts.draw(lang::tr("game.fastforward"), 44.0f, 31.0f, 20.0f,
+                             renderer::palette().text, 2.0f);
     }
 
     if (dlg_.active() && !choice_.active() && !saveMenu_ && !loadMenu_ && !escMenu_)
     {
-        engine()->fonts.draw("Esc 菜单 · F5 存档 · F9 读档", w - 290.0f, h - 32.0f, 16.0f,
-                             Color{255, 255, 255, 120}, 1.6f);
+        engine()->fonts.draw(lang::tr("game.key_hint"), w - 290.0f, h - 32.0f, 16.0f,
+                             withAlpha(renderer::palette().text, 130), 1.6f);
     }
 
     drawOverlays();
@@ -521,29 +586,40 @@ void GameScene::draw()
         float px = (w - pw) * 0.5f;
         float py = (h - ph) * 0.5f;
         const Font& font = engine()->fonts.font();
+        // 入场动画：遮罩淡入 + 面板轻微上浮，避免"啪"地弹出来
+        float t = renderer::easeOutCubic(std::min(1.0f, chapterPromptT_));
+        auto fade = [&](Color c, float k) {
+            c.a = static_cast<unsigned char>(c.a * k);
+            return c;
+        };
+        float rise = (1.0f - t) * 24.0f;
+        py += rise;
 
-        DrawRectangle(0, 0, static_cast<int>(w), static_cast<int>(h), Color{0, 0, 0, 150});
-        renderer::drawPanel({px, py, pw, ph}, Color{16, 20, 32, 248},
-                            renderer::kCornerRadius, Color{255, 255, 255, 55}, 2.0f);
+        DrawRectangle(0, 0, static_cast<int>(w), static_cast<int>(h),
+                      Color{0, 0, 0, static_cast<unsigned char>(150 * t)});
+        renderer::drawPanel({px, py, pw, ph}, fade(withAlpha(pal().surface, 250), t),
+                            renderer::kCornerRadius, fade(pal().lineStrong, t), 2.0f);
         renderer::drawAccentLine({px + 36.0f, py + 14.0f, pw - 72.0f, 4.0f},
-                                 Color{255, 205, 90, 255}, 3.0f);
-        engine()->fonts.draw("本章结束", px + 40.0f, py + 38.0f, 34.0f,
-                             Color{255, 255, 255, 255}, 3.4f);
-        engine()->fonts.draw("是否进入下一章？", px + 40.0f, py + 108.0f, 26.0f,
-                             Color{220, 226, 242, 255}, 2.6f);
+                                 fade(pal().highlight, t), 3.0f);
+        engine()->fonts.draw(lang::tr("game.chapter_end"), px + 40.0f, py + 38.0f, 34.0f,
+                             fade(pal().text, t), 3.4f);
+        engine()->fonts.draw(lang::tr("game.chapter_end_ask"), px + 40.0f, py + 108.0f, 26.0f,
+                             fade(pal().textDim, t), 2.6f);
 
-        Rectangle btn1{(w - 430.0f) * 0.5f, h * 0.5f + 42.0f, 190.0f, 54.0f};
-        Rectangle btn2{(w + 50.0f) * 0.5f, h * 0.5f + 42.0f, 190.0f, 54.0f};
+        Rectangle btn1{(w - 430.0f) * 0.5f, h * 0.5f + 42.0f + rise, 190.0f, 54.0f};
+        Rectangle btn2{(w + 50.0f) * 0.5f, h * 0.5f + 42.0f + rise, 190.0f, 54.0f};
         Vector2 mouse = GetMousePosition();
-        renderer::drawButton(btn1, "继续下一章", font, 22.0f, promptHover_[0],
-                             CheckCollisionPointRec(mouse, btn1),
-                             IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(mouse, btn1),
-                             true, Color{255, 205, 90, 255});
-        renderer::drawButton(btn2, "返回章节选择", font, 22.0f, promptHover_[1],
-                             CheckCollisionPointRec(mouse, btn2),
-                             IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(mouse, btn2));
-        engine()->fonts.draw("Enter 继续  ·  Esc 返回", px + 40.0f, py + ph - 44.0f,
-                             18.0f, Color{150, 160, 185, 255}, 1.8f);
+        bool ready = t > 0.85f;      // 动画快结束时才接受点击
+        renderer::drawButton(btn1, lang::tr("game.continue_next"), font, 22.0f, promptHover_[0],
+                             ready && CheckCollisionPointRec(mouse, btn1),
+                             ready && IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(mouse, btn1),
+                             true, pal().highlight, t);
+        renderer::drawButton(btn2, lang::tr("game.back_to_select"), font, 22.0f, promptHover_[1],
+                             ready && CheckCollisionPointRec(mouse, btn2),
+                             ready && IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(mouse, btn2),
+                             true, Color{0, 0, 0, 0}, t);
+        engine()->fonts.draw(lang::tr("game.prompt_hint"), px + 40.0f, py + ph - 44.0f,
+                             18.0f, fade(pal().textMuted, t), 1.8f);
     }
 
     // 章节切换淡出
@@ -558,6 +634,13 @@ void GameScene::afterDraw()
     // 自检：本帧绘制完成后再截图，保证画面包含刚打开的 UI
     if (!pendingShot_.empty() && engine()->time.frame() >= shotAtFrame_)
     {
+        // 对话框截图要等整句显示完、并且不在 CG 黑场里，否则拍到的是空框或黑屏
+        if (pendingShot_ == "dialogue" &&
+            !(dlg_.active() && dlg_.typingFinished() && game_.cgBlack() <= 0.01f))
+        {
+            shotAtFrame_ = engine()->time.frame() + 3;
+            return;
+        }
         engine()->selftestShot(pendingShot_);
         pendingShot_.clear();
     }
@@ -565,39 +648,29 @@ void GameScene::afterDraw()
 
 void GameScene::drawNarrate() const
 {
-    float w = static_cast<float>(GetScreenWidth());
+    float w = static_cast<float>(canvas::width());
     const Font& font = engine()->fonts.font();
     float nv = renderer::easeInOut(narrateAlpha_);
     unsigned char a = static_cast<unsigned char>(nv * 255.0f);
 
-    // 顶部旁白文字（居中，自动换行）
-    float maxW = w * 0.78f;
-    float lineH = 38.0f;
-    float y = 74.0f;
-    float panelY = y - 18.0f;
-    float panelH = lineH + 12.0f;
-    // 顶部压暗带：贴合旁白面板边界，避免阴影在面板下方拖出一截
-    renderer::drawGradientV({0, 0, w, panelY + panelH + 12.0f},
-                            Color{0, 0, 0, static_cast<unsigned char>(110 * nv)},
-                            Color{0, 0, 0, 0}, 48);
-    renderer::drawPanel({w * 0.11f, panelY, w * 0.78f, panelH},
-                        Color{10, 14, 26, static_cast<unsigned char>(90 * nv)},
-                        renderer::kCornerRadius, Color{255, 255, 255, 0}, 0.0f);
+    // 顶部旁白（自动换行 + 水平居中 + 在背景带内垂直居中）
+    const float size = 26.0f;
+    const float spacing = 2.6f;
+    const float lineH = 38.0f;
+    const float panelX = w * 0.11f;
+    const float panelW = w * 0.78f;
+    const float maxW = panelW - 24.0f;
+    const float padY = 8.0f;
+
+    // 1) 先折行（按字符折，CJK 友好；文本里的 \n 也照常换行）
+    std::vector<std::string> lines;
     std::string line;
-    float size = 26.0f;
-    float spacing = 2.6f;
-    float cursorY = y;
     size_t i = 0;
     while (i <= narrateText_.size())
     {
         if (i == narrateText_.size())
         {
-            if (!line.empty())
-            {
-                float lx = (w - MeasureTextEx(font, line.c_str(), size, spacing).x) * 0.5f;
-                DrawTextEx(font, line.c_str(), {lx, cursorY}, size, spacing,
-                           Color{255, 255, 255, a});
-            }
+            if (!line.empty() || lines.empty()) lines.push_back(line);
             break;
         }
         unsigned char c = static_cast<unsigned char>(narrateText_[i]);
@@ -607,33 +680,46 @@ void GameScene::drawNarrate() const
         i += len;
         if (ch == "\n")
         {
-            float lx = (w - MeasureTextEx(font, line.c_str(), size, spacing).x) * 0.5f;
-            DrawTextEx(font, line.c_str(), {lx, cursorY}, size, spacing,
-                       Color{255, 255, 255, a});
+            lines.push_back(line);
             line.clear();
-            cursorY += lineH;
             continue;
         }
         float lw = MeasureTextEx(font, (line + ch).c_str(), size, spacing).x;
         if (lw > maxW && !line.empty())
         {
-            float lx = (w - MeasureTextEx(font, line.c_str(), size, spacing).x) * 0.5f;
-            DrawTextEx(font, line.c_str(), {lx, cursorY}, size, spacing,
-                       Color{255, 255, 255, a});
+            lines.push_back(line);
             line = ch;
-            cursorY += lineH;
         }
         else
         {
             line += ch;
         }
     }
+
+    // 2) 背景带高度跟着行数走，文字在带内垂直居中（每行在自己的行槽里也居中）
+    const float contentH = static_cast<float>(lines.size()) * lineH;
+    const float panelY = 56.0f;
+    const float panelH = contentH + padY * 2.0f;
+
+    renderer::drawGradientV({0, 0, w, panelY + panelH + 12.0f},
+                            Color{0, 0, 0, static_cast<unsigned char>(110 * nv)},
+                            Color{0, 0, 0, 0}, 48);
+    renderer::drawPanel({panelX, panelY, panelW, panelH},
+                        withAlpha(pal().surfaceSunken, static_cast<unsigned char>(90 * nv)),
+                        renderer::kCornerRadius, Color{255, 255, 255, 0}, 0.0f);
+
+    for (size_t li = 0; li < lines.size(); ++li)
+    {
+        float lx = (w - MeasureTextEx(font, lines[li].c_str(), size, spacing).x) * 0.5f;
+        float ly = panelY + padY + static_cast<float>(li) * lineH + (lineH - size) * 0.5f;
+        DrawTextEx(font, lines[li].c_str(), {lx, ly}, size, spacing, Color{255, 255, 255, a});
+    }
 }
 
 void GameScene::drawCard() const
 {
-    float w = static_cast<float>(GetScreenWidth());
-    float h = static_cast<float>(GetScreenHeight());
+    float w = static_cast<float>(canvas::width());
+    float h = static_cast<float>(canvas::height());
     const Font& font = engine()->fonts.font();
 
     float a;
@@ -663,8 +749,8 @@ void GameScene::drawCard() const
 
 void GameScene::drawLog() const
 {
-    float w = static_cast<float>(GetScreenWidth());
-    float h = static_cast<float>(GetScreenHeight());
+    float w = static_cast<float>(canvas::width());
+    float h = static_cast<float>(canvas::height());
     float lw = w * 0.86f;
     float lh = h * 0.74f;
     float lx = (w - lw) * 0.5f;
@@ -672,10 +758,10 @@ void GameScene::drawLog() const
     const Font& font = engine()->fonts.font();
 
     DrawRectangle(0, 0, static_cast<int>(w), static_cast<int>(h), Color{0, 0, 0, 160});
-    renderer::drawPanel({lx, ly, lw, lh}, Color{12, 14, 24, 242}, renderer::kCornerRadius,
-                        Color{255, 255, 255, 40}, 2.0f);
-    engine()->fonts.draw("历史记录（L / Esc 关闭）", lx + 40.0f, ly + 26.0f, 26.0f,
-                         Color{255, 255, 255, 255}, 2.6f);
+    renderer::drawPanel({lx, ly, lw, lh}, withAlpha(pal().surface, 250), renderer::kCornerRadius,
+                        pal().line, 2.0f);
+    engine()->fonts.draw(lang::tr("game.history_title"), lx + 40.0f, ly + 26.0f, 26.0f,
+                         pal().text, 2.6f);
 
     float rowH = 50.0f;
     float topY = ly + 86.0f;
@@ -702,16 +788,16 @@ void GameScene::drawLog() const
             m = MeasureTextEx(font, text.c_str(), 22.0f, 2.2f);
         }
         engine()->fonts.draw(text, lx + 150.0f, ry + 10.0f, 22.0f,
-                             Color{225, 228, 240, 255}, 2.2f);
+                             pal().text, 2.2f);
     }
-    engine()->fonts.draw("↑ 查看更早  ·  ↓ 返回最新", lx + 40.0f, ly + lh - 44.0f,
-                         18.0f, Color{160, 170, 195, 255}, 1.8f);
+    engine()->fonts.draw(lang::tr("game.history_hint"), lx + 40.0f, ly + lh - 44.0f,
+                         18.0f, pal().textMuted, 1.8f);
 }
 
 void GameScene::drawOverlays() const
 {
-    float w = static_cast<float>(GetScreenWidth());
-    float h = static_cast<float>(GetScreenHeight());
+    float w = static_cast<float>(canvas::width());
+    float h = static_cast<float>(canvas::height());
     const Font& font = engine()->fonts.font();
 
     // 角色消失黑屏过渡
@@ -733,18 +819,18 @@ void GameScene::drawOverlays() const
         if (endTimer_ > 0.6f)
         {
             std::string title = script_ ? script_->title : std::string();
-            engine()->fonts.draw("END", (w - 150.0f) * 0.5f, h * 0.36f, 76.0f,
-                                 Color{255, 255, 255, 255}, 7.6f, true);
+            engine()->fonts.draw(lang::tr("game.end"), (w - 150.0f) * 0.5f, h * 0.36f, 76.0f,
+                                 pal().text, 7.6f, true);
             if (!title.empty())
                 engine()->fonts.draw(title, (w - MeasureTextEx(font, title.c_str(), 30.0f, 3.0f).x) * 0.5f,
-                                     h * 0.53f, 30.0f, Color{200, 210, 235, 230}, 3.0f);
+                                     h * 0.53f, 30.0f, withAlpha(pal().textDim, 235), 3.0f);
             if (endTimer_ > 1.2f)
             {
                 float pulse = 0.5f + 0.5f * std::sin(static_cast<float>(engine()->time.elapsed()) * 3.0f);
-                engine()->fonts.draw("点击任意处返回标题",
-                                     (w - MeasureTextEx(font, "点击任意处返回标题", 22.0f, 2.2f).x) * 0.5f,
+                engine()->fonts.draw(lang::tr("game.end_hint"),
+                                     (w - MeasureTextEx(font, lang::tr("game.end_hint"), 22.0f, 2.2f).x) * 0.5f,
                                      h * 0.62f, 22.0f,
-                                     Color{255, 255, 255, static_cast<unsigned char>(120 + 120 * pulse)},
+                                     withAlpha(pal().text, static_cast<unsigned char>(120 + 120 * pulse)),
                                      2.2f);
             }
         }
@@ -758,12 +844,12 @@ void GameScene::drawOverlays() const
         renderer::drawPanel({(w - 700.0f) * 0.5f, h * 0.38f, 700.0f, 150.0f},
                             Color{50, 16, 22, 245}, renderer::kCornerRadius,
                             Color{255, 100, 100, 140}, 2.0f);
-        engine()->fonts.draw("脚本错误", (w - MeasureTextEx(font, "脚本错误", 34.0f, 3.4f).x) * 0.5f,
+        engine()->fonts.draw(lang::tr("game.error_title"), (w - MeasureTextEx(font, lang::tr("game.error_title"), 34.0f, 3.4f).x) * 0.5f,
                              h * 0.38f + 28.0f, 34.0f, Color{255, 150, 150, 255}, 3.4f);
         engine()->fonts.draw(msg, (w - MeasureTextEx(font, msg.c_str(), 22.0f, 2.2f).x) * 0.5f,
                              h * 0.38f + 88.0f, 22.0f, Color{255, 210, 210, 255}, 2.2f);
-        engine()->fonts.draw("点击返回标题",
-                             (w - MeasureTextEx(font, "点击返回标题", 20.0f, 2.0f).x) * 0.5f,
+        engine()->fonts.draw(lang::tr("game.error_back"),
+                             (w - MeasureTextEx(font, lang::tr("game.error_back"), 20.0f, 2.0f).x) * 0.5f,
                              h * 0.38f + 128.0f, 20.0f, Color{255, 255, 255, 180}, 2.0f);
     }
 }
@@ -851,7 +937,7 @@ void GameScene::applyLoad(const SaveData& data)
     {
         dlg_.open(data.sayCharacter, data.sayText,
                   game_.colorOf(data.sayCharacter), engine()->fonts.font(),
-                  static_cast<float>(GetScreenWidth()));
+                  static_cast<float>(canvas::width()));
         game_.setSpeaking(data.sayCharacter);
     }
 
@@ -874,7 +960,9 @@ void GameScene::applyLoad(const SaveData& data)
     chapterSwitchSent_ = false;
     chapterPrompt_ = false;
     choice_.close();
-    dlgShotCount_ = 1;
+    // 读档后不再补拍对话截图——但如果本次自检还没拍到过第一句对话，
+    // 就别把它禁掉（自检的读档回归发生在第一句对话之前，否则永远拍不到对话框）
+    if (dlgShotCount_ > 0) dlgShotCount_ = 1;
     prevCgShown_ = game_.cgFullyShown();
     pendingShot_.clear();
     autoTimer_ = 0.0f;
@@ -883,8 +971,8 @@ void GameScene::applyLoad(const SaveData& data)
 void GameScene::handleMenu(float dt)
 {
     (void)dt;
-    float w = static_cast<float>(GetScreenWidth());
-    float h = static_cast<float>(GetScreenHeight());
+    float w = static_cast<float>(canvas::width());
+    float h = static_cast<float>(canvas::height());
     float pw = 760.0f;
     float ph = 560.0f;
     float px = (w - pw) * 0.5f;
@@ -938,8 +1026,8 @@ void GameScene::handleMenu(float dt)
 
 void GameScene::drawMenu() const
 {
-    float w = static_cast<float>(GetScreenWidth());
-    float h = static_cast<float>(GetScreenHeight());
+    float w = static_cast<float>(canvas::width());
+    float h = static_cast<float>(canvas::height());
     float pw = 760.0f;
     float ph = 560.0f;
     float px = (w - pw) * 0.5f;
@@ -949,29 +1037,27 @@ void GameScene::drawMenu() const
     const Font& font = engine()->fonts.font();
 
     DrawRectangle(0, 0, static_cast<int>(w), static_cast<int>(h), Color{0, 0, 0, 150});
-    renderer::drawPanel({px, py, pw, ph}, Color{14, 17, 28, 248}, renderer::kCornerRadius,
-                        Color{255, 255, 255, 45}, 2.0f);
+    renderer::drawPanel({px, py, pw, ph}, withAlpha(pal().surface, 250), renderer::kCornerRadius,
+                        pal().line, 2.0f);
     renderer::drawAccentLine({px + 40.0f, py + 16.0f, pw - 80.0f, 4.0f},
-                             Color{90, 140, 255, 255}, 3.0f);
-    engine()->fonts.draw(saveMenu_ ? "存档" : "读档", px + 44.0f, py + 34.0f, 34.0f,
-                         Color{255, 255, 255, 255}, 3.4f);
+                             renderer::accent(), 3.0f);
+    engine()->fonts.draw(saveMenu_ ? lang::tr("save.title") : lang::tr("load.title"), px + 44.0f, py + 34.0f, 34.0f,
+                         pal().text, 3.4f);
 
     for (int i = 0; i < kSaveSlots; ++i)
     {
         Rectangle r{px + 46.0f, py + 104.0f + i * (rowH + gap), pw - 92.0f, rowH};
         const SaveData& d = slotData_[i];
         float a = renderer::easeInOut(menuHoverAnim_[i]);
-        Color fill{static_cast<unsigned char>(22 + 30 * a),
-                   static_cast<unsigned char>(26 + 42 * a),
-                   static_cast<unsigned char>(38 + 70 * a), 235};
-        Color border{255, 255, 255, static_cast<unsigned char>(35 + 110 * a)};
+        Color fill = renderer::mix(pal().surfaceAlt, renderer::mix(pal().surfaceAlt, pal().accent, 0.35f), a);
+        fill.a = 238;
+        Color border = withAlpha(renderer::mix(pal().line, pal().lineStrong, a), 160);
         DrawRectangleRounded(r, renderer::roundness(renderer::kCornerRadius, r), 12, fill);
-        DrawRectangleRoundedLinesEx(r, renderer::roundness(renderer::kCornerRadius, r),
-                                    12, 1.5f, border);
+        renderer::drawRoundedBorder(r, renderer::kCornerRadius, 1.5f, border);
 
-        std::string slot = "存档位 " + std::to_string(i + 1);
+        std::string slot = std::string(lang::tr("save.slot")) + " " + std::to_string(i + 1);
         engine()->fonts.draw(slot, r.x + 20.0f, r.y + 9.0f, 22.0f,
-                             Color{220, 226, 242, 255}, 2.2f);
+                             pal().text, 2.2f);
 
         if (d.valid)
         {
@@ -987,19 +1073,19 @@ void GameScene::drawMenu() const
                 m = MeasureTextEx(font, preview.c_str(), 22.0f, 2.2f);
             }
             engine()->fonts.draw(preview, r.x + 20.0f, r.y + 33.0f, 22.0f,
-                                 Color{185, 195, 215, 255}, 2.2f);
+                                 pal().textDim, 2.2f);
             if (!d.savedAt.empty())
                 engine()->fonts.draw(d.savedAt, r.x + r.width - 110.0f, r.y + 12.0f, 20.0f,
-                                     Color{150, 160, 185, 255}, 2.0f);
+                                     pal().textMuted, 2.0f);
         }
         else
         {
-            engine()->fonts.draw("空档位", r.x + 20.0f, r.y + 33.0f, 22.0f,
-                                 Color{110, 120, 145, 255}, 2.2f);
+            engine()->fonts.draw(lang::tr("save.empty"), r.x + 20.0f, r.y + 33.0f, 22.0f,
+                                 withAlpha(pal().textMuted, 200), 2.2f);
         }
     }
-    engine()->fonts.draw("Esc 关闭  ·  点击或按数字键执行", px + 44.0f, py + ph - 44.0f,
-                         18.0f, Color{150, 160, 185, 255}, 1.8f);
+    engine()->fonts.draw(lang::tr("save.hint"), px + 44.0f, py + ph - 44.0f,
+                         18.0f, pal().textMuted, 1.8f);
 }
 
 void GameScene::handleEscMenu()
@@ -1009,8 +1095,8 @@ void GameScene::handleEscMenu()
         escMenu_ = false;
         return;
     }
-    float w = static_cast<float>(GetScreenWidth());
-    float h = static_cast<float>(GetScreenHeight());
+    float w = static_cast<float>(canvas::width());
+    float h = static_cast<float>(canvas::height());
     float pw = 380.0f;
     float ph = 430.0f;
     float px = (w - pw) * 0.5f;
@@ -1045,8 +1131,8 @@ void GameScene::handleEscMenu()
 
 void GameScene::drawEscMenu()
 {
-    float w = static_cast<float>(GetScreenWidth());
-    float h = static_cast<float>(GetScreenHeight());
+    float w = static_cast<float>(canvas::width());
+    float h = static_cast<float>(canvas::height());
     const Font& font = engine()->fonts.font();
     float pw = 380.0f;
     float ph = 430.0f;
@@ -1055,14 +1141,15 @@ void GameScene::drawEscMenu()
 
     DrawRectangle(0, 0, static_cast<int>(w), static_cast<int>(h),
                   Color{0, 0, 0, 150});
-    renderer::drawPanel({px, py, pw, ph}, Color{16, 20, 32, 248},
-                        renderer::kCornerRadius, Color{255, 255, 255, 55}, 2.0f);
+    renderer::drawPanel({px, py, pw, ph}, withAlpha(pal().surface, 250),
+                        renderer::kCornerRadius, pal().lineStrong, 2.0f);
     renderer::drawAccentLine({px + 36.0f, py + 14.0f, pw - 72.0f, 4.0f},
-                             Color{90, 140, 255, 255}, 3.0f);
-    engine()->fonts.draw("菜单", px + 40.0f, py + 30.0f, 34.0f,
-                         Color{255, 255, 255, 255}, 3.4f);
+                             renderer::accent(), 3.0f);
+    engine()->fonts.draw(lang::tr("menu.title"), px + 40.0f, py + 30.0f, 34.0f,
+                         pal().text, 3.4f);
 
-    const char* labels[4] = {"继续游戏", "存档", "读档", "返回标题"};
+    const char* labels[4] = {lang::tr("menu.resume"), lang::tr("menu.save"),
+                             lang::tr("menu.load"), lang::tr("menu.back_title")};
     Vector2 mouse = GetMousePosition();
     for (int i = 0; i < 4; ++i)
     {
@@ -1070,14 +1157,22 @@ void GameScene::drawEscMenu()
         renderer::drawButton(r, labels[i], font, 24.0f, escHover_[i],
                              CheckCollisionPointRec(mouse, r),
                              IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(mouse, r),
-                             true, Color{90, 140, 255, 255});
+                             true, renderer::accent());
     }
-    engine()->fonts.draw("Esc 关闭菜单", (w - MeasureTextEx(font, "Esc 关闭菜单", 18.0f, 1.8f).x) * 0.5f,
-                         py + ph - 42.0f, 18.0f, Color{150, 160, 185, 255}, 1.8f);
+    engine()->fonts.draw(lang::tr("menu.hint"), (w - MeasureTextEx(font, lang::tr("menu.hint"), 18.0f, 1.8f).x) * 0.5f,
+                         py + ph - 42.0f, 18.0f, pal().textMuted, 1.8f);
 }
 
 void GameScene::debugAuto(int frame)
 {
+    // 自检时如果正在打观测战，交给战斗自己出招
+    if (game_.battleActive())
+    {
+        game_.battleDebugAuto(frame);
+        if (frame % 40 == 0) engine()->selftestShot("battle");   // 自检留一张战斗画面
+        return;
+    }
+
     // 存档 / 读档回归：先存档，选项后再读档，验证能继续到结尾
     if (frame == 280)
     {
@@ -1136,8 +1231,7 @@ void GameScene::debugAuto(int frame)
         else
         {
             addLog(dlg_.name(), dlg_.text());
-            dlg_.close();
-            vm_.step(game_);
+            stepKeepDialogue();
         }
     }
     else if (vm_.state() == VM::State::WaitNarrate && frame >= narrateHold_)

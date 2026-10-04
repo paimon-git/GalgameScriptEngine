@@ -20,6 +20,26 @@ void VM::step(Game& game)
 {
     if (!script_ || state_ == State::Error) return;
 
+    // 观测战：等打完，再按胜负跳标签
+    if (state_ == State::WaitBattle)
+    {
+        if (!game.battleFinished()) return;
+        battleWon_ = game.battleWon();
+        game.endBattle();
+        const std::string& lab = battleWon_ ? battleWinLabel_ : battleLoseLabel_;
+        auto it = script_->labels.find(lab);
+        if (it == script_->labels.end())
+        {
+            error_ = "battle jumps to undefined label @" + lab;
+            state_ = State::Error;
+            return;
+        }
+        ip_ = it->second;
+        state_ = State::Running;
+        step(game);
+        return;
+    }
+
     while (ip_ < script_->stmts.size())
     {
         const Stmt& stmt = script_->stmts[ip_];
@@ -160,6 +180,37 @@ void VM::step(Game& game)
         {
             const auto& s = std::get<PlaySeStmt>(stmt);
             game.playSe(s.file);
+        }
+        else if (std::holds_alternative<BattleStmt>(stmt))
+        {
+            const auto& s = std::get<BattleStmt>(stmt);
+            if (!game.battleEnabled())
+            {
+                // 无头自检（--check-*）：不真的打，直接按胜利分支继续
+                ++ip_;
+                auto it = script_->labels.find(s.winLabel);
+                if (it == script_->labels.end())
+                {
+                    error_ = "battle jumps to undefined label @" + s.winLabel;
+                    state_ = State::Error;
+                    return;
+                }
+                ip_ = it->second;
+                continue;
+            }
+            auto it = script_->battles.find(s.id);
+            if (it == script_->battles.end())
+            {
+                error_ = "battle '" + s.id + "' is not defined (use init_battle)";
+                state_ = State::Error;
+                return;
+            }
+            battleWinLabel_ = s.winLabel;
+            battleLoseLabel_ = s.loseLabel;
+            game.startBattle(it->second);
+            ++ip_;
+            state_ = State::WaitBattle;
+            return;
         }
         ++ip_;
     }

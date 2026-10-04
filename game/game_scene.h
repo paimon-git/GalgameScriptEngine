@@ -31,6 +31,8 @@ public:
 
     void update(float dt) override;
     void draw() override;
+    bool needsBackdrop() const override;
+    void drawBackdropOnly() override;
     void debugAuto(int frame) override;
     void afterDraw() override;
 
@@ -38,6 +40,7 @@ private:
     void start();
     void syncToVM();
     void userAdvance();
+    void stepKeepDialogue();
     void choose(int idx);
     void addLog(const std::string& name, const std::string& text);
     void backToTitle();
@@ -64,6 +67,7 @@ private:
     float chapterAdvanceFade_ = 0.0f;
     bool chapterSwitchSent_ = false;
     bool chapterPrompt_ = false;   // 章节结束询问面板
+    float chapterPromptT_ = 0.0f;  // 该面板的入场动画进度 0..1
     float promptHover_[2] = {0.0f, 0.0f};
     VM vm_;
     Game game_{true};

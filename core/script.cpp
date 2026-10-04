@@ -142,6 +142,7 @@ public:
         {
             skipEols();
             if (atEnd()) break;
+            if (tryParseMeta(script)) continue;
             if (cur().kind == TokKind::Word && cur().text == "chapter")
             {
                 parseChapter(script);
@@ -155,6 +156,9 @@ public:
                     throw ScriptError(cur().line, "duplicate label @" + name);
                 script.labels[name] = script.stmts.size();
             }
+            // 大章节标题：以前解析出来就扔了（Script::title 一直是空的），现在存下来
+            if (std::holds_alternative<TitleStmt>(stmt))
+                script.title = std::get<TitleStmt>(stmt).text;
             script.stmts.push_back(std::move(stmt));
             expectEol();
         }
@@ -164,6 +168,80 @@ public:
 private:
     std::vector<Token> toks_;
     size_t pos_ = 0;
+
+    // 剧本头部的元信息：series / branch / order / subtitle / requires / init_battle*
+    // 这些行不是演出语句，解析时直接吃掉（不影响 VM）。
+    bool tryParseMeta(Script& script)
+    {
+        if (cur().kind != TokKind::Word) return false;
+        const std::string& cmd = cur().text;
+        if (cmd != "series" && cmd != "branch" && cmd != "order" &&
+            cmd != "subtitle" && cmd != "requires" &&
+            cmd != "init_battle" && cmd != "init_battle_party")
+            return false;
+        next();
+        if (cmd == "series") script.series = takeWord("series name");
+        else if (cmd == "branch")
+        {
+            std::string b = takeWord("branch (main|side)");
+            if (b != "main" && b != "side")
+                throw ScriptError(cur().line, "branch must be 'main' or 'side'");
+            script.branch = b;
+        }
+        else if (cmd == "order") script.order = std::atoi(takeWord("order number").c_str());
+        else if (cmd == "subtitle")
+            script.subtitle = cur().kind == TokKind::String ? next().text
+                                                            : takeWord("subtitle text");
+        else if (cmd == "requires")
+        {
+            // 形如 star_festival:8 —— 也可以只写脚本名（= 全部章节看完）
+            // 写多条 = 全部满足才解锁（AND）
+            std::string v = takeWord("requires <script>:<chapter>");
+            size_t colon = v.find(':');
+            std::string stem;
+            int ch = 0;
+            if (colon == std::string::npos)
+            {
+                stem = v;
+            }
+            else
+            {
+                stem = v.substr(0, colon);
+                ch = std::atoi(v.substr(colon + 1).c_str());
+            }
+            script.requiresList.emplace_back(stem, ch);
+            if (script.requiresScript.empty())
+            {
+                script.requiresScript = stem;
+                script.requiresChapter = ch;
+            }
+        }
+        else if (cmd == "init_battle")
+        {
+            // init_battle <id> <敌人名> <hp> <atk> <spd>
+            std::string id = takeWord("battle id");
+            EnemyDef e;
+            e.name = cur().kind == TokKind::String ? next().text : takeWord("enemy name");
+            e.hp = std::atoi(takeWord("enemy hp").c_str());
+            e.atk = std::atoi(takeWord("enemy atk").c_str());
+            e.spd = std::atoi(takeWord("enemy spd").c_str());
+            auto& def = script.battles[id];
+            def.id = id;
+            def.enemies.push_back(e);
+        }
+        else if (cmd == "init_battle_party")
+        {
+            // init_battle_party <id> <成员1> [成员2] [成员3]
+            std::string id = takeWord("battle id");
+            auto& def = script.battles[id];
+            def.id = id;
+            def.party.clear();
+            while (!atEnd() && cur().kind != TokKind::EOL)
+                def.party.push_back(takeWord("party member"));
+        }
+        expectEol();
+        return true;
+    }
 
     void parseChapter(Script& script)
     {
@@ -276,6 +354,37 @@ private:
         {
             TitleStmt s;
             s.text = cur().kind == TokKind::String ? next().text : takeWord("title");
+            return s;
+        }
+
+        if (cmd == "battle")
+        {
+            // battle <id> {
+            //     win  jump <标签>
+            //     lose jump <标签>
+            // }
+            BattleStmt s;
+            s.id = cur().kind == TokKind::String ? next().text : takeWord("battle id");
+            if (cur().kind != TokKind::LBrace)
+                throw ScriptError(cur().line, "expected '{' after battle id");
+            ++pos_;
+            while (true)
+            {
+                skipEols();
+                if (atEnd())
+                    throw ScriptError(toks_.back().line, "unterminated battle block, missing '}'");
+                if (cur().kind == TokKind::RBrace) { ++pos_; break; }
+                std::string kind = takeWord("'win' or 'lose'");
+                if (kind != "win" && kind != "lose")
+                    throw ScriptError(cur().line, "battle block expects 'win' or 'lose'");
+                if (cur().kind != TokKind::Word || cur().text != "jump")
+                    throw ScriptError(cur().line, "battle block expects 'jump <label>'");
+                next();
+                std::string label = takeWord("jump label");
+                if (kind == "win") s.winLabel = label;
+                else s.loseLabel = label;
+                expectEol();
+            }
             return s;
         }
 
@@ -453,6 +562,15 @@ Script parseGal(const std::string& text, const std::string& sourcePath)
                 if (!s.labels.count(opt.second))
                     throw ScriptError(0, "choice jumps to undefined label '" + opt.second + "'");
             }
+        }
+        else if (std::holds_alternative<BattleStmt>(stmt))
+        {
+            const auto& b = std::get<BattleStmt>(stmt);
+            for (const std::string& lab : {b.winLabel, b.loseLabel})
+                if (!lab.empty() && !s.labels.count(lab))
+                    throw ScriptError(0, "battle jumps to undefined label '" + lab + "'");
+            if (!s.battles.count(b.id))
+                throw ScriptError(0, "battle '" + b.id + "' is not defined (use init_battle)");
         }
     }
     return s;

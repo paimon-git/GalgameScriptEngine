@@ -15,6 +15,10 @@ class Scene;
 class Engine
 {
 public:
+    // 设计分辨率：所有场景按这个尺寸排版，窗口/全屏时整块画布等比缩放
+    static constexpr int kDesignWidth = 1280;
+    static constexpr int kDesignHeight = 720;
+
     bool init(int screenX, int screenY, const char* windowName,
               const std::vector<std::string>& texts,
               bool selftest, int selftestFrames);
@@ -22,6 +26,8 @@ public:
 
     void quit() { running_ = false; }
     void switchScene(std::shared_ptr<Scene> scene);
+    // 把 settings 里的外观项同步到渲染器（主题色 / 圆角 / 按钮样式）
+    void applyTheme();
     float renderScale() const
     {
         if (designW_ > 0 && rt_.texture.id != 0)
@@ -50,8 +56,10 @@ private:
     bool transitioning_ = false;
     float transitionT_ = 0.0f;
     RenderTexture2D rt_{};
+    RenderTexture2D backdrop_{};   // 1/2 设计分辨率的场景快照（毛玻璃用）
     int designW_ = 0;
     int designH_ = 0;
     int rtW_ = 0;
     int rtH_ = 0;
+    std::string shotPending_;   // 待截图的标签（在交换缓冲前取像，见 run()）
 };

@@ -1,4 +1,5 @@
 #include "choice.h"
+#include "../core/canvas.h"
 
 #include <algorithm>
 
@@ -60,8 +61,8 @@ int ChoicePanel::update()
     }
 
     Vector2 mouse = GetMousePosition();
-    float w = static_cast<float>(GetScreenWidth());
-    float h = static_cast<float>(GetScreenHeight());
+    float w = static_cast<float>(canvas::width());
+    float h = static_cast<float>(canvas::height());
 
     float optW, optH, gap, y, x;
     optionLayout(w, h, options_.size(), optW, optH, gap, y, x);
@@ -120,24 +121,22 @@ void ChoicePanel::draw(const Font& font, float screenW, float screenH) const
         Rectangle r{x, y + i * (optH + gap), optW, optH};
         bool hovered = (static_cast<int>(i) == hoverIndex_);
         float a = renderer::easeInOut(hoverAnim_[i]);
-        Color fill{static_cast<unsigned char>(26 + 34 * a),
-                   static_cast<unsigned char>(29 + 48 * a),
-                   static_cast<unsigned char>(42 + 84 * a),
-                   static_cast<unsigned char>(230 + 15 * a)};
-        Color border{static_cast<unsigned char>(140 * a + 255 * (1 - a) * 0.18f),
-                     static_cast<unsigned char>(170 * a + 255 * (1 - a) * 0.18f),
-                     255,
-                     static_cast<unsigned char>(45 + 155 * a)};
+        // 统一走调色板：底色 = 面板色 → 往主题色偏移；描边 = 常规线 → 主题色
+        const renderer::Palette& p = renderer::palette();
+        Color fill = renderer::mix(p.surfaceAlt, renderer::mix(p.surfaceAlt, p.accent, 0.42f), a);
+        fill.a = static_cast<unsigned char>(232 + 16 * a);
+        Color border = renderer::mix(Color{p.line.r, p.line.g, p.line.b, 45},
+                                     Color{p.accent.r, p.accent.g, p.accent.b, 200}, a);
         float radiusPx = std::min(renderer::kCornerRadius, r.height * 0.24f);
         float rad = renderer::roundness(radiusPx, r);
 
         DrawRectangleRounded(r, rad, 16, Fade(fill, v));
-        DrawRectangleRoundedLinesEx(r, rad, 16, 1.5f, Fade(border, v));
+        renderer::drawRoundedBorder(r, radiusPx, 1.5f, Fade(border, v));
 
         // 序号
         std::string num = std::to_string(i + 1);
         DrawCircleV({r.x + 38.0f, r.y + r.height * 0.5f}, 17.0f,
-                    Fade(hovered ? Color{90, 140, 255, 255} : Color{60, 64, 84, 255}, v));
+                    Fade(hovered ? renderer::accent() : p.surfaceHot, v));
         float numFs = 20.0f;
         Vector2 numM = MeasureTextEx(font, num.c_str(), numFs, numFs / 10.0f);
         DrawTextEx(font, num.c_str(),
@@ -148,12 +147,13 @@ void ChoicePanel::draw(const Font& font, float screenW, float screenH) const
         float txtFs = 26.0f;
         float txtSpacing = txtFs / 10.0f;
         DrawTextEx(font, options_[i].first.c_str(), {r.x + 72.0f, r.y + (r.height - 32.0f) * 0.5f},
-                   txtFs, txtSpacing, Fade(Color{242, 245, 255, 255}, v));
+                   txtFs, txtSpacing, Fade(p.text, v));
 
         if (hovered)
         {
             DrawTextEx(font, "→", {r.x + r.width - 46.0f, r.y + (r.height - 32.0f) * 0.5f},
-                       26.0f, 1.0f, Fade(Color{160, 190, 255, 255}, v));
+                       26.0f, 1.0f,
+                       Fade(renderer::mix(p.accent, Color{255, 255, 255, 255}, 0.35f), v));
         }
     }
 }

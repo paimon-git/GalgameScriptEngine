@@ -5,11 +5,13 @@
 #include "../core/video.h"
 #include <raylib.h>
 
+#include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
 #include "character.h"
+#include "battle.h"
 
 // 游戏状态：背景、角色、立绘资源缓存
 class Game
@@ -50,6 +52,19 @@ public:
     void stopBgm();
     void playSe(const std::string& file);
     void setVolumes(int bgm, int sfx);
+
+    // ---- 观测战（回合制战斗）----
+    // 剧本里 `battle <id> { win jump … / lose jump … }` 会走到这里；
+    // 打完由 won() 决定跳哪个标签（输了不 Game Over，剧情照走）
+    void startBattle(const BattleDef& def);
+    bool battleActive() const { return battle_ != nullptr; }
+    bool battleEnabled() const { return loadAssets_; }   // 无头自检时为 false
+    bool battleFinished() const { return battle_ && battle_->finished(); }
+    bool battleWon() const { return battle_ && battle_->won(); }
+    void updateBattle(float dt);
+    void drawBattle(const FontManager& fonts);
+    void battleDebugAuto(int frame);
+    void endBattle() { battle_.reset(); }
 
     void update(float dt);
     void draw() const;
@@ -106,4 +121,5 @@ private:
     bool cgVideoMode_ = false;
     int cgVideoFramesRead_ = 0;
     std::vector<unsigned char> cgVideoRgba_;
+    std::unique_ptr<Battle> battle_;
 };

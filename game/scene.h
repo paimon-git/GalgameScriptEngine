@@ -12,6 +12,11 @@ public:
     virtual void update(float dt) = 0;
     virtual void draw() = 0;
 
+    // 毛玻璃背景：返回 true 时引擎会额外用 drawBackdropOnly() 把「背景 + 立绘」
+    // 渲染到一张低分辨率快照上，供对话框做高斯模糊取样。
+    virtual bool needsBackdrop() const { return false; }
+    virtual void drawBackdropOnly() {}
+
     // 自检模式钩子：帧号驱动自动操作
     virtual void debugAuto(int /*frame*/) {}
     // 自检模式钩子：整帧绘制完成（EndDrawing 之后）调用
