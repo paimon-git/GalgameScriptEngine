@@ -1,0 +1,385 @@
+# ============================================================
+# 支线 · 一百二十七张（李俊辰线 · 4 章）
+#
+# 时间：第一部结束后的那个冬天（他高三上，退学申请之前的三个月）。
+# 位置：剧情树上挂在主线卷一第八章之后（requires star_festival:8）。
+# 主题：他画的画没有人买；他想知道"有没有人看"这件事，值不值钱。
+# ============================================================
+title "支线 · 一百二十七张"
+
+series 星屑祭典
+branch side
+order 14
+subtitle "李俊辰 · 一百二十七张"
+requires star_festival:8
+
+init_character 吴鸿韬 assets/char/wu_hongtao_body.png #6FA8FF center
+init_character_face 吴鸿韬 assets/char/wu_hongtao_face
+init_character 李俊辰 assets/char/li_junchen_body.png #5A6B8C left
+init_character_face 李俊辰 assets/char/li_junchen_face
+init_character 黎璘 assets/char/li_lin_body.png #FF8FB0 right
+init_character_face 黎璘 assets/char/li_lin_face
+init_character 邵清和 assets/char/shao_qinghe_body.png #7FB3D5 left
+init_character_face 邵清和 assets/char/shao_qinghe_face
+
+init_bg 画室 assets/bg/art_room.png
+init_bg 走廊 assets/bg/corridor.png
+init_bg 办公室 assets/bg/faculty_room.png
+init_bg 街道 assets/bg/street.png
+init_bg 活动室 assets/bg/clubroom.png
+init_bg 天台 assets/bg/rooftop.png
+
+# ---------------- 观测战（第三章：和画不出来的那张较劲）----------------
+init_battle 画不出来的墙 "褪色" 150 12 11
+init_battle_party 画不出来的墙 吴鸿韬 李俊辰
+
+# ============================================================
+# 第一章 · 碎片
+# ============================================================
+chapter 1 "第一章 · 碎片" picture assets/bg/art_room.png {
+#     play_bgm assets/audio/bgm_daily.ogg
+    show_bg 画室
+    card "第一章 · 碎片"
+    narrate "文化祭过去一个月，美术教室的暖气坏了一半。"
+    narrate "李俊辰占着最里面那张桌子，桌上摊着一堆碎纸。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 李俊辰
+    move 李俊辰 right
+    change_face 李俊辰 normal.png
+    say 李俊辰 "……你怎么来了。"
+    say 吴鸿韬 "黎璘说你这三天没上晚自习。"
+    say 李俊辰 "她管得真宽。"
+    say 吴鸿韬 "那堆是什么。"
+    narrate "桌上是一百多片被撕碎的海报。他把它们按颜色分成了七八堆。"
+    say 李俊辰 "拼图。"
+    say 李俊辰 "撕的人撕得挺用力的，有几张缺了角。"
+    say 李俊辰 "……我想把它们拼起来，看看能不能拼回原样。"
+    say 吴鸿韬 "拼不回来吧。"
+    change_face 李俊辰 sad.png
+    say 李俊辰 "嗯。拼不回来。"
+    say 李俊辰 "我已经拼了三天，缺了十七块。"
+
+    narrate "他捡起一片举到灯下。那是一片夜空，边缘是深深浅浅的蓝。"
+    say 李俊辰 "喂。"
+    say 吴鸿韬 "嗯。"
+    say 李俊辰 "这张海报，你们后来收起来了吗。"
+    say 吴鸿韬 "……收了。活动室的柜子里，有一张完整的。"
+    change_face 李俊辰 surprise.png
+    say 李俊辰 "你还留着？"
+    say 吴鸿韬 "一百二十七张里有十一张是那张的复本。"
+    say 吴鸿韬 "撕掉一百一十六张，还剩十一张。"
+    say 李俊辰 "……"
+    change_face 李俊辰 normal.png
+    say 李俊辰 "你这人算数真烂。"
+    say 李俊辰 "一百二十七张，撕完就撕完了。"
+    say 吴鸿韬 "没有。"
+    say 吴鸿韬 "……我留了一张。"
+
+    change_face 李俊辰 sad.png
+    say 李俊辰 "留着干什么。"
+    say 吴鸿韬 "因为没人问过你名字的时候，那张海报上也没有名字。"
+    say 吴鸿韬 "现在有人问了。"
+    say 李俊辰 "……"
+
+    choice 吴鸿韬 "怎么处理这些碎片？" {
+        "把碎片拼成一张新的画。", jump p1_new
+        "把碎片烧了，重新画一张。", jump p1_again
+    }
+
+    @p1_new
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "别拼回去了。"
+    say 吴鸿韬 "拼成一张新的。"
+    change_face 李俊辰 surprise.png
+    say 李俊辰 "……拼成什么。"
+    say 吴鸿韬 "随便。你画什么我不管。"
+    say 吴鸿韬 "我只想看你把撕裂的地方画进去。"
+    change_face 李俊辰 normal.png
+    say 李俊辰 "……行。"
+    jump p1_end
+
+    @p1_again
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "烧了吧。"
+    change_face 李俊辰 surprise.png
+    say 李俊辰 "……啊？"
+    say 吴鸿韬 "你留着它，等于留着那张废部通知。"
+    say 吴鸿韬 "重新画。这次画长一点的。"
+    change_face 李俊辰 happy.png
+    say 李俊辰 "……你这话说得跟你很像。"
+    say 李俊辰 "行。重新画。"
+    jump p1_end
+
+    @p1_end
+    narrate "他把桌上的碎片拢到一起，用一张大纸包起来，包得很好。"
+    say 李俊辰 "……我还是不烧。"
+    say 李俊辰 "画画的人，废纸也是东西。"
+    game_end
+}
+
+# ============================================================
+# 第二章 · 检查
+# ============================================================
+chapter 2 "第二章 · 检查" picture assets/bg/faculty_room.png {
+#     play_bgm assets/audio/bgm_tension.ogg
+    show_bg 办公室
+    card "第二章 · 检查"
+    narrate "第二天中午，李俊辰被叫进了办公室。"
+    narrate "桌上放着一份《学生行为检查书》，空白的那种。"
+
+    show_character 李俊辰
+    move 李俊辰 left
+    change_face 李俊辰 normal.png
+    show_character 邵清和
+    move 邵清和 right
+    change_face 邵清和 normal.png
+    say 邵清和 "海报属于校园宣传品，未经审批张贴，要写检查。"
+    say 李俊辰 "……好。"
+    say 邵清和 "……你没意见？"
+    change_face 李俊辰 happy.png
+    say 李俊辰 "我？我从来没写过检查。这回终于轮到我。"
+    say 邵清和 "……"
+    say 邵清和 "你爸来了。在会议室。"
+    change_face 李俊辰 surprise.png
+    say 李俊辰 "……他来了？"
+    say 邵清和 "接到电话就来了。从厂里直接过来的，工作服都没换。"
+
+    narrate "会议室的门开了一条缝。我站在外面，看见一个穿蓝工装的男人坐着。"
+    narrate "他的手放在膝盖上，指甲缝里有洗不掉的黑。"
+    narrate "……那双手和李俊辰的手很像。"
+    narrate "「我一天十二个小时。」"
+    narrate "「他画画的时候，我在厂里。」"
+    narrate "「我不是不让他画。我就想问问——他画的这些东西，有人看吗？」"
+    narrate "办公室里没有人回答。"
+
+    show_character 李俊辰
+    move 李俊辰 center
+    change_face 李俊辰 sad.png
+    say 李俊辰 "……有人看。"
+    say 李俊辰 "观测会那天，台下站着一百零三个人。"
+    say 李俊辰 "他们看的是星星，不是我的画。"
+    say 李俊辰 "但是没有那十一张纸，他们不会抬头。"
+    narrate "他爸看了他很久。然后从口袋里摸出一张折得很小的海报。"
+    narrate "那张海报的角是撕过的，被人重新用透明胶粘好。"
+    narrate "「这是我那天在厂门口的电线杆上撕下来的。」"
+    narrate "「……我以为你在学校不干正事。」"
+    change_face 李俊辰 surprise.png
+    say 李俊辰 "……你留着？"
+    narrate "「贴在工具箱上。」"
+    narrate "「你以为我为什么知道你今天要写检查。」"
+
+    choice 吴鸿韬 "站出去吗？" {
+        "推门进去，替他说一句。", jump p2_inside
+        "不进去。这是他们父子的事。", jump p2_outside
+    }
+
+    @p2_inside
+    show_character 吴鸿韬
+    move 吴鸿韬 right
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "叔叔。"
+    say 吴鸿韬 "张贴是我让他贴的。检查该我写。"
+    narrate "那个男人转过头来，看了我一眼。"
+    narrate "「你是天文社的？」"
+    say 吴鸿韬 "是。"
+    narrate "「……那张海报上写的是「你敢抬头吗」。」"
+    narrate "「我抬头了。那天晚上我在厂门口站着看了一会儿。」"
+    narrate "「云太厚，我什么都没看见。」"
+    change_face 李俊辰 sad.png
+    say 李俊辰 "爸。"
+    jump p2_end
+
+    @p2_outside
+    narrate "我没有推门。"
+    narrate "有些话必须他们自己说，别人替不了。"
+    narrate "过了很久，门开了。李俊辰走出来，眼睛是红的。"
+    say 李俊辰 "检查我写了。"
+    say 吴鸿韬 "写了什么。"
+    say 李俊辰 "「我错了。下次我申请。」"
+    say 李俊辰 "……我爸说，写得比他的报表好。"
+    jump p2_end
+
+    @p2_end
+    change_face 李俊辰 normal.png
+    say 李俊辰 "学长。"
+    say 吴鸿韬 "嗯。"
+    say 李俊辰 "我想画一面墙。"
+    say 李俊辰 "很长的那种，从东头画到西头。"
+    say 吴鸿韬 "……画什么。"
+    say 李俊辰 "星图。七个月，一张一张接下去。"
+    say 李俊辰 "就是上次被保安赶走的那面墙。"
+    game_end
+}
+
+# ============================================================
+# 第三章 · 墙
+# ============================================================
+chapter 3 "第三章 · 墙" picture assets/bg/street.png {
+#     play_bgm assets/audio/bgm_daily.ogg
+    show_bg 街道
+    card "第三章 · 墙"
+    narrate "那面墙在天文馆后面的小巷里，二十四米长。"
+    narrate "冬天刷墙，漆干得很慢。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 李俊辰
+    move 李俊辰 right
+    change_face 李俊辰 normal.png
+    say 李俊辰 "底色我刷了三遍。"
+    say 吴鸿韬 "为什么是深蓝。"
+    say 李俊辰 "因为天上也是深蓝。"
+    say 李俊辰 "……而且深蓝便宜。"
+
+    show_character 黎璘
+    move 黎璘 center
+    change_face 黎璘 normal.png
+    say 黎璘 "我带了观测日志。你要画哪几个月？"
+    say 李俊辰 "十二月。"
+    say 黎璘 "为什么。"
+    change_face 李俊辰 happy.png
+    say 李俊辰 "因为那张《你敢抬头吗》，画的就是十二月。"
+    say 李俊辰 "撕了一百一十六张，还剩十一张。"
+    say 李俊辰 "……这次画一张撕不掉的。"
+
+    # 观测战：颜料会褪色，画的人得先不认输
+    battle 画不出来的墙 {
+        win jump p3_wall_win
+        lose jump p3_wall_lose
+    }
+
+    @p3_wall_win
+    narrate "第七个月份的星图画完了，最后一个收笔收得很干净。"
+    jump p3_wall_go
+
+    @p3_wall_lose
+    narrate "有一段星图画歪了。他盯着看了很久。"
+    say 李俊辰 "……算了。天上本来也不规整。"
+    jump p3_wall_go
+
+    @p3_wall_go
+    narrate "画到第六天，有人来捣乱。三个初中生，骑着车在巷子里绕圈。"
+    narrate "「画这个有什么用？」"
+    narrate "李俊辰没回头，继续画他的猎户座。"
+    narrate "「喂，问你话呢。」"
+    change_face 李俊辰 normal.png
+    say 李俊辰 "没用。"
+    say 李俊辰 "你们抬头看一眼就知道了。"
+    narrate "三个小孩真的抬头了。"
+    narrate "冬天下午四点，天上什么都没有。"
+    narrate "「……什么都没有啊。」"
+    say 李俊辰 "对。所以我才画。"
+    say 李俊辰 "晚上八点再来。"
+    narrate "那天晚上八点，巷子里站了七个人。三个是骑车的，四个是他们的同学。"
+
+    choice 吴鸿韬 "帮什么忙？" {
+        "帮他扶梯子、递颜料。", jump p3_help
+        "把观测日志上的数据抄到墙上。", jump p3_data
+    }
+
+    @p3_help
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "我扶梯子。"
+    change_face 李俊辰 happy.png
+    say 李俊辰 "……你这人真不会画画。"
+    say 吴鸿韬 "我会扶梯子。"
+    narrate "二十四米，我们画了十一天。"
+    jump p3_end
+
+    @p3_data
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "日志借我。"
+    say 吴鸿韬 "十二月的每一天，云量、风向、能见度。"
+    say 吴鸿韬 "抄在星星下面。"
+    change_face 李俊辰 surprise.png
+    say 李俊辰 "……抄数据？那多难看。"
+    say 吴鸿韬 "不难看。"
+    say 吴鸿韬 "别人看的是画，我们看的是记录。"
+    say 李俊辰 "……行。"
+    jump p3_end
+
+    @p3_end
+    narrate "第十一天晚上，巷子里站了三十多个人。"
+    narrate "有人在拍照，有人在找自己的生日那天画的是哪一段星。"
+    narrate "李俊辰把最后一笔收在墙角。"
+    game_end
+}
+
+# ============================================================
+# 第四章 · 署名
+# ============================================================
+chapter 4 "第四章 · 署名" picture assets/bg/street.png {
+#     play_bgm assets/audio/bgm_warm.ogg
+    show_bg 街道
+    card "第四章 · 署名"
+    narrate "画完的那天早上，天很冷，墙上结了一层薄霜。"
+    narrate "霜化开的时候，深蓝的底色上浮出一层白。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 李俊辰
+    move 李俊辰 right
+    change_face 李俊辰 normal.png
+    say 李俊辰 "喂。"
+    say 吴鸿韬 "嗯。"
+    say 李俊辰 "墙角要写名字吗。"
+    say 吴鸿韬 "你自己定。"
+    change_face 李俊辰 sad.png
+    say 李俊辰 "……我以前不写。"
+    say 李俊辰 "因为没人问我。"
+    say 李俊辰 "现在有人问了，我反而有点不敢写。"
+    say 吴鸿韬 "为什么。"
+    say 李俊辰 "写了就得负责。"
+    say 李俊辰 "以后这面墙被人骂难看，被雨淋花，被刷掉——"
+    say 李俊辰 "都是我的。"
+
+    choice 吴鸿韬 "怎么回他？" {
+        "「那就写。你本来就要负责。」", jump p4_sign
+        "「不写。让它自己长在那儿。」", jump p4_anon
+    }
+
+    @p4_sign
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "写。"
+    say 吴鸿韬 "你本来就要负责。"
+    change_face 李俊辰 happy.png
+    say 李俊辰 "……行。"
+    narrate "他在墙角蹲下来，用最细的笔，写了三个字。"
+    narrate "写完往后退了两步，又回去补了一笔。"
+    say 李俊辰 "俊是俊，辰是辰。"
+    say 李俊辰 "别写错。"
+    jump p4_end
+
+    @p4_anon
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "不写。"
+    say 李俊辰 "为什么。"
+    say 吴鸿韬 "守夜人也不留名字。"
+    say 吴鸿韬 "……写了名字的东西，别人会以为只靠一个人。"
+    change_face 李俊辰 normal.png
+    say 李俊辰 "……你这话从哪儿学的。"
+    say 吴鸿韬 "从我们学校一个老师那儿。"
+    jump p4_end
+
+    @p4_end
+    play_se assets/audio/se_door.wav
+    narrate "巷子口停了一辆电动车。"
+    narrate "一个穿蓝工装的男人站在墙前，手插在口袋里，抬着头。"
+    narrate "他站了很久，久到早自习的铃响了。"
+    narrate "然后他从口袋里摸出那张被透明胶粘过的旧海报，比了比，又收回去。"
+    narrate "「……比这张大。」"
+    narrate "他转身走了。"
+    change_face 李俊辰 sad.png
+    say 李俊辰 "……"
+    say 吴鸿韬 "你爸？"
+    say 李俊辰 "嗯。"
+    say 李俊辰 "他从来没夸过我。"
+    say 李俊辰 "刚才那句……算不算。"
+    say 吴鸿韬 "算。"
+    game_end
+}

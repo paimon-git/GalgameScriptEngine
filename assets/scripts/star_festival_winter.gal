@@ -1,0 +1,686 @@
+# ============================================================
+# 星屑祭典 · 雪夜 —— 续篇（第二部）
+#
+# 承接《星屑祭典》：社团复活之后，旧校舍（含圆顶观测台）面临拆除，
+# 众人在拆除前夜的双子座流星雨办最后一场观测会。
+#
+# 角色沿用前作，未改动任何原有素材；新增 1 位角色：顾星禾。
+# 注意：素材路径必须是 ASCII，角色名与场景 ID 可以用中文。
+# ============================================================
+title "星屑祭典 · 雪夜"
+
+# ---------------- 剧情树元信息 ----------------
+series 星屑祭典
+branch main
+order 2
+subtitle "卷二 · 冬"
+requires star_festival:8
+
+# ---------------- 角色注册（沿用前作）----------------
+init_character 吴鸿韬 assets/char/wu_hongtao_body.png #6FA8FF center
+init_character_face 吴鸿韬 assets/char/wu_hongtao_face
+init_character 黎璘 assets/char/li_lin_body.png #FF8FB0 right
+init_character_face 黎璘 assets/char/li_lin_face
+init_character 张誉腾 assets/char/zhang_yuteng_body.png #E0B34C center
+init_character_face 张誉腾 assets/char/zhang_yuteng_face
+init_character 梁知奕 assets/char/liang_zhiyi_body.png #9B7BE0 center
+init_character_face 梁知奕 assets/char/liang_zhiyi_face
+init_character 尹博涛 assets/char/yin_botao_body.png #F0724A right
+init_character_face 尹博涛 assets/char/yin_botao_face
+init_character 李君浩 assets/char/li_junhao_body.png #4CC0A8 center
+init_character_face 李君浩 assets/char/li_junhao_face
+init_character 李俊辰 assets/char/li_junchen_body.png #5A6B8C left
+init_character_face 李俊辰 assets/char/li_junchen_face
+init_character 邵清和 assets/char/shao_qinghe_body.png #7FB3D5 left
+init_character_face 邵清和 assets/char/shao_qinghe_face
+init_character 魏思远 assets/char/wei_siyuan_body.png #D98C5F right
+init_character_face 魏思远 assets/char/wei_siyuan_face
+# 新角色：顾星禾，高一，摄影社兼天文社新成员
+init_character 顾星禾 assets/char/gu_xinghe_body.png #DA70D6 center
+init_character_face 顾星禾 assets/char/gu_xinghe_face
+
+# ---------------- 背景注册 ----------------
+init_bg 活动室 assets/bg/clubroom.png
+init_bg 冬日活动室 assets/bg/clubroom_winter.png
+init_bg 走廊 assets/bg/corridor.png
+init_bg 教室 assets/bg/classroom.png
+init_bg 操场 assets/bg/playground.png
+init_bg 天台 assets/bg/rooftop.png
+init_bg 观测台 assets/bg/observatory.png
+init_bg 冬夜观测台 assets/bg/observatory_winter.png
+init_bg 办公室 assets/bg/faculty_room.png
+init_bg 祭典夜 assets/bg/festival_night.png
+init_bg 雪中校园 assets/bg/snow_school.png
+init_bg 春天天文馆 assets/bg/spring_observatory.png
+init_bg 街道 assets/bg/street.png
+
+# ---------------- 观测战（第七章拆除前夜）----------------
+init_battle 拆除前夜 "重云" 168 13 7
+init_battle 拆除前夜 "雪压" 148 13 8
+init_battle_party 拆除前夜 吴鸿韬 尹博涛 李君浩
+
+# ============================================================
+# 第一章 · 拆除通知
+# ============================================================
+chapter 1 "第一章 · 拆除通知" picture assets/bg/clubroom_winter.png {
+#     play_bgm assets/audio/bgm_warm.ogg
+    show_bg 冬日活动室
+    card "第一章 · 拆除通知"
+    narrate "第一场雪落在青云镇的第二天，旧校舍三楼的活动室里，暖气片发出咕噜咕噜的响声。"
+    narrate "天文社活下来了。可这个冬天，好像没打算让我们安生。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "十一月二十七号的观测记录，云量三成，风偏北。"
+    show_character 黎璘
+    move 黎璘 right
+    change_face 黎璘 happy.png
+    say 黎璘 "你还在记啊。都放假了。"
+    say 吴鸿韬 "习惯了。"
+    change_face 黎璘 normal.png
+    say 黎璘 "……你有没有觉得，今年冬天特别冷。"
+
+    play_se assets/audio/se_door.wav
+    narrate "门被推开时带进来一阵雪。张誉腾站在门口，手里捏着一张纸，没有拍掉肩上的雪。"
+    show_character 张誉腾
+    move 张誉腾 center
+    change_face 张誉腾 sad.png
+    say 张誉腾 "我以为跑一趟就够了。"
+    say 吴鸿韬 "……怎么了？"
+    say 张誉腾 "旧校舍，明年三月拆。"
+    narrate "他把那张纸放在桌上。纸角的红章，和去年那封废部通知一模一样。"
+
+    show_cg assets/cg/demolition_notice.png
+    narrate "「旧校舍（含天文台圆顶）因结构老化，列入本年度拆除计划，原址新建体育馆。」"
+    hide_cg
+
+#     play_bgm assets/audio/bgm_tension.ogg
+    change_face 吴鸿韬 angry.png
+    say 吴鸿韬 "……圆顶也拆？"
+    say 张誉腾 "圆顶是旧校舍的一部分。旧校舍拆了，它就在里面。"
+    change_face 黎璘 sad.png
+    say 黎璘 "那台望远镜呢？"
+    change_face 张誉腾 sad.png
+    say 张誉腾 "校产处置流程。可能是搬走，可能是……处理掉。"
+    say 吴鸿韬 "那是我学长留下的。"
+    say 张誉腾 "我知道。"
+    narrate "他把「我知道」三个字说得很轻，像是怕碰碎什么。"
+
+    change_face 黎璘 normal.png
+    say 黎璘 "……还有多久？"
+    say 张誉腾 "到今天为止，还有一百零二天。"
+    say 吴鸿韬 "又是倒计时。"
+    say 张誉腾 "对。又是倒计时。"
+    change_face 张誉腾 normal.png
+    say 张誉腾 "这次不是废部，是拆楼。我不一定能帮上忙——所以我把消息先给你们。"
+
+    choice 黎璘 "先做什么？" {
+        "去现场看看那栋楼。", jump c1_see
+        "先去学生会问清楚流程。", jump c1_ask
+    }
+
+    @c1_see
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "先去楼下。我想看看它现在是什么样子。"
+    change_face 黎璘 normal.png
+    say 黎璘 "……好。带上手电。"
+    jump c1_end
+
+    @c1_ask
+    say 吴鸿韬 "学生会。拆楼的提案，是谁提的？"
+    change_face 张誉腾 sad.png
+    say 张誉腾 "……是我签的。提案人是校务会，但签字的人是我。"
+    say 吴鸿韬 "……"
+    say 张誉腾 "所以这次，我会站在你们那边。"
+    jump c1_end
+
+    @c1_end
+    hide_character 张誉腾
+    change_face 黎璘 sad.png
+    say 黎璘 "一百零二天。"
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "够我们再看一次流星雨了。"
+    say 黎璘 "……嗯。"
+    game_end
+}
+
+# ============================================================
+# 第二章 · 新来的
+# ============================================================
+chapter 2 "第二章 · 新来的" picture assets/bg/snow_school.png {
+#     play_bgm assets/audio/bgm_daily.ogg
+    show_bg 雪中校园
+    card "第二章 · 新来的"
+    narrate "雪后的旧校舍，比平时更像一座被遗忘的天文台。"
+    narrate "圆顶上的雪积得很厚，像一顶没人戴的帽子。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    narrate "我站在楼下，数它的窗户。一、二、三——"
+    play_se assets/audio/se_shutter.wav
+    narrate "快门声。"
+
+    show_character 顾星禾
+    move 顾星禾 center
+    change_face 顾星禾 surprise.png
+    say 顾星禾 "啊、抱歉！我不是故意拍你的——"
+    say 吴鸿韬 "……你在拍楼？"
+    change_face 顾星禾 happy.png
+    say 顾星禾 "在拍圆顶！我拍了整整一个早上，光不对，一直重来。"
+    say 顾星禾 "顾星禾，一年五班。摄影社的，但是我更喜欢拍这种……会动的光。"
+    say 吴鸿韬 "它不会动。"
+    change_face 顾星禾 normal.png
+    say 顾星禾 "会的。雪化了以后，圆顶的铜会变成金色。我去年拍到过。"
+    say 吴鸿韬 "……去年。"
+    say 顾星禾 "嗯？"
+    say 吴鸿韬 "没什么。去年这个时候，我也在楼下站着。"
+
+    show_cg assets/cg/old_blueprint.png
+    narrate "她把相机翻转过来。屏幕上是一张泛黄的复印件——旧校舍的原始立面图。"
+    hide_cg
+    change_face 顾星禾 normal.png
+    say 顾星禾 "我在图书馆旧刊室翻到的。这栋楼是建校那年盖的，图纸上写着「天文台」三个字。"
+    say 顾星禾 "建校那年……七十六年前。"
+    say 吴鸿韬 "……你说什么？"
+    say 顾星禾 "它不是「旧校舍」。它一开始就是天文台。"
+
+    show_character 黎璘
+    move 黎璘 right
+    change_face 黎璘 normal.png
+    say 黎璘 "鸿韬，广播在说拆楼的事。全校都知道了。"
+    say 黎璘 "……这位是？"
+    change_face 顾星禾 happy.png
+    say 顾星禾 "顾星禾！我想加入天文社！"
+    change_face 黎璘 surprise.png
+    say 黎璘 "……诶？"
+
+    choice 吴鸿韬 "怎么办？" {
+        "让她加入。多一个人多一分力。", jump c2_join
+        "先别。这栋楼要拆了，别连累她。", jump c2_refuse
+    }
+
+    @c2_join
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "……填表。社团现在有十一个人，你是第十二个。"
+    change_face 顾星禾 happy.png
+    say 顾星禾 "好耶！"
+    say 吴鸿韬 "不过先说好。这栋楼要拆了，跟着我们可能什么都留不住。"
+    change_face 顾星禾 normal.png
+    say 顾星禾 "留不住东西，留得住照片。"
+    jump c2_end
+
+    @c2_refuse
+    change_face 吴鸿韬 sad.png
+    say 吴鸿韬 "……先算了。这栋楼三月就要拆，跟着我们只会白忙一场。"
+    change_face 顾星禾 sad.png
+    say 顾星禾 "……白忙也没关系啊。"
+    say 顾星禾 "我去年拍到它变成金色的时候，是它最后一次变金。今年不拍，就没有了。"
+    say 吴鸿韬 "……"
+    change_face 顾星禾 happy.png
+    say 顾星禾 "所以我不是来帮忙的。我是来拍它的。"
+    change_face 吴鸿韬 happy.png
+    say 吴鸿韬 "……填表。第十二个。"
+    jump c2_end
+
+    @c2_end
+    hide_character 顾星禾
+    change_face 黎璘 normal.png
+    say 黎璘 "建校那年就是天文台……这件事，说不定有用。"
+    say 吴鸿韬 "去找邵老师。"
+    game_end
+}
+
+# ============================================================
+# 第三章 · 图纸
+# ============================================================
+chapter 3 "第三章 · 图纸" picture assets/bg/faculty_room.png {
+#     play_bgm assets/audio/bgm_tension.ogg
+    show_bg 办公室
+    card "第三章 · 图纸"
+    narrate "邵清和把那份复印件按在桌上，看了很久。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 邵清和
+    move 邵清和 center
+    change_face 邵清和 sad.png
+    say 邵清和 "……你们从哪弄来的。"
+    say 吴鸿韬 "图书馆旧刊室。"
+    say 邵清和 "我知道它在旧刊室。"
+    say 吴鸿韬 "……那您为什么不说？"
+    change_face 邵清和 normal.png
+    say 邵清和 "因为说了也没用。一栋七十六年的楼，挡不住一体育馆的预算。"
+
+    show_character 梁知奕
+    move 梁知奕 right
+    change_face 梁知奕 normal.png
+    say 梁知奕 "那不一定。"
+    say 邵清和 "……梁知奕。"
+    say 梁知奕 "我查了市里的《历史建筑认定办法》。建校第一批建筑、保存完整、在继续使用，三条都符合。"
+    say 梁知奕 "缺的只有一件东西——证明它在继续使用。"
+    change_face 邵清和 surprise.png
+    say 邵清和 "……"
+    say 梁知奕 "而我们恰好，每个月都在上面看星星。"
+
+    play_se assets/audio/se_door.wav
+    show_character 魏思远
+    move 魏思远 center
+    change_face 魏思远 happy.png
+    say 魏思远 "——那么，这个我来补。"
+    say 吴鸿韬 "魏学长？"
+    say 魏思远 "我请了三天假。这次带回来的不是图纸，是原件。"
+    narrate "他从包里抽出一个卷着的牛皮纸筒。纸筒上的字迹，已经褪成很淡的褐色。"
+
+    change_face 邵清和 sad.png
+    say 邵清和 "……这个笔迹。"
+    say 魏思远 "对。周老师的。"
+    say 吴鸿韬 "周老师？"
+    say 邵清和 "我高中的物理老师。这个圆顶，是他画的。"
+    say 邵清和 "三十一年前那台赤道仪，也是他签收的。"
+    say 魏思远 "他一辈子只留下两样东西：一台望远镜，和一个圆顶。"
+    say 魏思远 "现在它们要被一起拆掉。"
+
+    change_face 邵清和 normal.png
+    say 邵清和 "……思远。"
+    say 魏思远 "老师，十年前那场雨不是你的错。"
+    say 魏思远 "但这次要是我们什么都不做，就是我们的错。"
+
+    choice 吴鸿韬 "怎么走这一步？" {
+        "提交历史建筑认定申请。", jump c3_apply
+        "先办观测会，用数据证明它在被使用。", jump c3_observe
+    }
+
+    @c3_apply
+    change_face 梁知奕 happy.png
+    say 梁知奕 "材料我来写。三天，一万两千字，附七十六年的档案。"
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "……你一个人？"
+    say 梁知奕 "我最讨厌跟笨蛋合作。但这次，你们负责别添乱就行。"
+    jump c3_end
+
+    @c3_observe
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "先办观测会。让全校看见这栋楼还在被人使用。"
+    change_face 魏思远 happy.png
+    say 魏思远 "对。认定委员会最看重的就是这一条。"
+    say 魏思远 "十二月的双子座流星雨，是今年最后一个窗口。"
+    jump c3_end
+
+    @c3_end
+    hide_character 梁知奕
+    hide_character 魏思远
+    change_face 邵清和 normal.png
+    say 邵清和 "……我签顾问意见。"
+    say 邵清和 "这次我不站在旁边看了。"
+    game_end
+}
+
+# ============================================================
+# 第四章 · 冬夜的路
+# ============================================================
+chapter 4 "第四章 · 冬夜的路" picture assets/bg/playground.png {
+#     play_bgm assets/audio/bgm_daily.ogg
+    show_bg 操场
+    card "第四章 · 冬夜的路"
+    narrate "操场上的雪被扫成一条窄路。路尽头是跑道，跑道上只有一个人。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 尹博涛
+    move 尹博涛 right
+    change_face 尹博涛 sad.png
+    say 尹博涛 "……十一秒二。"
+    say 尹博涛 "以前我闭着眼都能跑出来。现在跑三百米，就喘得像刚搬完望远镜。"
+    say 吴鸿韬 "你确实刚搬完望远镜。"
+    change_face 尹博涛 happy.png
+    say 尹博涛 "……也是。"
+    change_face 尹博涛 normal.png
+    say 尹博涛 "医生说可以慢慢练了。我试了三天，一天比一天远一点。"
+    say 尹博涛 "虽然回不到十一秒二了。"
+
+    show_character 李君浩
+    move 李君浩 center
+    change_face 李君浩 happy.png
+    say 李君浩 "学长！圆顶的电机我修好了！"
+    say 李君浩 "换了轴承，重绕了线圈，还……还多装了防雪的罩子。"
+    change_face 尹博涛 surprise.png
+    say 尹博涛 "防雪罩？你自己做的？"
+    change_face 李君浩 blush.png
+    say 李君浩 "嗯……用钟表店剩的铜片。不好看，但是能用。"
+    say 吴鸿韬 "……李君浩。"
+    say 李君浩 "怎、怎么了？"
+    say 吴鸿韬 "你今年才一年级，已经比我们所有人都强了。"
+    change_face 李君浩 blush.png
+    say 李君浩 "……没有！"
+
+    change_face 尹博涛 normal.png
+    say 尹博涛 "喂，吴鸿韬。观测会那天，东西我来搬。"
+    say 尹博涛 "一百二十公斤，三层楼。上次我一个人搬，这次我有信心搬两趟。"
+    say 吴鸿韬 "……你的腿。"
+    change_face 尹博涛 angry.png
+    say 尹博涛 "我的腿现在跑不了百米，但还搬得动东西。"
+    change_face 尹博涛 normal.png
+    say 尹博涛 "我以前以为，跑得快才叫在跑。"
+    say 尹博涛 "现在觉得，没停下来就算。"
+
+    choice 吴鸿韬 "怎么回应他？" {
+        "让他慢慢来，别急着证明。", jump c4_slow
+        "好。那天的器材都交给你。", jump c4_trust
+    }
+
+    @c4_slow
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "……别急。三月才拆，你有的是时间。"
+    change_face 尹博涛 sad.png
+    say 尹博涛 "……我知道你是为我好。"
+    change_face 尹博涛 happy.png
+    say 尹博涛 "但那天我想站在跑道边上，看着大家抬头。"
+    say 尹博涛 "这次我不想当那个被照顾的人。"
+    jump c4_end
+
+    @c4_trust
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "好。那天的器材、椅子、应急灯，全交给你。"
+    change_face 尹博涛 happy.png
+    say 尹博涛 "放心。搬东西我最在行。"
+    say 尹博涛 "……谢了。"
+    jump c4_end
+
+    @c4_end
+    hide_character 李君浩
+    hide_character 尹博涛
+    narrate "雪又落下来了。跑道上的脚印，被一夜之间填平，又被第二天重新踩出来。"
+    narrate "就这样，一天一天，离三月近了十厘米。"
+    game_end
+}
+
+# ============================================================
+# 第五章 · 退学申请
+# ============================================================
+chapter 5 "第五章 · 退学申请" picture assets/bg/corridor.png {
+#     play_bgm assets/audio/bgm_tension.ogg
+    show_bg 走廊
+    card "第五章 · 退学申请"
+    narrate "李俊辰在海报堆里坐了整整一节课。他手里那张纸，比海报还薄。"
+
+    show_character 李俊辰
+    move 李俊辰 left
+    change_face 李俊辰 sad.png
+    say 李俊辰 "……退学申请。我爸让我填的。"
+    show_character 吴鸿韬
+    move 吴鸿韬 right
+    change_face 吴鸿韬 surprise.png
+    say 吴鸿韬 "你要退学？"
+    say 李俊辰 "他说，画画没出路。让我去他朋友的厂里，一个月三千八。"
+    change_face 李俊辰 angry.png
+    say 李俊辰 "反正我成绩也就那样。老师也是这样想的。"
+    say 吴鸿韬 "……那你自己怎么想？"
+    change_face 李俊辰 sad.png
+    say 李俊辰 "我想画完那张星图。"
+    say 李俊辰 "十二月的星图，我画了十一张，只剩最后一张。"
+
+    show_character 顾星禾
+    move 顾星禾 center
+    change_face 顾星禾 normal.png
+    say 顾星禾 "……学长，你那张海报，我拍下来了。"
+    say 顾星禾 "《你敢抬头吗》那张。"
+    change_face 顾星禾 happy.png
+    say 顾星禾 "它在我的照片里，还挂着一百二十七张。"
+    change_face 李俊辰 surprise.png
+    say 李俊辰 "……你还留着。"
+    say 顾星禾 "我准备把这张照片，投稿市里的青少年摄影展。"
+    say 顾星禾 "标题我想好了——「有人在冬天里贴海报」。"
+    say 李俊辰 "……"
+
+    choice 吴鸿韬 "怎么做？" {
+        "把决定权还给他自己。", jump c5_self
+        "一起去找他父亲谈。", jump c5_father
+    }
+
+    @c5_self
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "……这张纸，我不替你签。"
+    say 吴鸿韬 "你自己想清楚。但十二月十四号晚上七点，我们在圆顶下面等你贴最后一张星图。"
+    change_face 李俊辰 sad.png
+    say 李俊辰 "……你们真的会等我？"
+    say 吴鸿韬 "一百二十七张都贴过了，还差一张？"
+    jump c5_end
+
+    @c5_father
+    change_face 吴鸿韬 angry.png
+    say 吴鸿韬 "带我去见你爸。"
+    change_face 李俊辰 surprise.png
+    say 李俊辰 "你疯了？他会骂你的！"
+    say 吴鸿韬 "我被骂过很多次了。而且我想给他看一样东西。"
+    say 吴鸿韬 "——你画的那张星图。"
+    jump c5_end
+
+    @c5_end
+    hide_character 顾星禾
+    change_face 李俊辰 normal.png
+    say 李俊辰 "……那我先不填。"
+    say 李俊辰 "先挂十天。挂到十四号。"
+    game_end
+}
+
+# ============================================================
+# 第六章 · 云图
+# ============================================================
+chapter 6 "第六章 · 云图" picture assets/bg/observatory.png {
+#     play_bgm assets/audio/bgm_rain.ogg
+    show_bg 观测台
+    card "第六章 · 云图"
+    narrate "十二月十三号。离流星雨还有一天。"
+    narrate "天气预报说，那天晚上有雪。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 sad.png
+    say 吴鸿韬 "……雪。又是这种天气。"
+    show_character 黎璘
+    move 黎璘 right
+    change_face 黎璘 normal.png
+    say 黎璘 "会停。"
+    say 吴鸿韬 "上次你也说会停。"
+    change_face 黎璘 happy.png
+    say 黎璘 "上次我算对了。"
+    narrate "她把那本观测日志翻到最后一页。整整十年，一页一页，全是云。"
+    say 黎璘 "第三册，第七百三十一页。"
+    say 黎璘 "十二月十四号，晚上九点到九点十七分，云会散开一条缝。"
+    say 吴鸿韬 "……十七分钟。"
+    change_face 黎璘 blush.png
+    say 黎璘 "比上次多六分钟。我尽力了。"
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "……你什么时候记的？"
+    say 黎璘 "你不在的时候。"
+
+    show_character 梁知奕
+    move 梁知奕 center
+    change_face 梁知奕 normal.png
+    say 梁知奕 "我复核过她的模型。"
+    say 梁知奕 "西南方向有一股暖湿气流，会在九点前后被北风剪断。窗口大概率成立。"
+    say 梁知奕 "误差……最多两分钟。"
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "……梁知奕。你今天居然没说风凉话。"
+    change_face 梁知奕 blush.png
+    say 梁知奕 "……我要是说，你们就不办了。"
+    say 梁知奕 "不办的话，我寒假没地方去。"
+
+    change_face 吴鸿韬 happy.png
+    say 吴鸿韬 "……明天见。"
+    game_end
+}
+
+# ============================================================
+# 第七章 · 拆除前夜
+# ============================================================
+chapter 7 "第七章 · 拆除前夜" picture assets/bg/observatory_winter.png {
+#     play_bgm assets/audio/bgm_festival.ogg
+    show_bg 冬夜观测台
+    card "第七章 · 拆除前夜"
+    narrate "十二月十四号，晚上六点五十。雪停了，云还很厚。"
+    narrate "圆顶下面站了三百多人——比张誉腾的条件多了两倍。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "……三百一十二个。"
+    show_character 黎璘
+    move 黎璘 right
+    change_face 黎璘 happy.png
+    say 黎璘 "还有二十二分钟。"
+
+    show_character 尹博涛
+    move 尹博涛 center
+    change_face 尹博涛 happy.png
+    say 尹博涛 "八十公斤的赤道仪，我一个人搬上来的。"
+    say 尹博涛 "……虽然中间歇了四次。"
+    hide_character 尹博涛
+
+    show_character 李君浩
+    move 李君浩 center
+    change_face 李君浩 happy.png
+    say 李君浩 "电机转速稳定。防雪罩……挡住了今天下午的雪。"
+    hide_character 李君浩
+
+    show_character 李俊辰
+    move 李俊辰 center
+    change_face 李俊辰 happy.png
+    say 李俊辰 "最后一张星图，贴好了。"
+    say 李俊辰 "……退学申请，我撕了。"
+    change_face 吴鸿韬 happy.png
+    say 吴鸿韬 "……好。"
+    hide_character 李俊辰
+
+    change_face 黎璘 normal.png
+    say 黎璘 "鸿韬。云在动。"
+    # 观测战：跟压在头顶的重云抢那十七分钟
+    battle 拆除前夜 {
+        win jump w7_win
+        lose jump w7_lose
+    }
+
+    @w7_win
+    narrate "北风比预报早了六分钟。云层中间开始裂。"
+    jump w7_go
+
+    @w7_lose
+    narrate "云没能完全让路。望远镜追得手忙脚乱，记录断了两段。"
+    say 李君浩 "……电力不够，我、我去把备用电瓶接上！"
+    narrate "他抱着电瓶冲下楼梯，风把他的围巾吹到了脸上。"
+    jump w7_go
+
+    @w7_go
+    narrate "九点整。第一阵北风穿过圆顶的缝隙，卷起地上的雪粉。"
+    show_cg assets/cg/clouds_parting.png
+    narrate "云像被人从中间轻轻推开——和去年那晚一模一样。"
+    hide_cg
+    play_se assets/audio/se_meteor.wav
+    narrate "第一颗流星落下来的时候，欢呼声从圆顶底下一直卷到操场。"
+    show_cg assets/cg/meteor_winter.png
+    narrate "然后是第二颗，第三颗。"
+    narrate "九点十七分，云重新合上。"
+    narrate "一分不多，一分不少。"
+    hide_cg
+
+    show_character 张誉腾
+    move 张誉腾 center
+    change_face 张誉腾 normal.png
+    say 张誉腾 "到场三百一十二人，观测记录两千一百条。"
+    change_face 张誉腾 happy.png
+    say 张誉腾 "历史建筑认定申请，我明天早上八点提交。"
+    say 张誉腾 "……这是我这辈子签得最痛快的一份文件。"
+    hide_character 张誉腾
+
+    show_character 邵清和
+    move 邵清和 center
+    change_face 邵清和 sad.png
+    say 邵清和 "……周老师。"
+    say 邵清和 "你的楼，保住了。"
+    change_face 邵清和 happy.png
+    say 邵清和 "……谢谢你们。"
+    hide_character 邵清和
+    game_end
+}
+
+# ============================================================
+# 第八章 · 春天
+# ============================================================
+chapter 8 "第八章 · 春天" picture assets/bg/spring_observatory.png {
+#     play_bgm assets/audio/bgm_starry.ogg
+    show_bg 春天天文馆
+    card "第八章 · 春天"
+    narrate "三月，旧校舍没有拆。"
+    narrate "市里批了认定，把它改成了「青云天文馆」。牌匾挂上去的那天，樱花开了一半。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "……三年级的时候，我在这里第一次看见土星环。"
+    show_character 黎璘
+    move 黎璘 right
+    change_face 黎璘 happy.png
+    say 黎璘 "上周顾星禾拍的圆顶，登在市报上了。"
+    say 黎璘 "标题是《有人在冬天里贴海报》。"
+    say 吴鸿韬 "……她真的投了。"
+
+    show_character 顾星禾
+    move 顾星禾 center
+    change_face 顾星禾 happy.png
+    say 顾星禾 "社长！天文馆的讲解词我写好了！"
+    say 顾星禾 "第一段是——「建校那年，这里就是天文台」。"
+    change_face 吴鸿韬 happy.png
+    say 吴鸿韬 "……你把「天文社社长」四个字，背熟了没有？"
+    change_face 顾星禾 surprise.png
+    say 顾星禾 "诶？"
+    say 吴鸿韬 "下学期开始，社长是你。"
+    say 顾星禾 "我、我才一年级！"
+    say 吴鸿韬 "我一年级的时候，也是被别人扶着进来的。"
+    hide_character 顾星禾
+
+    change_face 黎璘 normal.png
+    say 黎璘 "……你看，猎户座出来了。"
+    say 吴鸿韬 "……嗯。"
+    say 黎璘 "鸿韬，明年，我们还来看吗？"
+
+    change_face 黎璘 blush.png
+    choice 黎璘 "我等你一句话。" {
+        "看。而且这次，我不用等云让路了。", jump c8_cloud
+        "看。这一次，我想先看你。", jump c8_you
+    }
+
+    @c8_cloud
+    change_face 吴鸿韬 happy.png
+    say 吴鸿韬 "看。而且这次，我不用等云让路了。"
+    change_face 黎璘 happy.png
+    say 黎璘 "为什么？"
+    say 吴鸿韬 "因为你在的时候，天一直是晴的。"
+    change_face 黎璘 blush.png
+    say 黎璘 "……你这句话，想了几年？"
+    say 吴鸿韬 "十年。"
+    jump c8_end
+
+    @c8_you
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "看。这一次，我想先看你。"
+    change_face 黎璘 surprise.png
+    say 黎璘 "……"
+    change_face 吴鸿韬 happy.png
+    say 吴鸿韬 "十年里我都在看星星。剩下那点时间，我想分给你。"
+    change_face 黎璘 blush.png
+    say 黎璘 "……笨蛋。"
+    jump c8_end
+
+    @c8_end
+    show_cg assets/cg/spring_clubroom.png
+    narrate "天文馆的灯一盏一盏亮起来，照着那台七十多岁的赤道仪。"
+    narrate "它还会转很久。"
+    narrate "而我们，也会一直抬头。"
+    hide_cg
+    card "全剧终"
+    game_end
+}

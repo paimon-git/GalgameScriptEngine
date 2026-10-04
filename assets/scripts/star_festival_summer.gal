@@ -1,0 +1,1037 @@
+# ============================================================
+# 星屑祭典 · 盛夏 —— 第三部
+#
+# 承接《星屑祭典 · 雪夜》：旧校舍保住了，改成了「青云天文馆」。
+# 这个夏天，一家文旅公司想把它整晚包下来做星空灯光秀——
+# 而这正好压在英仙座流星雨的观测时间上。
+#
+# 原有角色全部沿用，未做任何修改；新增 1 位角色：沈砚。
+# 注意：素材路径必须是 ASCII，角色名与场景 ID 可以用中文。
+# ============================================================
+title "星屑祭典 · 盛夏"
+
+# ---------------- 剧情树元信息 ----------------
+series 星屑祭典
+branch main
+order 3
+subtitle "卷三 · 夏"
+requires star_festival_winter:8
+
+# ---------------- 角色注册（沿用前两部）----------------
+init_character 吴鸿韬 assets/char/wu_hongtao_body.png #6FA8FF center
+init_character_face 吴鸿韬 assets/char/wu_hongtao_face
+init_character 黎璘 assets/char/li_lin_body.png #FF8FB0 right
+init_character_face 黎璘 assets/char/li_lin_face
+init_character 张誉腾 assets/char/zhang_yuteng_body.png #E0B34C center
+init_character_face 张誉腾 assets/char/zhang_yuteng_face
+init_character 梁知奕 assets/char/liang_zhiyi_body.png #9B7BE0 center
+init_character_face 梁知奕 assets/char/liang_zhiyi_face
+init_character 尹博涛 assets/char/yin_botao_body.png #F0724A right
+init_character_face 尹博涛 assets/char/yin_botao_face
+init_character 李君浩 assets/char/li_junhao_body.png #4CC0A8 center
+init_character_face 李君浩 assets/char/li_junhao_face
+init_character 李俊辰 assets/char/li_junchen_body.png #5A6B8C left
+init_character_face 李俊辰 assets/char/li_junchen_face
+init_character 邵清和 assets/char/shao_qinghe_body.png #7FB3D5 left
+init_character_face 邵清和 assets/char/shao_qinghe_face
+init_character 魏思远 assets/char/wei_siyuan_body.png #D98C5F right
+init_character_face 魏思远 assets/char/wei_siyuan_face
+init_character 顾星禾 assets/char/gu_xinghe_body.png #DA70D6 center
+init_character_face 顾星禾 assets/char/gu_xinghe_face
+# 新角色：沈砚，高一，天文馆第一批志愿者讲解员，背得下整本星表，一紧张就结巴
+init_character 沈砚 assets/char/shen_yan_body.png #9DBF5C center
+init_character_face 沈砚 assets/char/shen_yan_face
+
+# ---------------- 背景注册 ----------------
+init_bg 夏日街道 assets/bg/summer_street.png
+init_bg 天文馆展厅 assets/bg/planetarium_hall.png
+init_bg 夏日观测台 assets/bg/summer_observatory.png
+init_bg 城外山丘 assets/bg/summer_hill.png
+init_bg 台风街 assets/bg/typhoon_street.png
+init_bg 夏日天台 assets/bg/summer_rooftop.png
+init_bg 活动室 assets/bg/clubroom.png
+init_bg 走廊 assets/bg/corridor.png
+init_bg 教室 assets/bg/classroom.png
+init_bg 操场 assets/bg/playground.png
+init_bg 天台 assets/bg/rooftop.png
+init_bg 观测台 assets/bg/observatory.png
+init_bg 办公室 assets/bg/faculty_room.png
+init_bg 雨中 assets/bg/rain_street.png
+init_bg 祭典夜 assets/bg/festival_night.png
+init_bg 街道 assets/bg/street.png
+init_bg 春天天文馆 assets/bg/spring_observatory.png
+init_bg 冬夜观测台 assets/bg/observatory_winter.png
+
+# ---------------- 观测战（第七章英仙座那一夜）----------------
+init_battle 英仙座之夜 "灯海" 188 14 9
+init_battle 英仙座之夜 "霓虹" 158 14 11
+init_battle_party 英仙座之夜 吴鸿韬 顾星禾 沈砚
+
+# ============================================================
+# 第一章 · 灯
+# ============================================================
+chapter 1 "第一章 · 灯" picture assets/bg/planetarium_hall.png {
+#     play_bgm assets/audio/bgm_daily.ogg
+    show_bg 夏日街道
+    card "第一章 · 灯"
+    narrate "暑假第一天，蝉叫得像有人在耳朵边上拉锯。"
+    narrate "青云镇的街上没几个行人。只有天文馆门口，人多得像赶集。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "……这就是你说的「夜游」。"
+    show_character 顾星禾
+    move 顾星禾 right
+    change_face 顾星禾 happy.png
+    say 顾星禾 "试营业第三天！昨天来了四百一十六个人！"
+    say 吴鸿韬 "来干什么的？"
+    say 顾星禾 "拍照。"
+    say 吴鸿韬 "……"
+    change_face 顾星禾 normal.png
+    say 顾星禾 "社长，你先别皱眉，你先上来看看。"
+
+    show_bg 天文馆展厅
+    play_se assets/audio/se_click.wav
+    show_cg assets/cg/lightshow.png
+    narrate "圆顶的外壳被缠上了三百二十米灯带。红的、蓝的、紫的，一圈一圈往上绕。"
+    narrate "灯光把观测窗照得发白，像一块蒙了雾的玻璃。"
+    hide_cg
+    change_face 吴鸿韬 angry.png
+    say 吴鸿韬 "……观测窗。"
+    change_face 顾星禾 sad.png
+    say 顾星禾 "我知道。我第一眼就想骂人。"
+    say 顾星禾 "可是社长，你看楼下——四百多个人，第一次愿意走进这栋楼。"
+
+    narrate "展厅里，一个穿志愿者马甲的小个子男生正站在展柜前，背对着人流。"
+    show_character 沈砚
+    move 沈砚 center
+    change_face 沈砚 normal.png
+    say 沈砚 "这、这台赤道仪……是七十六年前……"
+    say 沈砚 "……极轴、赤纬、赤经……校对精度是……"
+    narrate "他背得很熟，熟到像在念一本自己抄了十遍的书。可他的手指一直在抖。"
+    play_se assets/audio/se_door.wav
+    narrate "一个举着手机的游客从他面前走过去，边走边喊：「这边这边！圆顶拍到了！」"
+    narrate "沈砚的声音被挤散了。他低下头，把稿子翻回第一页。"
+    say 吴鸿韬 "……他背错了吗？"
+    change_face 顾星禾 normal.png
+    say 顾星禾 "一个字都没错。"
+    say 顾星禾 "「七十六年」他说的是建馆那年，「精度 0.4 角分」他也说对了。"
+    say 顾星禾 "就是没人听。"
+
+    hide_character 沈砚
+    show_character 邵清和
+    move 邵清和 left
+    change_face 邵清和 sad.png
+    say 邵清和 "……你们来了。"
+    say 吴鸿韬 "老师，灯是谁挂的？"
+    say 邵清和 "星野文旅。市里引进的公司，做夜游项目的。"
+    say 邵清和 "他们出一份合同：整馆承包五年，每晚七点半到十点，灯光秀加讲解。"
+    change_face 吴鸿韬 surprise.png
+    say 吴鸿韬 "七点半到十点。"
+    say 邵清和 "对。"
+    say 吴鸿韬 "……八月十三号，英仙座流星雨的极大，就在十点前后。"
+    change_face 邵清和 normal.png
+    say 邵清和 "我知道。"
+    say 邵清和 "签字日是这个月三十一号。"
+
+    hide_character 邵清和
+    narrate "手机在口袋里震了两下。是张誉腾。"
+    show_character 张誉腾
+    move 张誉腾 center
+    change_face 张誉腾 sad.png
+    say 张誉腾 "……我在高铁上，信号不好，我长话短说。"
+    say 张誉腾 "这份合同是校方和文旅公司签的，学生会插不进手。"
+    say 吴鸿韬 "那你能插进什么地方？"
+    change_face 张誉腾 normal.png
+    say 张誉腾 "我能告诉你们，他们最怕什么。"
+    say 张誉腾 "——他们最怕一份写得很干净的数据。"
+    say 张誉腾 "我暑假回来一趟。你们先把要留的东西列出来。"
+    hide_character 张誉腾
+
+    change_face 顾星禾 normal.png
+    say 顾星禾 "社长，先做什么？"
+    narrate "玻璃上映着灯带的颜色。那是星星的颜色，也是星星最不该被染上的颜色。"
+
+    choice 吴鸿韬 "先做什么？" {
+        "先递反对意见书，明天就递。", jump c1_petition
+        "先把灯下的星空量出来。", jump c1_measure
+    }
+
+    @c1_petition
+    change_face 吴鸿韬 angry.png
+    say 吴鸿韬 "写意见书。今晚就写，明天早上递过去。"
+    change_face 顾星禾 surprise.png
+    say 顾星禾 "这么急？"
+    say 吴鸿韬 "上上次我们也是这样开始的。"
+    say 吴鸿韬 "一封通知，一个人敲门——如果不马上回话，事情就会自己往前走。"
+    change_face 顾星禾 happy.png
+    say 顾星禾 "好。我去找联名的人。现在楼下有四百个。"
+    jump c1_end
+
+    @c1_measure
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "先测。"
+    say 吴鸿韬 "我不想跟人吵架，我只想看数字。"
+    change_face 顾星禾 normal.png
+    say 顾星禾 "测什么？"
+    say 吴鸿韬 "把灯全开的时候，这里的天有多亮。"
+    say 吴鸿韬 "把结论放在桌上，比我们说一百句都好用。"
+    jump c1_end
+
+    @c1_end
+    change_face 顾星禾 happy.png
+    say 顾星禾 "对了社长，那个讲解员……他叫沈砚，今年才考上我们学校。"
+    say 顾星禾 "他自己报名来当志愿者的。"
+    say 吴鸿韬 "……他自己报名的？"
+    say 顾星禾 "嗯。他说他背了三个月的稿子。"
+    game_end
+}
+
+# ============================================================
+# 第二章 · 沈砚的星图
+# ============================================================
+chapter 2 "第二章 · 沈砚的星图" picture assets/bg/clubroom.png {
+#     play_bgm assets/audio/bgm_daily.ogg
+    show_bg 活动室
+    card "第二章 · 沈砚的星图"
+    narrate "活动室在夏天显得更小。四个人挤进来，风扇吹得纸哗哗响。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 梁知奕
+    move 梁知奕 right
+    change_face 梁知奕 normal.png
+    say 梁知奕 "数据我看了。灯光秀按他们的方案开，观测窗外的天空亮度会上升两个星等。"
+    say 吴鸿韬 "两个星等是多少？"
+    say 梁知奕 "本来能看见的星星，三分之二都会消失。"
+    say 梁知奕 "包括英仙座流星雨里最暗的那些——也就是最好看的那些。"
+
+    show_character 尹博涛
+    move 尹博涛 center
+    change_face 尹博涛 angry.png
+    say 尹博涛 "那还办什么观测会？"
+    say 梁知奕 "办。"
+    change_face 尹博涛 surprise.png
+    say 尹博涛 "……啊？"
+    say 梁知奕 "办给签字的人看。不然你以为我坐在这里干什么。"
+
+    play_se assets/audio/se_door.wav
+    show_character 顾星禾
+    move 顾星禾 center
+    change_face 顾星禾 happy.png
+    say 顾星禾 "社长！我把他带来了！"
+    show_character 沈砚
+    move 沈砚 center
+    change_face 沈砚 surprise.png
+    say 沈砚 "打、打扰了……我是沈砚，一年、一年三班的……"
+    say 吴鸿韬 "……你昨天站在展柜前面，背了四十分钟的稿子。"
+    change_face 沈砚 sad.png
+    say 沈砚 "您、您听见了？"
+    say 吴鸿韬 "听见了。一个字都没错。"
+    change_face 沈砚 surprise.png
+    say 沈砚 "……"
+
+    narrate "他从书包里抽出一个本子。封面用胶带加固过两遍，边角已经磨圆了。"
+    show_cg assets/cg/shen_yan_notebook.png
+    narrate "翻开是手绘的星图。铅笔线细得像头发，一张一张，按月份排到十二月。"
+    narrate "每一页的角落里都有一行小字：「今晚云量」「今晚看得见几颗」。"
+    hide_cg
+    change_face 梁知奕 surprise.png
+    say 梁知奕 "……这个赤经坐标是谁教你的？"
+    change_face 沈砚 normal.png
+    say 沈砚 "没、没人教。图书馆有本旧星表，我对着抄的。"
+    say 梁知奕 "抄错了两处。"
+    change_face 沈砚 sad.png
+    say 沈砚 "……是。第三页和第四十一页。我、我后来发现了。"
+    say 梁知奕 "发现了为什么不用橡皮擦？"
+    say 沈砚 "因为……擦掉的话，就看不出来我错过。"
+    change_face 梁知奕 normal.png
+    say 梁知奕 "……"
+    say 梁知奕 "你这个本子，比他们那份灯光秀方案有用十倍。"
+
+    change_face 顾星禾 normal.png
+    say 顾星禾 "但是……昨天有人在群里说他。"
+    say 吴鸿韬 "说什么？"
+    change_face 顾星禾 sad.png
+    say 顾星禾 "说「天文馆请了个结巴讲解员，一张票二十块」。"
+    narrate "沈砚的手停在半空，慢慢收回去，把本子合上了。"
+    change_face 沈砚 sad.png
+    say 沈砚 "……我明天不去了。"
+    say 吴鸿韬 "为什么？"
+    say 沈砚 "我讲得不好。"
+    say 吴鸿韬 "你讲得对。"
+    say 沈砚 "对……没有用啊。"
+
+    change_face 尹博涛 normal.png
+    say 尹博涛 "喂，小个子。"
+    change_face 沈砚 surprise.png
+    say 沈砚 "……是？"
+    say 尹博涛 "我跑过十一秒二。现在跑三百米要喘三分钟。"
+    say 尹博涛 "你觉得我是停下来好，还是跑得难看一点好？"
+    say 沈砚 "……"
+    say 尹博涛 "结巴不是错。停下来才是。"
+    change_face 尹博涛 happy.png
+    say 尹博涛 "明天早上六点半，操场。我教你换气。"
+    say 沈砚 "……换气？"
+    say 尹博涛 "讲解跟跑八百米一个道理。气不顺，话就断。"
+
+    hide_character 沈砚
+    hide_character 尹博涛
+    change_face 梁知奕 normal.png
+    say 梁知奕 "……那个本子里的记录，是连续一百四十天。"
+    change_face 吴鸿韬 surprise.png
+    say 吴鸿韬 "一百四十天？"
+    say 梁知奕 "他一个人记得比我们社团还全。"
+    say 梁知奕 "如果我们要交「连续观测记录」，缺的那部分，在他那里。"
+
+    choice 吴鸿韬 "怎么用这本笔记？" {
+        "直接告诉他：我们需要他。", jump c2_need
+        "先让他在讲解这件事上赢一次。", jump c2_win
+    }
+
+    @c2_need
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "明天我去找他。"
+    say 吴鸿韬 "我要说清楚：不是我们给他一个位置，是我们需要他那一百四十天。"
+    change_face 梁知奕 normal.png
+    say 梁知奕 "……难得。你说话居然过了脑子。"
+    jump c2_end
+
+    @c2_win
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "先别跟他讲数据。"
+    say 吴鸿韬 "让他先站上讲台，把一段话讲完。"
+    change_face 梁知奕 happy.png
+    say 梁知奕 "……你以前不会这样想事情。"
+    say 吴鸿韬 "有人教过我。"
+    jump c2_end
+
+    @c2_end
+    say 梁知奕 "还有一件事。八月十三号那天，英仙座流星雨的辐射点在东北方向。"
+    say 梁知奕 "天文馆的圆顶朝西南。就算没有灯，我们也看不到最好的那一片天。"
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "……所以要去别的地方。"
+    say 梁知奕 "对。"
+    say 吴鸿韬 "去城外。"
+    game_end
+}
+
+# ============================================================
+# 第三章 · 光害计
+# ============================================================
+chapter 3 "第三章 · 光害计" picture assets/bg/summer_hill.png {
+#     play_bgm assets/audio/bgm_tension.ogg
+    show_bg 活动室
+    card "第三章 · 光害计"
+    narrate "李君浩把一只铁盒子放在桌上，盒子上焊着一个小小的探头。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 李君浩
+    move 李君浩 center
+    change_face 李君浩 happy.png
+    say 李君浩 "光、光害计！做好了！"
+    say 吴鸿韬 "……你哪来的仪器？"
+    change_face 李君浩 blush.png
+    say 李君浩 "邵老师从物理实验室借的光电池，钟表店的旧表壳，还有……我的闹钟。"
+    say 吴鸿韬 "你的闹钟。"
+    say 李君浩 "拆了。反正暑假不用早起。"
+    show_character 梁知奕
+    move 梁知奕 right
+    change_face 梁知奕 normal.png
+    say 梁知奕 "校准过吗？"
+    change_face 李君浩 normal.png
+    say 李君浩 "校准过！用、用手机屏幕的固定亮度做了三点标定，误差在百分之六以内。"
+    change_face 梁知奕 surprise.png
+    say 梁知奕 "……百分之六。"
+    say 梁知奕 "李君浩。"
+    say 李君浩 "在、在！"
+    say 梁知奕 "你明年要是敢去学文科，我把你闹钟的零件全扔了。"
+
+    show_bg 夏日观测台
+    play_se assets/audio/se_door.wav
+    narrate "七点半，灯带准时亮起。整座天文馆像一只被人按亮的水母。"
+    change_face 李君浩 sad.png
+    say 李君浩 "……读数三十七。"
+    say 梁知奕 "城外同期是零点八。"
+    say 吴鸿韬 "多少倍？"
+    say 梁知奕 "四十六倍。"
+    narrate "圆顶下面，游客的笑声一阵一阵传上来。"
+    hide_character 李君浩
+    hide_character 梁知奕
+
+    show_bg 城外山丘
+#     play_bgm assets/audio/bgm_starry.ogg
+    narrate "九点，他们把仪器搬到了城外的山丘上。"
+    narrate "这里没有灯，只有风，和一层薄薄的、凉下来的草味。"
+    show_character 黎璘
+    move 黎璘 right
+    change_face 黎璘 normal.png
+    say 黎璘 "……你看那边。"
+    narrate "山脚下，青云镇摊成一片橙色的光。天文馆是里面最亮的一点。"
+
+    show_cg assets/cg/light_meter.png
+    narrate "黎璘把仪器举起来，对着天空。红色的数字在黑里跳。"
+    narrate "「零点八」。"
+    hide_cg
+    change_face 黎璘 sad.png
+    say 黎璘 "我们花了十年，才让这栋楼被人看见。"
+    say 黎璘 "现在它被人看见了。可是它把星星挡住了。"
+    say 吴鸿韬 "……那就关着灯被人看见。"
+    change_face 黎璘 surprise.png
+    say 黎璘 "……嗯？"
+    say 吴鸿韬 "他们要看灯，我们要看星星。"
+    say 吴鸿韬 "这两件事，不是非要打一架。"
+
+    play_se assets/audio/se_door.wav
+    show_character 魏思远
+    move 魏思远 center
+    change_face 魏思远 happy.png
+    say 魏思远 "——说得好。"
+    say 吴鸿韬 "魏学长？你怎么在这？"
+    say 魏思远 "邵老师给我发了消息。我暑假回来一周，顺便带了点东西。"
+    narrate "他从背包里抽出几张打印纸。纸上印着一行标题：《暗夜科普基地评选办法》。"
+    say 魏思远 "省科协今年第一次评这个。条件我背下来了。"
+    say 魏思远 "第一，连续三十天的光害观测记录。第二，一年内办过一场百人以上的公开观测活动。"
+    say 魏思远 "第三，也是最好笑的一条——"
+    change_face 魏思远 happy.png
+    say 魏思远 "「申报单位所在地的居民，愿意在观测时段减少照明。」"
+    change_face 梁知奕 surprise.png
+    show_character 梁知奕
+    move 梁知奕 center
+    say 梁知奕 "……需要居民自愿。"
+    say 魏思远 "对。不是要你们赢一场官司。"
+    say 魏思远 "是要你们，让一整个镇子愿意为你们关一次灯。"
+
+    choice 吴鸿韬 "走哪条路？" {
+        "申报暗夜科普基地，正面顶住合同。", jump c3_apply
+        "先把这次流星雨的观测会办成再说。", jump c3_observe
+    }
+
+    @c3_apply
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "报。"
+    say 吴鸿韬 "三十天的记录我们补得上，活动我们办得出。"
+    say 吴鸿韬 "剩下那一条，我们去问全镇的人。"
+    change_face 魏思远 happy.png
+    say 魏思远 "……你变了啊，吴鸿韬。"
+    say 吴鸿韬 "哪儿变了？"
+    say 魏思远 "以前你只抬头。现在你会回头看了。"
+    jump c3_end
+
+    @c3_observe
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "先把观测会办起来。"
+    say 吴鸿韬 "三十天记录也好，申报也好，都要靠一场真的看得见的夜晚撑着。"
+    change_face 魏思远 normal.png
+    say 魏思远 "……合理。先让人抬头，再跟人讲道理。"
+    say 魏思远 "但八月十三号之后，就是他们签字的日子。只剩十三天。"
+    jump c3_end
+
+    @c3_end
+    hide_character 魏思远
+    hide_character 梁知奕
+    change_face 黎璘 normal.png
+    say 黎璘 "鸿韬。"
+    say 吴鸿韬 "嗯？"
+    say 黎璘 "观测记录，我来。"
+    change_face 黎璘 happy.png
+    say 黎璘 "这次是三十天。我记一千页也行。"
+    say 吴鸿韬 "……好。"
+    game_end
+}
+
+# ============================================================
+# 第四章 · 台风
+# ============================================================
+chapter 4 "第四章 · 台风" picture assets/bg/typhoon_street.png {
+#     play_bgm assets/audio/bgm_rain.ogg
+    show_bg 台风街
+    card "第四章 · 台风"
+    narrate "八月五号，台风「南屏」登陆。"
+    narrate "雨横着打在窗户上，整条街的树都朝一个方向弯。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 sad.png
+    say 吴鸿韬 "……第五天断了。"
+    show_character 梁知奕
+    move 梁知奕 right
+    change_face 梁知奕 angry.png
+    say 梁知奕 "不是断了，是被人从窗户里往外拍的。"
+    say 梁知奕 "天文馆的观测窗今天重新擦了，因为「雨里的灯光秀更好看」。"
+    say 吴鸿韬 "……"
+    say 梁知奕 "游客三百人。我们的人站在楼下等雨停。"
+
+    play_se assets/audio/se_thunder.wav
+    show_bg 天文馆展厅
+    narrate "展厅里，讲解台前的队伍排到了门口。"
+    show_character 沈砚
+    move 沈砚 center
+    change_face 沈砚 normal.png
+    say 沈砚 "这、这台赤道仪，是七十六年前由、由……"
+    narrate "「讲快点。」"
+    narrate "「小同学，你就说这玩意儿值多少钱就行了。」"
+    narrate "「拍这边拍这边，别挡镜头。」"
+    change_face 沈砚 sad.png
+    say 沈砚 "……"
+    narrate "他把稿子合上，鞠了一躬，从人群的缝隙里挤了出去。"
+    hide_character 沈砚
+
+    show_character 顾星禾
+    move 顾星禾 left
+    change_face 顾星禾 sad.png
+    say 顾星禾 "沈砚！"
+    hide_character 顾星禾
+
+    change_face 梁知奕 angry.png
+    say 梁知奕 "……我昨天说了他一句。"
+    say 吴鸿韬 "哪句？"
+    say 梁知奕 "我说，「数据不错，但你的讲解没有一次讲完过」。"
+    change_face 梁知奕 sad.png
+    say 梁知奕 "说的时候，我觉得自己很客观。"
+    say 梁知奕 "现在想起来，那句话和游客说的没有区别。"
+
+    narrate "雨声里，有人在活动室门口敲了很久的门。"
+    play_se assets/audio/se_door.wav
+    show_character 李俊辰
+    move 李俊辰 center
+    change_face 李俊辰 normal.png
+    say 李俊辰 "……怎么都不开灯。"
+    say 吴鸿韬 "李俊辰？你不是去美院了吗？"
+    say 李俊辰 "暑假回来赚学费，在镇上给人画墙。"
+    narrate "他把湿透的包往地上一放，从里面抽出一卷纸。"
+    say 李俊辰 "我今天在天文馆后墙画画。画到一半，被保安赶了。"
+    say 李俊辰 "他说「这墙要贴灯箱广告」。"
+    change_face 李俊辰 angry.png
+    say 李俊辰 "我画的是星图。整面墙，七月到十二月。"
+    say 李俊辰 "……我第一次画自己的画，被人当小广告赶。"
+
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "……你还记得吗。去年冬天，你贴了一百二十七张。"
+    say 李俊辰 "记得。"
+    say 吴鸿韬 "现在换我们贴一次。"
+    change_face 李俊辰 surprise.png
+    say 李俊辰 "……你是说，把墙要回来？"
+    say 吴鸿韬 "我是说，把墙画完。"
+
+    choice 吴鸿韬 "先管哪一头？" {
+        "先去追沈砚。", jump c4_shen
+        "先把三十天记录补回来。", jump c4_data
+    }
+
+    @c4_shen
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "记录可以补。人跑掉了不好找。"
+    say 吴鸿韬 "李俊辰，你的伞借我。"
+    change_face 李俊辰 normal.png
+    say 李俊辰 "……拿去。别把人弄丢了。"
+    jump c4_end
+
+    @c4_data
+    change_face 吴鸿韬 sad.png
+    say 吴鸿韬 "今天是第五天。再断一天，三十天就要从头数。"
+    say 吴鸿韬 "沈砚家在镇上，顾星禾去。我们把记录补回来。"
+    change_face 李俊辰 normal.png
+    say 李俊辰 "……你们这群人，还是这么死心眼。"
+    say 李俊辰 "行。今晚我陪你们测。"
+    jump c4_end
+
+    @c4_end
+    hide_character 李俊辰
+    hide_character 梁知奕
+    change_face 吴鸿韬 sad.png
+    narrate "雨下到半夜。观测记录停在第五天。"
+    narrate "第二天早上，天文馆的公众号发了一条推送："
+    narrate "《雨夜星空 | 单日客流新高达 512 人次》。"
+    say 吴鸿韬 "……五百一十二。"
+    say 吴鸿韬 "我们一共，只有十一个人。"
+    game_end
+}
+
+# ============================================================
+# 第五章 · 三十天
+# ============================================================
+chapter 5 "第五章 · 三十天" picture assets/bg/corridor.png {
+#     play_bgm assets/audio/bgm_tension.ogg
+    show_bg 活动室
+    card "第五章 · 三十天"
+    narrate "活动室的桌子被拼成一长条，上面摊着一百四十页笔记、三本日志、两台笔记本电脑。"
+    narrate "窗外的雨还没停，风扇转得很慢。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 黎璘
+    move 黎璘 right
+    change_face 黎璘 normal.png
+    say 黎璘 "七月六号，云量四，能见度三。"
+    say 黎璘 "七月七号，云量五，有雷。"
+    say 黎璘 "……这些是沈砚写的。"
+    say 吴鸿韬 "他人在哪？"
+    change_face 黎璘 sad.png
+    say 黎璘 "顾星禾昨天在他家楼下站了两个小时。他没下来。"
+    say 黎璘 "他妈妈说，他发烧了。"
+    say 吴鸿韬 "……"
+
+    show_character 张誉腾
+    move 张誉腾 center
+    change_face 张誉腾 normal.png
+    say 张誉腾 "我把申报表打印出来了。"
+    say 张誉腾 "……我仔细看了一遍。这张表，和我们当年那份废部通知，是同一个模板。"
+    change_face 张誉腾 sad.png
+    say 张誉腾 "前三页是「申报理由」，第四页是「附件清单」，第五页是「审批意见」。"
+    say 张誉腾 "我签过第五页。那次我签完，天文社差点没了。"
+    say 吴鸿韬 "……这次第五页谁签？"
+    say 张誉腾 "文旅公司。"
+    say 张誉腾 "所以前面四页，必须厚到让他们不敢轻飘飘地写一个字。"
+
+    show_character 尹博涛
+    move 尹博涛 center
+    change_face 尹博涛 normal.png
+    say 尹博涛 "记录我来跑。天文馆、山顶、操场，一天三个点。"
+    show_character 梁知奕
+    move 梁知奕 right
+    change_face 梁知奕 normal.png
+    say 梁知奕 "你的腿。"
+    change_face 尹博涛 happy.png
+    say 尹博涛 "骑车。我腿不行，不是人不行。"
+    say 梁知奕 "……这句话有语病。"
+    say 尹博涛 "我知道。反正你听懂了。"
+
+    show_character 李君浩
+    move 李君浩 center
+    change_face 李君浩 normal.png
+    say 李君浩 "我、我再做两台光害计。一台放天文馆，一台放山顶，一台放……我家阳台。"
+    say 吴鸿韬 "为什么放你家阳台？"
+    change_face 李君浩 happy.png
+    say 李君浩 "因为你说的那一条——「居民愿意在观测时段减少照明」。"
+    say 李君浩 "我家就在镇上。我们家关灯，也是一票。"
+
+    show_cg assets/cg/old_logbook.png
+    narrate "邵清和把一本旧笔记放在桌子最中间。封皮上有褐色的水痕。"
+    hide_cg
+    show_character 邵清和
+    move 邵清和 center
+    change_face 邵清和 normal.png
+    say 邵清和 "周老师的。三十一年前，他这一个月也没停过。"
+    say 邵清和 "……他还写了一句话。"
+    say 邵清和 "「天文台最亮的时候，不是开灯的时候。」"
+    change_face 邵清和 happy.png
+    say 邵清和 "我以前以为他在说望远镜。"
+    say 邵清和 "现在知道了，他在说人。"
+
+    hide_character 张誉腾
+    hide_character 邵清和
+    hide_character 尹博涛
+    hide_character 李君浩
+    narrate "那天晚上，雨停了十分钟。"
+    play_se assets/audio/se_door.wav
+    narrate "活动室的门口，放着一本用塑料袋包好的本子。"
+    narrate "本子下面压着一张纸条：「第六天到第一百四十天，都在里面。我背的是错的，字是好的。」"
+    change_face 黎璘 happy.png
+    say 黎璘 "……是他。"
+    say 吴鸿韬 "他没上来？"
+    say 黎璘 "没有。他跑得很快。"
+    change_face 吴鸿韬 happy.png
+    say 吴鸿韬 "……跑得挺快的。"
+
+    choice 吴鸿韬 "怎么回他？" {
+        "写一张纸条，从门缝里塞回去。", jump c5_note
+        "让顾星禾带他去讲解台。", jump c5_stage
+    }
+
+    @c5_note
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "笔给我。"
+    narrate "他写了六个字：「你的字，比我的好。」"
+    say 吴鸿韬 "……我字丑，你写。"
+    change_face 黎璘 happy.png
+    say 黎璘 "现在知道找我了？"
+    jump c5_end
+
+    @c5_stage
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "顾星禾，明天带他去天文馆。"
+    change_face 黎璘 surprise.png
+    say 黎璘 "啊？可他现在不敢进馆……"
+    say 吴鸿韬 "不是让他讲给游客听。"
+    say 吴鸿韬 "是把那一百四十页，讲给我们四个人听。"
+    say 吴鸿韬 "讲给我们听，就不会结巴。"
+    jump c5_end
+
+    @c5_end
+    narrate "八月十一号，记录补到第三十天。"
+    narrate "梁知奕在最后一页写上：「连续三十二天，无缺口。」"
+    change_face 梁知奕 normal.png
+    say 梁知奕 "……接下来，就剩一件事了。"
+    say 吴鸿韬 "什么事？"
+    say 梁知奕 "让一千个人，愿意在一个晚上把灯关掉。"
+    game_end
+}
+
+# ============================================================
+# 第六章 · 讲解
+# ============================================================
+chapter 6 "第六章 · 讲解" picture assets/bg/planetarium_hall.png {
+#     play_bgm assets/audio/bgm_festival.ogg
+    show_bg 天文馆展厅
+    card "第六章 · 讲解"
+    narrate "八月十二号，晚七点二十五分。灯光秀的最后一个夜晚。"
+    narrate "展厅里的人比台风那天还多。有人在喊，有人在自拍，有人在找出口。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 顾星禾
+    move 顾星禾 right
+    change_face 顾星禾 normal.png
+    say 顾星禾 "社长……你真的要让他上？"
+    say 吴鸿韬 "不是我要让他上。"
+    say 吴鸿韬 "是他自己走到台边上，站了二十分钟没走。"
+
+    show_character 沈砚
+    move 沈砚 center
+    change_face 沈砚 sad.png
+    say 沈砚 "社长……我讲不完的。"
+    say 吴鸿韬 "讲不完就讲不完。"
+    change_face 沈砚 surprise.png
+    say 沈砚 "……？"
+    say 吴鸿韬 "你只要讲完第一句就行。"
+    say 吴鸿韬 "第一句以后，你自己就知道下一句是什么了。"
+
+    narrate "七点半，灯亮了。整座圆顶从楼下一直亮到天上。"
+    narrate "沈砚走上讲解台，手心里捏着一页已经软掉的稿子。"
+    change_face 沈砚 normal.png
+    say 沈砚 "这、这台赤道仪……"
+    narrate "人群里有人笑了一声。"
+    say 沈砚 "……"
+    narrate "他停了两秒。然后他做了一件所有人都没料到的事——他抬起头，看向那个人的眼睛。"
+    change_face 沈砚 happy.png
+    say 沈砚 "这栋楼是七十六年前盖的。盖它的那一年，这里就是一座观测站。"
+    say 沈砚 "而里面这台赤道仪，是三十一年前，一位老师装起来的。"
+    say 沈砚 "……他装完之后，在这张纸上写了一句话。"
+    say 沈砚 "「装好了，可是今晚有云。」"
+    narrate "展厅安静下来了。"
+    say 沈砚 "他等了三十一年。等到他走，也没有等到一个完全晴的夜晚。"
+    say 沈砚 "……今天晚上的云量，我查过。也有云。"
+    say 沈砚 "所以我想说——今晚有云，可是我们在这里。"
+    narrate "掌声是从后排开始响的。响得有点晚，但很齐。"
+
+    hide_character 沈砚
+    change_face 顾星禾 happy.png
+    say 顾星禾 "社长……他真的讲完了。"
+    say 吴鸿韬 "嗯。"
+    say 顾星禾 "你在哭？"
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "风大。"
+    say 顾星禾 "这是室内。"
+    say 吴鸿韬 "……把梁知奕叫过来。"
+
+    show_character 梁知奕
+    move 梁知奕 center
+    change_face 梁知奕 normal.png
+    say 梁知奕 "稿子我写好了。三分钟版本，两页纸。"
+    say 梁知奕 "第一页是我们的数据。第二页只有一句话——"
+    say 梁知奕 "「请把灯关掉三十分钟。就今晚。」"
+    say 吴鸿韬 "……谁去说？"
+    say 梁知奕 "你去。你是社长。"
+    say 吴鸿韬 "那这件事，我来定。"
+
+    choice 吴鸿韬 "怎么开口？" {
+        "把三十天的数据拍在桌上。", jump c6_hard
+        "请他们下楼，自己抬头看一次。", jump c6_look
+    }
+
+    @c6_hard
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "三十天，连续记录，两个观测点，误差百分之六。"
+    say 吴鸿韬 "你们方案的第七页写着「不影响原有科普功能」。"
+    say 吴鸿韬 "现在这句话，不成立。"
+    narrate "对面的人翻了翻那两页纸，翻了很久。"
+    change_face 梁知奕 surprise.png
+    say 梁知奕 "……他翻了四分钟。"
+    say 吴鸿韬 "够了。"
+    jump c6_end
+
+    @c6_look
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "能不能请你们下楼一趟？就五分钟。"
+    narrate "他把那两页纸收回口袋，带着三个人下了楼。"
+    narrate "在楼下，他指着被灯带照白的圆顶，只说了唯一的一句话——"
+    say 吴鸿韬 "「你们把最好的东西，盖住了。」"
+    jump c6_end
+
+    @c6_end
+    hide_character 梁知奕
+    narrate "八月十三号凌晨一点。台风过后的第一个晴夜。"
+    narrate "天文馆的灯带灭了。"
+    narrate "镇上的许多窗户，也一盏一盏地暗了下去。"
+    change_face 顾星禾 normal.png
+    say 顾星禾 "社长……你看楼下。"
+    say 顾星禾 "有人在关灯。"
+    game_end
+}
+
+# ============================================================
+# 第七章 · 英仙座
+# ============================================================
+chapter 7 "第七章 · 英仙座" picture assets/bg/summer_hill.png {
+#     play_bgm assets/audio/bgm_starry.ogg
+    show_bg 城外山丘
+    card "第七章 · 英仙座"
+    narrate "八月十三号，凌晨两点。离极大还有四十分钟。"
+    narrate "山丘上站了一千一百多人。草被踩平了一片，像一小块露天的礼堂。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 黎璘
+    move 黎璘 right
+    change_face 黎璘 happy.png
+    say 黎璘 "一千一百二十六人。"
+    say 吴鸿韬 "……上次三百一十二。"
+    say 黎璘 "这次多出来的，一半是来看灯的。"
+    change_face 黎璘 normal.png
+    say 黎璘 "结果灯没了，他们还是来了。"
+
+    show_character 尹博涛
+    move 尹博涛 center
+    change_face 尹博涛 happy.png
+    say 尹博涛 "山上山下，我跑了十四个来回。"
+    say 尹博涛 "……全程骑车。"
+    change_face 尹博涛 normal.png
+    say 尹博涛 "吴鸿韬，我跟你说个事。我查了体育学院的招生简章。"
+    say 尹博涛 "运动康复专业。"
+    say 吴鸿韬 "……你想去做康复？"
+    say 尹博涛 "我这条腿要是没被人捞回来，我现在就在家里躺着。"
+    say 尹博涛 "我想当捞人的那个。"
+    change_face 吴鸿韬 happy.png
+    say 吴鸿韬 "……嗯。"
+    hide_character 尹博涛
+
+    show_character 李君浩
+    move 李君浩 center
+    change_face 李君浩 happy.png
+    say 李君浩 "三台光害计，读数都在零点九以下！"
+    say 李君浩 "邵老师说、说，这是天文馆建馆以来最暗的一夜。"
+    hide_character 李君浩
+
+    show_character 顾星禾
+    move 顾星禾 center
+    change_face 顾星禾 happy.png
+    say 顾星禾 "社长！沈砚在下面讲第三场了！"
+    say 顾星禾 "他带了二十个小朋友，一人一张星图。"
+    hide_character 顾星禾
+
+    show_character 邵清和
+    move 邵清和 center
+    change_face 邵清和 normal.png
+    say 邵清和 "……周老师。"
+    say 邵清和 "三十一年了。今晚，天是晴的。"
+    change_face 邵清和 happy.png
+    hide_character 邵清和
+
+    change_face 黎璘 normal.png
+    say 黎璘 "鸿韬。"
+    say 吴鸿韬 "嗯？"
+    say 黎璘 "辐射点在东北。"
+    say 吴鸿韬 "……我知道。"
+    say 黎璘 "风从东北来。"
+    # 观测战：全镇的灯是这一夜最大的对手
+    battle 英仙座之夜 {
+        win jump s7_win
+        lose jump s7_lose
+    }
+
+    @s7_win
+    narrate "山下的橙色光一寸一寸地退下去。整片天开始露出来。"
+    jump s7_go
+
+    @s7_lose
+    narrate "还有几条街没关。光晕压在天边，最暗的那几颗流星看不见了。"
+    say 沈砚 "……我、我去广播站再喊一次！"
+    narrate "他抱着喇叭往山下跑，声音在山谷里拖出很长的尾巴。"
+    jump s7_go
+
+    @s7_go
+    play_se assets/audio/se_meteor.wav
+
+    show_cg assets/cg/perseid_shower.png
+    narrate "第一颗流星从英仙座的方向拉出来。"
+    narrate "然后是第二颗，第三颗。"
+    narrate "整片天像有人在很深的地方，慢慢地、耐心地划着线。"
+    narrate "一千一百二十六个人，同时安静了。"
+    hide_cg
+
+    change_face 吴鸿韬 happy.png
+    say 吴鸿韬 "……黎璘。"
+    say 黎璘 "嗯。"
+    say 吴鸿韬 "你说过，你在的时候，天一直是晴的。"
+    change_face 黎璘 blush.png
+    say 黎璘 "……我说过。"
+    say 吴鸿韬 "我以前以为那是运气。"
+    say 吴鸿韬 "现在我知道了——那是十年。"
+
+    choice 黎璘 "我等你一句话。" {
+        "「这次换我记。三十天，我陪你。」", jump c7_record
+        "「明年，我们去更远的地方看。」", jump c7_far
+    }
+
+    @c7_record
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "这次换我记。"
+    say 吴鸿韬 "三十天，我陪你。"
+    change_face 黎璘 happy.png
+    say 黎璘 "……你连日志的格式都不会写。"
+    say 吴鸿韬 "你教我。"
+    say 黎璘 "……好。"
+    jump c7_end
+
+    @c7_far
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "明年，我们去更远的地方看。"
+    say 吴鸿韬 "去一个看不见这个镇子的地方。"
+    change_face 黎璘 surprise.png
+    say 黎璘 "……那你得先考上。"
+    change_face 吴鸿韬 happy.png
+    say 吴鸿韬 "所以我在填志愿。"
+    change_face 黎璘 blush.png
+    say 黎璘 "……你这个笨蛋。"
+    jump c7_end
+
+    @c7_end
+    hide_character 黎璘
+    narrate "凌晨三点四十，最后一颗流星划过。"
+    narrate "记录表上写着：英仙座流星雨，目视计数 847 颗，观测者 1126 人。"
+    narrate "以及——「观测期间，全镇照明负荷下降 41%。」"
+    game_end
+}
+
+# ============================================================
+# 第八章 · 盛夏之后
+# ============================================================
+chapter 8 "第八章 · 盛夏之后" picture assets/bg/summer_rooftop.png {
+#     play_bgm assets/audio/bgm_warm.ogg
+    show_bg 夏日天台
+    card "第八章 · 盛夏之后"
+    narrate "八月三十一号，签约日上午。"
+    narrate "天文馆的灯带拆掉了，换成了一块新的牌子：「青云镇暗夜科普基地」。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 邵清和
+    move 邵清和 center
+    change_face 邵清和 normal.png
+    say 邵清和 "文旅公司撤了灯光秀，改成「每月一次闭灯观测夜」。"
+    say 邵清和 "合同签了，五年的。"
+    say 吴鸿韬 "……他们居然肯。"
+    say 邵清和 "他们不是肯。"
+    change_face 邵清和 happy.png
+    say 邵清和 "是他们发现，一个真的能看到星星的天文馆，比一条拍完照就走的灯带，能活得更久。"
+
+    show_character 顾星禾
+    move 顾星禾 right
+    change_face 顾星禾 happy.png
+    say 顾星禾 "社长！讲解排班表我做好了！"
+    say 顾星禾 "周一沈砚，周二沈砚，周三——"
+    say 吴鸿韬 "……周三呢？"
+    change_face 顾星禾 normal.png
+    say 顾星禾 "周三我。周四我。"
+    show_character 沈砚
+    move 沈砚 center
+    change_face 沈砚 happy.png
+    say 沈砚 "周、周五我来！"
+    say 沈砚 "我不结巴了！"
+    say 吴鸿韬 "……你还是结巴。"
+    change_face 沈砚 blush.png
+    say 沈砚 "我在练！"
+    hide_character 沈砚
+    hide_character 顾星禾
+
+    change_face 邵清和 normal.png
+    say 邵清和 "吴鸿韬。"
+    say 吴鸿韬 "老师？"
+    say 邵清和 "社长的事，该交了。"
+    say 吴鸿韬 "……九月一号之前交接。"
+    say 邵清和 "嗯。你已经想好了吧。"
+    say 吴鸿韬 "……想好了。"
+    hide_character 邵清和
+
+    play_se assets/audio/se_door.wav
+    show_bg 走廊
+    narrate "走廊尽头的公告栏上，贴着一张纸。"
+    narrate "「天文社社长交接公告：顾星禾（二年五班）。」"
+    narrate "纸的右下角，有两个签名。"
+
+    show_bg 活动室
+    show_character 梁知奕
+    move 梁知奕 center
+    change_face 梁知奕 normal.png
+    say 梁知奕 "志愿表填好了？"
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "填好了。"
+    say 梁知奕 "第一志愿哪个学校？"
+    say 吴鸿韬 "……你不认识。"
+    change_face 梁知奕 happy.png
+    say 梁知奕 "天文系？"
+    say 吴鸿韬 "……"
+    say 梁知奕 "不说话我就当是了。"
+    change_face 梁知奕 normal.png
+    say 梁知奕 "我也填了物理系。"
+    say 吴鸿韬 "你不是说要读经济吗？"
+    say 梁知奕 "那是上个学期的话。"
+    say 梁知奕 "这个学期我发现一件事——"
+    say 梁知奕 "我算得来的东西，不如你们抬头看得准。"
+    hide_character 梁知奕
+
+    show_bg 夏日天台
+    narrate "八月三十一号，晚上。夏天最后一个晴夜。"
+    change_face 吴鸿韬 normal.png
+    show_character 黎璘
+    move 黎璘 right
+    change_face 黎璘 normal.png
+    say 黎璘 "明天开学了。"
+    say 吴鸿韬 "嗯。"
+    say 黎璘 "高三。"
+    say 吴鸿韬 "嗯。"
+    change_face 黎璘 happy.png
+    say 黎璘 "……你就不能多说一句？"
+    say 吴鸿韬 "我在看猎户座。"
+    say 黎璘 "现在是八月，看不到猎户座。"
+    change_face 吴鸿韬 happy.png
+    say 吴鸿韬 "……我知道。"
+    say 吴鸿韬 "但是冬天的时候，它还会在原来的地方。"
+
+    hide_character 黎璘
+    narrate "他把社长章放在桌上，旁边是那本被翻烂的观测日志。"
+    narrate "日志的最后一页，是今天刚写上去的："
+    narrate "「第八十七天。云量零。看得见全部的星星。」"
+
+    show_cg assets/cg/summer_promise.png
+    narrate "天台上站着一排人。有人在数流星，有人在写记录，有人只是抬着头。"
+    narrate "远处的塔灯扫过来，又扫过去，一次也没有照到他们。"
+    narrate "因为他们站的地方，本来就该是暗的。"
+    narrate "——只有这样，星星才是星星。"
+    hide_cg
+
+    change_face 吴鸿韬 happy.png
+    say 吴鸿韬 "……黎璘。"
+    say 黎璘 "嗯？"
+    say 吴鸿韬 "明年夏天，我们还来吗？"
+    change_face 黎璘 blush.png
+    say 黎璘 "这句话，去年冬天我问过你。"
+    say 吴鸿韬 "……我知道。"
+    change_face 黎璘 happy.png
+    say 黎璘 "来。"
+    say 黎璘 "反正天这么大，我们有的是时间。"
+
+    card "全剧终"
+    game_end
+}

@@ -1,0 +1,118 @@
+# QLWT 界面文案（Minecraft 风格的语言文件）
+#
+# 规则：
+#   * 一行一条 key=value，`#` 开头是注释，空行忽略
+#   * 代码里一律用 tr("key") 取文案，不要再把中文写死在 C++ 里
+#   * 字体只光栅化"这份文件里出现的字 + 剧本里的字"，所以新增文案只要写在这里，
+#     字形会自动被收录，不会出现缺字问号
+#   * value 里的 %s 是占位符，用 trf("key", {..}) 填充
+
+# ---- 通用 ----
+common.back=返回
+common.up=上级
+common.on=开
+common.off=关
+
+# ---- 标题界面 ----
+# title.main：开始界面的大标题。留空 = 用当前脚本的 title
+# （默认脚本是 assets/scripts/star_festival.gal，里面写着 `title 星屑祭典`）
+title.main=星屑祭典
+title.subtitle=青云高中天文社 · 三部曲
+title.start=开始游戏
+title.settings=设置
+title.quit=退出
+title.version=v1.2  ·  QLWT ENGINE
+
+# ---- 设置抽屉 ----
+settings.title=设置
+settings.scroll_hint=双指滚动
+settings.text_speed=文字速度
+settings.bgm_volume=音乐音量
+settings.sfx_volume=音效音量
+settings.section_appearance=外观
+settings.accent=主题色
+settings.rgb_r=红色
+settings.rgb_g=绿色
+settings.rgb_b=蓝色
+settings.corner=圆角
+settings.button_style=按钮样式
+settings.style_dark=深色
+settings.style_light=浅色
+settings.style_outline=描边
+settings.fullscreen=全屏模式
+
+# ---- 章节选择 ----
+chapter.title=章节选择
+chapter.list=章节列表
+chapter.scroll_hint=双指滑动 / 滚轮 / ↑↓ 滚动  ·  按住拖动可翻阅
+chapter.count=共 %s 章
+chapter.progress=%s / %s 已观看
+chapter.viewed=已观看
+chapter.next=下一章
+chapter.locked=未开启
+chapter.locked_short=未解锁
+chapter.branch_main=主线
+chapter.branch_side=支线
+chapter.require_hint=需要看完「%s」%s
+chapter.map_main_info=共 %s 卷
+chapter.map_side_info=%s 条  ·  共 %s 章
+chapter.zoom_hint=双指滑动平移 · Ctrl/⌘+滚轮 或 ＋－ 缩放 · 拖动平移 · R 复位
+chapter.reset_view=复位视图
+chapter.enter=进入 →
+chapter.none=未找到带章节的脚本
+
+# ---- 游戏内 ----
+game.autoplay=自动播放
+game.fastforward=快进中
+game.key_hint=Esc 菜单 · F5 存档 · F9 读档
+game.history_title=历史记录（L / Esc 关闭）
+game.history_hint=↑ 查看更早  ·  ↓ 返回最新
+game.chapter_end=本章结束
+game.chapter_end_ask=是否进入下一章？
+game.continue_next=继续下一章
+game.back_to_select=返回章节选择
+game.prompt_hint=Enter 继续  ·  Esc 返回
+game.end=END
+game.end_hint=点击任意处返回标题
+game.error_title=脚本错误
+game.error_back=点击返回标题
+game.error_prefix=脚本错误：
+
+# ---- 观测战（回合制战斗）----
+battle.title=观测战
+battle.window=目标
+battle.round=第 %d 回合
+battle.round_info=第 %d / %d 回合 · 回合上限就是观测窗口
+battle.start=—— 观测开始 ——
+battle.timeout=观测窗口关闭了……这份记录没能完成
+battle.win=观测成功
+battle.lose=未能完成记录
+battle.result_hint=点击继续（剧情会继续往下走）
+battle.enemy_down=已驱散
+battle.ally_down=已记录
+battle.turn_hint= 的回合
+battle.cmd_attack=攻击
+battle.cmd_skill=技能
+battle.cmd_guard=守住
+battle.log_guard= 守住了
+battle.log_skill= 使用了「%s」
+battle.log_crit=会心一击！
+battle.log_heal=记录整理完毕，大家缓过来了
+battle.log_buff=全队观测精度提升
+battle.log_stun=对方一时看不清了
+battle.log_enemy_hit= 打向了 
+
+# ---- 存读档 ----
+save.title=存档
+load.title=读档
+save.slot=存档位 %s
+save.empty=空档位
+save.hint=Esc 关闭  ·  点击或按数字键执行
+
+# ---- 暂停菜单 ----
+menu.title=菜单
+menu.resume=继续游戏
+menu.save=存档
+menu.load=读档
+menu.back_title=返回标题
+menu.hint=Esc 关闭菜单

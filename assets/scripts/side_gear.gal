@@ -1,0 +1,331 @@
+# ============================================================
+# 支线 · 齿轮与发条（李君浩线 · 3 章）
+#
+# 时间：第一部《星屑祭典》期间（赤道仪修好之后、文化祭之前）。
+# 位置：剧情树上挂在主线卷一第三章之后（requires star_festival:3）。
+# 主题：他爸要把店盘出去；他想留下的不是店，是"让停住的东西再动起来"这件事。
+# ============================================================
+title "支线 · 齿轮与发条"
+
+series 星屑祭典
+branch side
+order 13
+subtitle "李君浩 · 齿轮与发条"
+requires star_festival:3
+
+init_character 吴鸿韬 assets/char/wu_hongtao_body.png #6FA8FF center
+init_character_face 吴鸿韬 assets/char/wu_hongtao_face
+init_character 李君浩 assets/char/li_junhao_body.png #4CC0A8 center
+init_character_face 李君浩 assets/char/li_junhao_face
+init_character 梁知奕 assets/char/liang_zhiyi_body.png #9B7BE0 center
+init_character_face 梁知奕 assets/char/liang_zhiyi_face
+
+init_bg 钟表店 assets/bg/clock_shop.png
+init_bg 活动室 assets/bg/clubroom.png
+init_bg 街道 assets/bg/street.png
+init_bg 观测台 assets/bg/observatory.png
+
+# ---------------- 观测战（第三章：和停摆较劲）----------------
+init_battle 停摆的怀表 "停摆" 145 13 9
+init_battle_party 停摆的怀表 吴鸿韬 李君浩
+
+# ============================================================
+# 第一章 · 柜台上的怀表
+# ============================================================
+chapter 1 "第一章 · 柜台上的怀表" picture assets/bg/clock_shop.png {
+#     play_bgm assets/audio/bgm_daily.ogg
+    show_bg 钟表店
+    play_se assets/audio/se_clock.wav
+    card "第一章 · 柜台上的怀表"
+    narrate "镇上的钟表店在正街上，玻璃门很久没擦了。"
+    narrate "我进去还螺丝刀的时候，李君浩正踩着凳子，把墙上的挂钟一只一只摘下来。"
+
+    show_character 李君浩
+    move 李君浩 center
+    change_face 李君浩 normal.png
+    say 李君浩 "啊，学长。工具我、我放哪儿了……"
+    say 吴鸿韬 "不着急。"
+    say 吴鸿韬 "你在摘钟？"
+    change_face 李君浩 sad.png
+    say 李君浩 "……嗯。"
+    say 李君浩 "我爸说，月底把店盘出去。"
+    narrate "墙上的钟摘到一半，露出几十个颜色更浅的方形印子。"
+    narrate "像一面墙的牙齿被拔掉了。"
+    say 吴鸿韬 "盘出去……给谁？"
+    say 李君浩 "隔壁开手机的。他说这里位置好。"
+    say 李君浩 "以后修手机。"
+
+    narrate "玻璃柜台的角落里，摆着一只黄铜怀表。表壳磨得发亮，表盖开着，停着。"
+    say 吴鸿韬 "这只呢？"
+    change_face 李君浩 normal.png
+    say 李君浩 "客人的。"
+    say 李君浩 "二十年了，一直没来取。"
+    say 吴鸿韬 "二十年？"
+    say 李君浩 "我爸说，那人当年把表放下，说「下礼拜来拿」。"
+    say 李君浩 "……后来大概忘了。"
+    change_face 李君浩 sad.png
+    say 李君浩 "我爸说，这就是修表这行的下场。"
+    say 李君浩 "你把别人停住的时间修好，别人转头就走了。"
+
+    choice 吴鸿韬 "怎么接？" {
+        "「那你自己那只表呢？」", jump g1_self
+        "「他不来取，你也可以修。」", jump g1_fix
+    }
+
+    @g1_self
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "那你自己那只表呢。"
+    change_face 李君浩 surprise.png
+    say 李君浩 "……我哪只？"
+    say 吴鸿韬 "你拆过我那台赤道仪，装回去以后多了一颗螺丝。"
+    say 吴鸿韬 "你没扔。我看见你揣兜里了。"
+    change_face 李君浩 blush.png
+    say 李君浩 "……那个是备件。"
+    say 吴鸿韬 "那就是你的表。"
+    jump g1_end
+
+    @g1_fix
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "他不来取，你也可以修。"
+    change_face 李君浩 sad.png
+    say 李君浩 "修了也没人要。"
+    say 吴鸿韬 "不是给他修的。"
+    say 吴鸿韬 "……是给你自己修的。"
+    change_face 李君浩 surprise.png
+    say 李君浩 "……"
+    jump g1_end
+
+    @g1_end
+    change_face 李君浩 normal.png
+    say 李君浩 "学长，我先摘钟了。"
+    say 吴鸿韬 "……嗯。"
+    narrate "我出门的时候回头看了一眼。"
+    narrate "他把摘下来的那几只钟，又摆回了地上，摆得很整齐。"
+    game_end
+}
+
+# ============================================================
+# 第二章 · 停住的表
+# ============================================================
+chapter 2 "第二章 · 停住的表" picture assets/bg/clubroom.png {
+#     play_bgm assets/audio/bgm_daily.ogg
+    show_bg 活动室
+    card "第二章 · 停住的表"
+    narrate "那之后的一个星期，李君浩白天在店里打包，晚上来活动室。"
+    narrate "他坐在最角落的那张桌子里，桌上一盏台灯，一堆拆开的零件。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 梁知奕
+    move 梁知奕 right
+    change_face 梁知奕 normal.png
+    say 梁知奕 "他连续来了六天。"
+    say 梁知奕 "每天从七点坐到十点半，一句话不说。"
+    say 吴鸿韬 "他在修那块怀表。"
+    say 梁知奕 "我知道。"
+    change_face 梁知奕 sad.png
+    say 梁知奕 "那块表的游丝断了，摆轮轴也歪了。"
+    say 梁知奕 "二十年前的机芯，配件厂早就不做了。"
+    say 梁知奕 "……修不好的。"
+
+    show_character 李君浩
+    move 李君浩 center
+    change_face 李君浩 normal.png
+    say 李君浩 "学长。"
+    say 吴鸿韬 "嗯。"
+    say 李君浩 "这个游丝，我用手工绕一根行不行。"
+    say 梁知奕 "手工绕的精度不够，走时会差。"
+    change_face 李君浩 normal.png
+    say 李君浩 "差多少。"
+    say 梁知奕 "一天……大概差五分钟。"
+    say 李君浩 "那没关系。"
+    change_face 梁知奕 surprise.png
+    say 梁知奕 "没关系？"
+    say 李君浩 "它现在一天慢二十四个小时。"
+    say 李君浩 "差五分钟，就是好的了。"
+
+    narrate "他低下头继续绕。铜丝细得像头发，绕到第七圈的时候断了。"
+    narrate "他换了根铜丝，重新开始。"
+    narrate "我数了一下，他手上贴了四个创可贴。"
+
+    change_face 梁知奕 sad.png
+    say 梁知奕 "……喂。"
+    say 李君浩 "嗯？"
+    say 梁知奕 "你手在抖。"
+    say 李君浩 "……嗯。"
+    say 梁知奕 "你爸把店盘出去，跟你没关系。"
+    change_face 李君浩 sad.png
+    say 李君浩 "有关系。"
+    say 李君浩 "那家店是我爷爷开的。我爸十七岁学徒，学了三年。"
+    say 李君浩 "他这辈子就会这一件事。"
+    say 李君浩 "现在他每天早上还是六点半起床，走到店里，坐着。"
+    say 李君浩 "……店里已经没有钟了。"
+    narrate "活动室里很安静。风扇转了两圈。"
+    change_face 李君浩 normal.png
+    say 李君浩 "所以我要把这只能走的表修好。"
+    say 李君浩 "我要让他看见，他教我的东西还在走。"
+
+    choice 吴鸿韬 "留下来陪他吗？" {
+        "留下来。坐到十点半。", jump g2_stay
+        "去把那只表的主人的地址找出来。", jump g2_find
+    }
+
+    @g2_stay
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "……我给你泡杯茶。"
+    change_face 李君浩 surprise.png
+    say 李君浩 "学长你不用陪我的。"
+    say 吴鸿韬 "我不陪你。"
+    say 吴鸿韬 "我改社团的活动申请表。"
+    narrate "那天晚上我们谁也没说话，台灯亮到十点四十。"
+    jump g2_end
+
+    @g2_find
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "那人的名字，你爸的旧账本上有吗？"
+    say 李君浩 "……有。柜台底下有一本旧账簿。"
+    say 吴鸿韬 "我去找。"
+    say 吴鸿韬 "表修好以后，得还给人。"
+    change_face 李君浩 normal.png
+    say 李君浩 "……好。"
+    jump g2_end
+
+    @g2_end
+    change_face 李君浩 happy.png
+    say 李君浩 "学长，你放心。"
+    say 李君浩 "我修不好的东西很少。"
+    say 李君浩 "……就是修好了以后，也没多少人要。"
+    game_end
+}
+
+# ============================================================
+# 第三章 · 发条
+# ============================================================
+chapter 3 "第三章 · 发条" picture assets/bg/clock_shop.png {
+#     play_bgm assets/audio/bgm_starry.ogg
+    show_bg 钟表店
+    card "第三章 · 发条"
+    narrate "文化祭前一天的傍晚，店里的货架已经空了。"
+    narrate "李君浩站在柜台后面，手上托着那块怀表。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 李君浩
+    move 李君浩 center
+    change_face 李君浩 normal.png
+    say 李君浩 "……好了。"
+    show_cg assets/cg/gear_watch.png
+    play_se assets/audio/se_clock.wav
+    # 观测战：二十年的停摆，得一点点把它顶回去
+    battle 停摆的怀表 {
+        win jump g3_watch_win
+        lose jump g3_watch_lose
+    }
+
+    @g3_watch_win
+    narrate "他闭上眼睛，把铜丝最后一圈绕完。"
+    jump g3_watch_go
+
+    @g3_watch_lose
+    narrate "铜丝又断了一根。他把断头捏在手里，没有抬头。"
+    say 李君浩 "……再来一次。"
+    jump g3_watch_go
+
+    @g3_watch_go
+    narrate "他把发条上了三圈，然后松手。"
+    narrate "「嗒、嗒、嗒」——很轻，但是一直在走。"
+    hide_cg
+    play_se assets/audio/se_click.wav
+    change_face 李君浩 happy.png
+    say 李君浩 "它走了。"
+    say 吴鸿韬 "一天差多少？"
+    say 李君浩 "我调了四遍。现在一天差三十秒。"
+    change_face 吴鸿韬 surprise.png
+    say 吴鸿韬 "……你不是说只能做到五分钟。"
+    change_face 李君浩 blush.png
+    say 李君浩 "那是第一次。"
+    say 李君浩 "我绕断了两百多根铜丝。"
+    narrate "他摊开手。掌心里全是细细的划痕，横着竖着，像一张坏掉的星图。"
+
+    play_se assets/audio/se_door.wav
+    narrate "卷帘门被人从外面推上来一半。是他爸。"
+    narrate "男人站在门口，没有进来。他看了看空掉的货架，又看了看柜台上的表。"
+    narrate "李君浩把表往前推了推，像交作业一样。"
+    narrate "「……你绕的游丝？」"
+    say 李君浩 "嗯。"
+    narrate "「绕了两百根？」"
+    change_face 李君浩 surprise.png
+    say 李君浩 "您怎么知道。"
+    narrate "「铜丝掉在地上会有声音。我在楼上一夜都听见了。」"
+    narrate "他走进来，把表拿起来，凑到耳朵边听了一会儿。"
+    narrate "然后他说了一句话。"
+    narrate "「你手比我稳。」"
+
+    narrate "他从柜台底下拿出一个旧木盒，放在桌上。"
+    narrate "盒子里面是一颗铜齿轮，很小的那种，边上刻着一个很浅的「李」字。"
+    narrate "「我十七岁那年做的第一颗。学徒第一年，只做这一颗。」"
+    narrate "「这行当没用了。但是这颗东西还在。」"
+    narrate "「你拿着。」"
+    change_face 李君浩 sad.png
+    say 李君浩 "爸。"
+    narrate "「嗯。」"
+    say 李君浩 "我明年想报精密仪器。"
+    say 李君浩 "不是修表。是……做更小的东西。卫星里的那种。"
+    narrate "他爸看了他很久。"
+    narrate "「……那你得把数学学好。」"
+    narrate "「我数学不好。」"
+    change_face 李君浩 happy.png
+    say 李君浩 "梁学长教！他、他特别凶！"
+    narrate "门口的人笑了一下，转身走了。"
+
+    hide_character 李君浩
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "……表呢。"
+    show_character 李君浩
+    move 李君浩 center
+    change_face 李君浩 normal.png
+    say 李君浩 "账簿上那个地址，我去了。"
+    say 李君浩 "那家人搬走了。邻居说，老人三年前过世了。"
+    say 吴鸿韬 "……"
+    say 李君浩 "所以这块表，我留下了。"
+    change_face 李君浩 happy.png
+    say 李君浩 "就当是他把它送给我们店了。"
+    narrate "他把表放回柜台角落，那只表走得很稳。"
+    narrate "整个店里已经没有别的钟了，只有它一个在响。"
+
+    choice 吴鸿韬 "跟他说什么？" {
+        "「明天观测会，你带着表来。」", jump g3_watch
+        "「帮你爸把店里那面墙刷一下。」", jump g3_wall
+    }
+
+    @g3_watch
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "明天观测会，你把表带上。"
+    say 李君浩 "为什么？"
+    say 吴鸿韬 "记录要写时间。"
+    say 吴鸿韬 "——用它记。"
+    change_face 李君浩 happy.png
+    say 李君浩 "……好。"
+    jump g3_end
+
+    @g3_wall
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "明天上午，先把墙上那几十个印子刷了。"
+    say 李君浩 "刷了就不是钟表店了。"
+    say 吴鸿韬 "刷了才是。"
+    say 吴鸿韬 "钟表店不是挂钟的地方，是你在的地方。"
+    change_face 李君浩 blush.png
+    say 李君浩 "……嗯。"
+    jump g3_end
+
+    @g3_end
+    change_face 李君浩 normal.png
+    say 李君浩 "学长。"
+    say 吴鸿韬 "嗯。"
+    say 李君浩 "我爸刚才那句话，我记了十年。"
+    say 李君浩 "他第一次说我手稳，是今天。"
+    narrate "他把那颗齿轮握在手里，握得很紧。"
+    game_end
+}

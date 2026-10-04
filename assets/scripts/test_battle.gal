@@ -1,0 +1,42 @@
+# ============================================================
+# 观测战冒烟测试（test 开头的脚本会被章节选择跳过，只给自检用）
+#
+#   ./qlwt --check-script assets/scripts/test_battle.gal     无头：自动按胜利分支走
+#   ./qlwt --script assets/scripts/test_battle.gal --selftest --frames 600
+#                                                            带窗口：看战斗实际表现
+# ============================================================
+title "观测战测试"
+
+init_character 吴鸿韬 assets/char/wu_hongtao_body.png #6FA8FF left
+init_character_face 吴鸿韬 assets/char/wu_hongtao_face
+init_character 黎璘 assets/char/li_lin_body.png #FF8FB0 right
+init_character_face 黎璘 assets/char/li_lin_face
+init_character 梁知奕 assets/char/liang_zhiyi_body.png #9B7BE0 center
+init_character_face 梁知奕 assets/char/liang_zhiyi_face
+init_bg 活动室 assets/bg/clubroom.png
+
+init_battle 试验 "积云" 120 12 8
+init_battle 试验 "霓虹" 96 13 11
+init_battle_party 试验 吴鸿韬 黎璘 梁知奕
+
+chapter 1 "战斗测试" picture assets/bg/clubroom.png {
+    show_bg 活动室
+    card "观测战 冒烟测试"
+    narrate "这是一场自检用的战斗。"
+    battle 试验 {
+        win jump tb_win
+        lose jump tb_lose
+    }
+
+    @tb_win
+    narrate "WIN 分支。"
+    jump tb_end
+
+    @tb_lose
+    narrate "LOSE 分支。"
+    jump tb_end
+
+    @tb_end
+    narrate "战斗结束，剧情继续。"
+    game_end
+}

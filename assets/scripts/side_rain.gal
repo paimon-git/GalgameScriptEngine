@@ -1,0 +1,314 @@
+# ============================================================
+# 支线 · 那场雨（邵清和线 · 3 章）
+#
+# 时间：第一部结束后的那个冬天。
+# 位置：剧情树上挂在主线卷一第八章之后（requires star_festival:8）。
+# 主题：十年前那场雨，他一个人记了四十三页"无"；
+#       十年里他每年往山上放一块石头，从来没说过一句话。
+# ============================================================
+title "支线 · 那场雨"
+
+series 星屑祭典
+branch side
+order 16
+subtitle "邵清和 · 那场雨"
+requires star_festival:8
+
+init_character 吴鸿韬 assets/char/wu_hongtao_body.png #6FA8FF center
+init_character_face 吴鸿韬 assets/char/wu_hongtao_face
+init_character 邵清和 assets/char/shao_qinghe_body.png #7FB3D5 left
+init_character_face 邵清和 assets/char/shao_qinghe_face
+init_character 黎璘 assets/char/li_lin_body.png #FF8FB0 right
+init_character_face 黎璘 assets/char/li_lin_face
+
+init_bg 雨中 assets/bg/rain_street.png
+init_bg 观测台 assets/bg/observatory.png
+init_bg 办公室 assets/bg/faculty_room.png
+init_bg 走廊 assets/bg/corridor.png
+init_bg 城外山丘 assets/bg/summer_hill.png
+init_bg 操场 assets/bg/playground.png
+
+# ---------------- 观测战（第三章：和那场雨较劲）----------------
+init_battle 山上的雨 "连夜雨" 160 14 12
+init_battle_party 山上的雨 吴鸿韬 邵清和
+
+# ============================================================
+# 第一章 · 雨里的人
+# ============================================================
+chapter 1 "第一章 · 雨里的人" picture assets/bg/rain_street.png {
+#     play_bgm assets/audio/bgm_rain.ogg
+    show_bg 雨中
+    card "第一章 · 那场雨"
+    narrate "十二月的第一场雨。不是雪，是雨。"
+    narrate "晚自习放学，我撑着伞走过操场，看见跑道中间站着一个人。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 邵清和
+    move 邵清和 right
+    change_face 邵清和 normal.png
+    narrate "他没有伞。站在那里，肩膀已经湿透了。"
+    say 吴鸿韬 "……老师。"
+    change_face 邵清和 surprise.png
+    say 邵清和 "……你怎么还没回去。"
+    say 吴鸿韬 "您站在这儿干什么。"
+    say 邵清和 "……没干什么。"
+    say 邵清和 "每年这天下雨，我都来站一会儿。"
+    say 吴鸿韬 "为什么。"
+    say 邵清和 "习惯了。"
+    narrate "雨点打在跑道上，砸出一层很密的雾。"
+
+    say 吴鸿韬 "……十年前。"
+    change_face 邵清和 sad.png
+    say 邵清和 "嗯。"
+    say 邵清和 "十年前的今天，也是这么一场雨。"
+    say 邵清和 "我在圆顶下面摆了一百二十把椅子。"
+    say 邵清和 "摆到晚上七点，一把都没坐满。"
+    say 邵清和 "八点，我把望远镜擦了一遍，收进防尘罩。"
+    say 邵清和 "九点，我一个人坐在记录本前面。"
+
+    say 吴鸿韬 "……您记到几点。"
+    say 邵清和 "天亮。"
+    say 邵清和 "中间下了六次雨，风变了三次方向。"
+    change_face 邵清和 normal.png
+    say 邵清和 "记录本还在我办公室的抽屉里。"
+    say 邵清和 "你要看吗。"
+
+    choice 吴鸿韬 "怎么回答？" {
+        "「看。走，现在就去。」", jump r1_go
+        "「先跟我去躲雨。」", jump r1_shelter
+    }
+
+    @r1_go
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "看。现在就去。"
+    change_face 邵清和 surprise.png
+    say 邵清和 "……现在？你湿成这样。"
+    say 吴鸿韬 "您也湿成这样。"
+    change_face 邵清和 happy.png
+    say 邵清和 "……走吧。"
+    jump r1_end
+
+    @r1_shelter
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "先跟我去躲雨。"
+    say 吴鸿韬 "记录本明天再看。"
+    change_face 邵清和 sad.png
+    say 邵清和 "……"
+    say 吴鸿韬 "老师，雨会停的。"
+    say 邵清和 "……十年前我也这么想。"
+    say 吴鸿韬 "不是今天停。"
+    say 吴鸿韬 "是总会停。"
+    change_face 邵清和 normal.png
+    say 邵清和 "……"
+    say 邵清和 "好。走。"
+    jump r1_end
+
+    @r1_end
+    narrate "伞下只有一个人宽。他往旁边站了站。"
+    narrate "雨很大，我们两个还是都湿了。"
+    narrate "走到教学楼门口的时候，他停了一下。"
+    say 邵清和 "……吴鸿韬。"
+    say 吴鸿韬 "嗯。"
+    say 邵清和 "他那天站在雨里，比今天大。"
+    say 邵清和 "我一直没问过他要不要伞。"
+    say 邵清和 "……我这十年，一直在想这件事。"
+    game_end
+}
+
+# ============================================================
+# 第二章 · 四十三页
+# ============================================================
+chapter 2 "第二章 · 四十三页" picture assets/bg/faculty_room.png {
+#     play_bgm assets/audio/bgm_rain.ogg
+    show_bg 办公室
+    card "第二章 · 四十三页"
+    narrate "第二天放学，他把那本记录本放在桌上。"
+    narrate "硬壳，蓝布封面，边角泡过水，鼓起来一块。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 邵清和
+    move 邵清和 center
+    change_face 邵清和 normal.png
+    play_se assets/audio/se_page.wav
+    narrate "我翻开。"
+    narrate "十一月九日，七点零三分。"
+    narrate "「云量十。风：东南。能见度：零。」"
+    narrate "「到场人数：零。」"
+    narrate "再往下翻，还是这一页的背面。"
+    narrate "「七点四十分。雨。」"
+    narrate "「八点十五分。雨。」"
+    narrate "「九点。雨。」"
+    narrate "……整整写了四十三页。"
+    say 吴鸿韬 "……四十三页。"
+    say 邵清和 "四十三页。"
+    say 邵清和 "天亮之前，我每十五分钟记一次。"
+    say 邵清和 "记到第四十三页的时候，我觉得我该写点什么。"
+    say 邵清和 "然后我在最后一页上写了一句。"
+    narrate "最后一页只有一行字。"
+    narrate "「今晚没有星星。但记录是真的。」"
+
+    change_face 吴鸿韬 sad.png
+    say 吴鸿韬 "……为什么还记。"
+    say 邵清和 "因为记云是规矩。"
+    say 邵清和 "规矩不看你今天有没有观众。"
+    change_face 邵清和 sad.png
+    say 邵清和 "……也因为我不想让那晚变成「什么都没发生」。"
+    say 邵清和 "如果我不写，那一夜就真的没有了。"
+
+    narrate "他从抽屉里又拿出一张照片。"
+    narrate "照片上是那晚的圆顶：黑白的，颗粒很粗，一个背影站在雨里。"
+    say 吴鸿韬 "这是谁拍的。"
+    say 邵清和 "周老师。"
+    say 邵清和 "他站在台阶上，用一台傻瓜相机拍的。"
+    say 邵清和 "……拍完他就走了。第二天他没来上课。"
+    say 吴鸿韬 "他病了多久。"
+    say 邵清和 "一个月。"
+    say 邵清和 "他回来以后，一句都没提过那晚的事。"
+    say 邵清和 "……他到死都没提。"
+
+    choice 吴鸿韬 "说点什么？" {
+        "「他不是不想提。他是不想让您愧疚。」", jump r2_quiet
+        "「您也可以不提。但先把这张照片裱起来。」", jump r2_frame
+    }
+
+    @r2_quiet
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "他不是不想提。"
+    say 吴鸿韬 "他是不想让您愧疚。"
+    change_face 邵清和 surprise.png
+    say 邵清和 "……"
+    say 邵清和 "你凭什么这么确定。"
+    say 吴鸿韬 "因为他把那半本日志留给了我，也没提您。"
+    say 吴鸿韬 "……我猜，他是怕我一查就查到他为什么病。"
+    change_face 邵清和 sad.png
+    say 邵清和 "……"
+    jump r2_end
+
+    @r2_frame
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "您也可以不提。"
+    say 吴鸿韬 "但先把这张照片裱起来。"
+    say 邵清和 "裱起来干什么。"
+    say 吴鸿韬 "挂在圆顶下面。"
+    say 吴鸿韬 "让以后每个来的人都看见——有人在一场大雨里记了四十三页。"
+    change_face 邵清和 happy.png
+    say 邵清和 "……那上面有个背影，别人会问是谁。"
+    say 吴鸿韬 "您就说，是一个老师。"
+    jump r2_end
+
+    @r2_end
+    change_face 邵清和 normal.png
+    say 邵清和 "……周六，你有空吗。"
+    say 吴鸿韬 "有。"
+    say 邵清和 "陪我去山上走一趟。"
+    game_end
+}
+
+# ============================================================
+# 第三章 · 第十一块石头
+# ============================================================
+chapter 3 "第三章 · 第十一块石头" picture assets/bg/summer_hill.png {
+#     play_bgm assets/audio/bgm_starry.ogg
+    show_bg 城外山丘
+    card "第三章 · 第十一块石头"
+    narrate "周六上午，我们爬到了城外的山坡上。"
+    narrate "半山腰有一片很旧的墓地，几块碑，草长到膝盖。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 邵清和
+    move 邵清和 right
+    change_face 邵清和 normal.png
+    narrate "最东边那块碑上刻着「周文远」。"
+    narrate "碑很干净，像常有人擦。"
+    narrate "碑前摆着十块石头，大小差不多，排成一排。"
+    say 吴鸿韬 "……十块。"
+    say 邵清和 "一年一块。"
+    say 邵清和 "我不带花。他过敏。"
+    say 吴鸿韬 "……"
+    say 邵清和 "我每年就放一块石头，站十分钟，然后下山。"
+    say 邵清和 "……十年，一句话都没说过。"
+
+    narrate "他从外套口袋里摸出一块石头——早就准备好的，边缘被磨得很圆。"
+    narrate "他蹲下去，把它放在第十块旁边。"
+    say 邵清和 "……周老师。"
+    narrate "他停住了，停了很久。"
+    say 邵清和 "……那天晚上，我一直在心里怪您。"
+    say 邵清和 "怪您为什么要来，怪您为什么不说一句「回去吧」。"
+    say 邵清和 "后来我发现，我是怪您让我成了「被人陪过的人」。"
+    say 邵清和 "……那样我就不敢不活了。"
+    say 邵清和 "这十年，我一次都没敢上圆顶。"
+    say 邵清和 "今年我上去了。"
+    say 邵清和 "……回去的时候，我在上面站了一夜。没有人，但是天很晴。"
+
+    narrate "他说完，站起来，拍了拍手上的土。"
+    change_face 邵清和 happy.png
+    say 邵清和 "……走吧。要下雨了。"
+    # 观测战：十年的雨，这回两个人一起淋
+    battle 山上的雨 {
+        win jump r3_rain_win
+        lose jump r3_rain_lose
+    }
+
+    @r3_rain_win
+    narrate "雨在山脊那边停了半分钟。他抬头看了一眼天。"
+    jump r3_rain_go
+
+    @r3_rain_lose
+    narrate "雨没停，反而更大了。他站在原地，没有躲。"
+    say 邵清和 "……习惯了。"
+    jump r3_rain_go
+
+    @r3_rain_go
+    narrate "下山的时候，雨真的来了。"
+    narrate "我们谁也没跑。"
+
+    choice 吴鸿韬 "要不要给他撑伞？" {
+        "把伞收起来，一起淋。", jump r3_rain
+        "撑过去。他这回不用一个人湿。", jump r3_umbrella
+    }
+
+    @r3_rain
+    change_face 吴鸿韬 normal.png
+    narrate "我把伞收了。"
+    say 邵清和 "……你干什么。"
+    say 吴鸿韬 "您每年这天都淋一次。"
+    say 吴鸿韬 "今年多一个人。"
+    change_face 邵清和 sad.png
+    say 邵清和 "……"
+    say 邵清和 "……你这个小鬼。"
+    jump r3_end
+
+    @r3_umbrella
+    change_face 吴鸿韬 normal.png
+    narrate "我把伞撑开，往他那边偏了偏。"
+    say 吴鸿韬 "这回您不用一个人湿。"
+    change_face 邵清和 surprise.png
+    say 邵清和 "……"
+    say 邵清和 "十年前要是有人跟我说这句话。"
+    say 邵清和 "……算了吧。现在也不晚。"
+    jump r3_end
+
+    @r3_end
+    show_bg 走廊
+    narrate "回学校的时候，我们在教学楼门口站了一会儿。"
+    show_character 邵清和
+    move 邵清和 center
+    change_face 邵清和 normal.png
+    say 邵清和 "吴鸿韬。"
+    say 吴鸿韬 "嗯。"
+    say 邵清和 "明年今日，你陪我来一次。"
+    say 吴鸿韬 "好。"
+    say 邵清和 "……后年也是。"
+    change_face 邵清和 happy.png
+    say 邵清和 "再后面，你要是去外地上学，就写张纸条寄回来。"
+    say 吴鸿韬 "寄给谁。"
+    say 邵清和 "寄给天文馆。"
+    say 邵清和 "……反正，总有人收。"
+    game_end
+}

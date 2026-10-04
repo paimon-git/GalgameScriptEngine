@@ -1,0 +1,351 @@
+# ============================================================
+# 支线 · 十一秒二（尹博涛线 · 3 章）
+#
+# 时间：第一部《星屑祭典》期间（文化祭之前）。
+# 位置：剧情树上挂在主线卷一第三章之后（requires star_festival:3）。
+# 主题：他跑不回十一秒二了，那他还剩下什么。
+# ============================================================
+title "支线 · 十一秒二"
+
+series 星屑祭典
+branch side
+order 11
+subtitle "尹博涛 · 十一秒二"
+requires star_festival:3
+
+# ---------------- 角色 ----------------
+init_character 吴鸿韬 assets/char/wu_hongtao_body.png #6FA8FF center
+init_character_face 吴鸿韬 assets/char/wu_hongtao_face
+init_character 尹博涛 assets/char/yin_botao_body.png #F0724A right
+init_character_face 尹博涛 assets/char/yin_botao_face
+init_character 梁知奕 assets/char/liang_zhiyi_body.png #9B7BE0 center
+init_character_face 梁知奕 assets/char/liang_zhiyi_face
+init_character 李君浩 assets/char/li_junhao_body.png #4CC0A8 center
+init_character_face 李君浩 assets/char/li_junhao_face
+
+# ---------------- 背景 ----------------
+init_bg 操场 assets/bg/playground.png
+init_bg 活动室 assets/bg/clubroom.png
+init_bg 走廊 assets/bg/corridor.png
+init_bg 教室 assets/bg/classroom.png
+init_bg 街道 assets/bg/street.png
+init_bg 天台 assets/bg/rooftop.png
+
+# ---------------- 观测战（第三章：和"十一秒二"较劲）----------------
+init_battle 十一秒二 "旧纪录" 150 13 12
+init_battle_party 十一秒二 吴鸿韬 尹博涛
+
+# ============================================================
+# 第一章 · 秒表
+# ============================================================
+chapter 1 "第一章 · 秒表" picture assets/bg/playground.png {
+#     play_bgm assets/audio/bgm_daily.ogg
+    show_bg 操场
+    card "第一章 · 秒表"
+    narrate "放学后的操场，只剩下跑道边上一圈被夕阳照红的水泥。"
+    narrate "跑道上有人在慢慢跑。每跑三百米，就停下来扶着膝盖喘一会儿。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "……第三圈。"
+    show_character 尹博涛
+    move 尹博涛 right
+    change_face 尹博涛 happy.png
+    say 尹博涛 "四圈。今天多跑了一圈。"
+    say 吴鸿韬 "你手里那是什么？"
+
+    narrate "他把手往背后藏了一下，又自己拿了出来。"
+    narrate "是一只旧秒表，表壳的漆掉了一半，玻璃上有一道裂纹。"
+    change_face 尹博涛 normal.png
+    say 尹博涛 "……第一次跑进十一秒二那天，教练给我的。"
+    say 尹博涛 "那时候我按一次，就少 0.1 秒。"
+    change_face 尹博涛 sad.png
+    say 尹博涛 "现在我按一次，是一圈。"
+    say 尹博涛 "十一秒二，和一分四十七秒。"
+
+    narrate "跑道另一头，几个初一的小孩在练起跑。有人朝这边喊了一声："
+    narrate "「学长！你什么时候回来跑啊？」"
+    change_face 尹博涛 surprise.png
+    say 尹博涛 "……"
+    change_face 尹博涛 happy.png
+    say 尹博涛 "明年！明年我就回去！"
+    hide_character 尹博涛
+    narrate "他喊得很大声。喊完之后，脸上的笑只维持了三步路。"
+
+    change_face 吴鸿韬 sad.png
+    say 吴鸿韬 "……你为什么要喊。"
+    change_face 尹博涛 sad.png
+    show_character 尹博涛
+    move 尹博涛 right
+    say 尹博涛 "因为他们信。"
+    say 尹博涛 "我不喊，他们就不知道该等谁。"
+    narrate "他把秒表塞进裤兜，按了一下——那一下按的是壳，不是按钮。"
+
+    choice 吴鸿韬 "怎么接这句话？" {
+        "「他们等的不是秒表。」", jump e1_watch
+        "「那你先别喊，先把表修好。」", jump e1_fix
+    }
+
+    @e1_watch
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "他们等的不是秒表。"
+    say 吴鸿韬 "你站在跑道上，他们就知道该往哪儿跑。"
+    change_face 尹博涛 surprise.png
+    say 尹博涛 "……你这话，从哪学的？"
+    say 吴鸿韬 "从你身上。"
+    change_face 尹博涛 happy.png
+    say 尹博涛 "……行吧。"
+    jump e1_end
+
+    @e1_fix
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "表先修好。按钮坏了，按一次疼一次。"
+    change_face 尹博涛 normal.png
+    say 尹博涛 "找谁修？"
+    say 吴鸿韬 "李君浩。他拆过钟表店所有的钟。"
+    change_face 尹博涛 happy.png
+    say 尹博涛 "……那我明天找他。"
+    jump e1_end
+
+    @e1_end
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "喂。"
+    say 尹博涛 "嗯？"
+    say 吴鸿韬 "十一秒二，是你以前的名字。"
+    say 吴鸿韬 "现在这个，也是你的。"
+    change_face 尹博涛 sad.png
+    say 尹博涛 "……我知道。"
+    say 尹博涛 "只是我还不太想认。"
+    game_end
+}
+
+# ============================================================
+# 第二章 · 康复表
+# ============================================================
+chapter 2 "第二章 · 康复表" picture assets/bg/clubroom.png {
+#     play_bgm assets/audio/bgm_daily.ogg
+    show_bg 活动室
+    card "第二章 · 康复表"
+    narrate "第二天中午，尹博涛把一张纸拍在活动室的桌子上。"
+    narrate "纸上画着密密麻麻的格子，横轴是日期，纵轴写着「米数」。"
+
+    show_character 梁知奕
+    move 梁知奕 center
+    change_face 梁知奕 surprise.png
+    say 梁知奕 "……这是你画的？"
+    show_character 尹博涛
+    move 尹博涛 right
+    change_face 尹博涛 angry.png
+    say 尹博涛 "别笑。我知道画得丑。"
+    say 梁知奕 "我没笑。"
+    say 梁知奕 "第一周到第六周，你每天加的量都在百分之八到百分之十二之间。"
+    change_face 梁知奕 normal.png
+    say 梁知奕 "……这是康复科的标准曲线。你从哪抄的？"
+    change_face 尹博涛 normal.png
+    say 尹博涛 "没抄。我自己试出来的。"
+    say 尹博涛 "加多了疼，加少了没用。试了两个月，就试出这么一条。"
+
+    change_face 梁知奕 sad.png
+    say 梁知奕 "……"
+    say 梁知奕 "尹博涛。我说一句难听的。"
+    say 尹博涛 "说。"
+    say 梁知奕 "你的跟腱不会长回原来的样子。十一秒二，你回不去了。"
+    narrate "活动室里安静了。风扇转了两圈。"
+    change_face 尹博涛 sad.png
+    say 尹博涛 "……我早就知道了。"
+    say 尹博涛 "我第一天去复查的时候，医生就说得很清楚。"
+    say 尹博涛 "但他还说了一句——「你可以练到能教别人怎么跑」。"
+
+    change_face 梁知奕 normal.png
+    say 梁知奕 "……"
+    say 梁知奕 "那你为什么还画这张表。"
+    change_face 尹博涛 happy.png
+    say 尹博涛 "因为初一那帮小孩在练起跑。"
+    say 尹博涛 "他们的姿势全是错的。有人起跑的时候会先抬头——那样会少零点三秒。"
+    say 尹博涛 "我以前也这么跑。有人教了我一个下午，我才改过来。"
+    say 尹博涛 "教我的那个人，现在在省队。"
+    say 尹博涛 "他大概早就忘了。"
+
+    show_character 李君浩
+    move 李君浩 center
+    change_face 李君浩 happy.png
+    say 李君浩 "学、学长！秒表修好了！"
+    say 李君浩 "按钮换成了黄铜的，玻璃……玻璃我找不到一样的，就用钟表店的旧表蒙磨了一块。"
+    change_face 尹博涛 surprise.png
+    say 尹博涛 "……磨的？"
+    change_face 李君浩 blush.png
+    say 李君浩 "磨了四个晚上。不好看，但是能按了。"
+    narrate "尹博涛把秒表接过去，按了一下。"
+    narrate "「嗒」。"
+    change_face 尹博涛 happy.png
+    say 尹博涛 "……能按了。"
+
+    choice 吴鸿韬 "把这张表怎么用？" {
+        "贴在活动室墙上，当社团训练计划。", jump e2_wall
+        "抄一份给田径队，署他的名字。", jump e2_copy
+    }
+
+    @e2_wall
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "贴墙上。"
+    change_face 尹博涛 surprise.png
+    say 尹博涛 "啊？那多丑。"
+    say 吴鸿韬 "丑的东西才会有人看。"
+    say 吴鸿韬 "贴着它，你就不会哪天偷偷不来了。"
+    change_face 尹博涛 happy.png
+    say 尹博涛 "……你这个社长，嘴真毒。"
+    jump e2_end
+
+    @e2_copy
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "抄一份，送到田径队去。署你的名字。"
+    change_face 尹博涛 angry.png
+    say 尹博涛 "不行。教练会骂我多管闲事。"
+    say 吴鸿韬 "那就让他骂。"
+    say 吴鸿韬 "你现在能给他们的，就是这两百多个格子。"
+    change_face 尹博涛 normal.png
+    say 尹博涛 "……行。抄。"
+    jump e2_end
+
+    @e2_end
+    change_face 梁知奕 happy.png
+    say 梁知奕 "……喂。"
+    say 尹博涛 "啊？"
+    say 梁知奕 "那张表，横轴最后一行是空的。"
+    say 梁知奕 "你打算写到什么时候。"
+    change_face 尹博涛 happy.png
+    say 尹博涛 "写到我自己能跑完四百米。"
+    say 尹博涛 "不掐表。"
+    game_end
+}
+
+# ============================================================
+# 第三章 · 第二次起跑
+# ============================================================
+chapter 3 "第三章 · 第二次起跑" picture assets/bg/playground.png {
+#     play_bgm assets/audio/bgm_starry.ogg
+    show_bg 操场
+    card "第三章 · 第二次起跑"
+    narrate "文化祭前三天的傍晚，操场上一个人都没有。"
+    play_se assets/audio/se_wind.wav
+    narrate "风把跑道上的落叶吹成一条线。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 尹博涛
+    move 尹博涛 right
+    change_face 尹博涛 normal.png
+    say 尹博涛 "……你怎么来了。"
+    say 吴鸿韬 "李君浩说你今天要跑四百米。"
+    change_face 尹博涛 angry.png
+    say 尹博涛 "他嘴真大。"
+    say 吴鸿韬 "他还说你没带秒表。"
+    change_face 尹博涛 surprise.png
+    say 尹博涛 "……"
+    say 尹博涛 "今天不掐表。"
+    say 吴鸿韬 "为什么？"
+    change_face 尹博涛 normal.png
+    say 尹博涛 "因为一掐表，我就还是那个想跑十一秒二的人。"
+    say 尹博涛 "今天我想当另一个人。"
+
+    # 观测战：真正的对手不是秒表，是那条一直挂在心里的旧纪录
+    battle 十一秒二 {
+        win jump e3_run_win
+        lose jump e3_run_lose
+    }
+
+    @e3_run_win
+    narrate "他把那条旧纪录甩在了身后。"
+    jump e3_run_go
+
+    @e3_run_lose
+    narrate "第二个弯道，右腿沉得抬不起来。他在心里骂了一句。"
+    say 尹博涛 "……慢就慢。"
+    jump e3_run_go
+
+    @e3_run_go
+    narrate "他站到起跑线上，弯下腰，两只手撑在白色的起跑线前面。"
+    narrate "出发的口令我替他喊。"
+    say 吴鸿韬 "各就位——"
+    say 吴鸿韬 "跑。"
+
+    narrate "第一圈他跑得很稳。"
+    narrate "第二个弯道，他的右腿开始往下沉，肩膀一高一低。"
+    narrate "他没有停。"
+    narrate "最后一个直道，跑道边的旗子被风吹得啪啪响。"
+    narrate "他撞过终点线的时候，扶着膝盖，弯下去，很久没有起来。"
+
+    change_face 尹博涛 happy.png
+    say 尹博涛 "……到了。"
+    say 吴鸿韬 "到了。"
+    say 尹博涛 "你看看表。"
+    say 吴鸿韬 "你不是说不掐表。"
+    change_face 尹博涛 normal.png
+    say 尹博涛 "我想知道。"
+    narrate "手机屏幕上跳着两个数字：1 分 12 秒。"
+    say 吴鸿韬 "……一分十二。"
+    change_face 尹博涛 happy.png
+    say 尹博涛 "比上个月快了十九秒。"
+    say 尹博涛 "……比十一秒二慢了一分钟。"
+    narrate "他笑了起来，笑得有点丑，但是真的。"
+
+    play_se assets/audio/se_door.wav
+    show_character 李君浩
+    move 李君浩 center
+    change_face 李君浩 happy.png
+    say 李君浩 "学长！我、我把那张表抄好了，送到田径队了！"
+    say 李君浩 "教练看完以后说……说……"
+    change_face 李君浩 blush.png
+    say 李君浩 "说「让那个小子自己来一趟」。"
+    change_face 尹博涛 surprise.png
+    say 尹博涛 "……他骂我了？"
+    say 李君浩 "没有！他把表贴在办公室墙上了！"
+    say 李君浩 "还、还拿红笔在最后一行写了字。"
+    say 尹博涛 "写什么？"
+    change_face 李君浩 happy.png
+    say 李君浩 "「一年级组，起跑姿势，周二周四下午四点，尹博涛带」。"
+
+    narrate "风停了一下。操场很安静。"
+    change_face 尹博涛 happy.png
+    say 尹博涛 "……行。"
+    say 尹博涛 "那我得先学会怎么喊口令。"
+    say 吴鸿韬 "口令我刚才喊过了。"
+    say 尹博涛 "你喊得太轻了。"
+    say 吴鸿韬 "……那你下次自己喊。"
+
+    choice 吴鸿韬 "把秒表还给他吗？" {
+        "还给他。「这表以后用来教人。」", jump e3_watch
+        "留在他那儿。「下次跑给我看。」", jump e3_keep
+    }
+
+    @e3_watch
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "表给他。"
+    say 吴鸿韬 "以前它记你的秒数。以后它记别人进步的秒数。"
+    change_face 尹博涛 happy.png
+    say 尹博涛 "……好。"
+    jump e3_end
+
+    @e3_keep
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "表你留着。"
+    say 吴鸿韬 "下次跑给我看。"
+    change_face 尹博涛 surprise.png
+    say 尹博涛 "……你还想看？"
+    say 吴鸿韬 "想看。"
+    say 尹博涛 "……行。那我把表揣好。"
+    jump e3_end
+
+    @e3_end
+    change_face 尹博涛 normal.png
+    say 尹博涛 "喂，吴鸿韬。"
+    say 吴鸿韬 "嗯。"
+    say 尹博涛 "我以前以为，跑得快才叫在跑。"
+    change_face 尹博涛 happy.png
+    say 尹博涛 "现在我知道了——有人等着你到终点，那也叫在跑。"
+    narrate "天黑了。两个人从操场走回教学楼，影子被路灯拉得很长。"
+    narrate "跑道上的那条落叶线，第二天又被风吹散了一次。"
+    game_end
+}

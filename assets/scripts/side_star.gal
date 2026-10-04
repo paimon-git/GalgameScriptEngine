@@ -1,0 +1,342 @@
+# ============================================================
+# 支线 · 拍星星的人（顾星禾 & 沈砚线 · 3 章）
+#
+# 时间：第三部之后、卷四之前的那个夏天末尾。
+# 位置：剧情树上挂在主线卷三第八章之后，并且要先看完支线《云志》
+#       （requires star_festival_summer:8 + side_yunzhi:3）——这是树枝上的树枝。
+# 主题：一个人靠相机记住光，一个人靠笔记记住云；
+#       他们要在没有学长的那一年，把这件事接着做下去。
+# ============================================================
+title "支线 · 拍星星的人"
+
+series 星屑祭典
+branch side
+order 17
+subtitle "顾星禾 & 沈砚 · 拍星星的人"
+requires star_festival_summer:8
+requires side_yunzhi:3
+
+init_character 吴鸿韬 assets/char/wu_hongtao_body.png #6FA8FF center
+init_character_face 吴鸿韬 assets/char/wu_hongtao_face
+init_character 顾星禾 assets/char/gu_xinghe_body.png #DA70D6 center
+init_character_face 顾星禾 assets/char/gu_xinghe_face
+init_character 沈砚 assets/char/shen_yan_body.png #9DBF5C center
+init_character_face 沈砚 assets/char/shen_yan_face
+init_character 黎璘 assets/char/li_lin_body.png #FF8FB0 right
+init_character_face 黎璘 assets/char/li_lin_face
+
+init_bg 街道 assets/bg/street.png
+init_bg 暗房 assets/bg/darkroom.png
+init_bg 天文馆展厅 assets/bg/planetarium_hall.png
+init_bg 活动室 assets/bg/clubroom.png
+init_bg 夏日天台 assets/bg/summer_rooftop.png
+
+# ---------------- 观测战（第三章：和噪点较劲）----------------
+init_battle 噪点 "噪点" 145 13 13
+init_battle_party 噪点 顾星禾 沈砚
+
+# ============================================================
+# 第一章 · 摔掉的相机
+# ============================================================
+chapter 1 "第一章 · 摔掉的相机" picture assets/bg/street.png {
+#     play_bgm assets/audio/bgm_daily.ogg
+    show_bg 街道
+    card "第一章 · 摔掉的相机"
+    narrate "八月底，天文馆门口的台阶上，顾星禾坐在最上面一级。"
+    narrate "她怀里抱着一台相机，镜头碎了。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 顾星禾
+    move 顾星禾 right
+    change_face 顾星禾 sad.png
+    say 顾星禾 "……学长。"
+    say 吴鸿韬 "怎么了。"
+    say 顾星禾 "我拍的东西，全没了。"
+    narrate "她把相机翻过来。镜头裂了一整条，镜筒歪着。"
+    say 顾星禾 "为了市里那个摄影展，我拍了三个月。"
+    say 顾星禾 "流星雨那晚我拍了四百多张。"
+    say 顾星禾 "……我昨天骑车回来，在巷子口摔了一跤。"
+    say 顾星禾 "相机掉在台阶上。"
+    say 顾星禾 "照片还在卡里，但是镜头这样了，我不知道还能不能读出来。"
+
+    say 吴鸿韬 "……能修吗。"
+    change_face 顾星禾 normal.png
+    say 顾星禾 "送修要两千三。我妈说，等开学再说。"
+    say 顾星禾 "展品下礼拜就要交。"
+    say 顾星禾 "……算了。"
+    change_face 顾星禾 sad.png
+    say 顾星禾 "反正拍的是星星，明年还有。"
+    say 吴鸿韬 "……明年那批星星，不是今年这批。"
+    change_face 顾星禾 surprise.png
+    say 顾星禾 "……"
+    say 顾星禾 "学长，你怎么比我还难过。"
+
+    narrate "台阶下面，有个人抱着书包站了很久。是沈砚。"
+    show_character 沈砚
+    move 沈砚 center
+    change_face 沈砚 normal.png
+    say 沈砚 "那个……学姐。"
+    say 沈砚 "镜头坏了，卡不一定坏。"
+    say 沈砚 "照片是存在卡里的。"
+    change_face 顾星禾 surprise.png
+    say 顾星禾 "可是没镜头怎么导出来。"
+    say 沈砚 "不用镜头。"
+    say 沈砚 "……把卡拿出来，用读卡器就行。"
+    narrate "顾星禾愣了三秒。"
+    change_face 顾星禾 happy.png
+    say 顾星禾 "……你早说啊！"
+    change_face 沈砚 blush.png
+    say 沈砚 "我、我刚才不敢插嘴。"
+
+    choice 吴鸿韬 "接下来做什么？" {
+        "陪她去买读卡器。", jump t1_card
+        "让他们自己折腾。", jump t1_alone
+    }
+
+    @t1_card
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "走。文具店关门之前还有半小时。"
+    say 顾星禾 "学长你有事就先走吧。"
+    say 吴鸿韬 "没事。"
+    say 吴鸿韬 "……我想看看那晚的照片。"
+    change_face 顾星禾 happy.png
+    say 顾星禾 "好！"
+    jump t1_end
+
+    @t1_alone
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "你们去吧。"
+    change_face 顾星禾 surprise.png
+    say 顾星禾 "诶？"
+    say 吴鸿韬 "他要跟你说的事，比我多。"
+    change_face 沈砚 blush.png
+    say 沈砚 "学、学长我没有——"
+    say 吴鸿韬 "卡读出来了记得叫我。"
+    narrate "我走出十几米，听见后面两个人在翻书包。"
+    jump t1_end
+
+    @t1_end
+    narrate "那天晚上，天文馆的电脑上跳出了四百二十七张照片。"
+    narrate "最后一张，是流星雨那晚，从台阶上拍的——"
+    narrate "台阶最边上，放着一本翻开的日志。"
+    game_end
+}
+
+# ============================================================
+# 第二章 · 暗房
+# ============================================================
+chapter 2 "第二章 · 暗房" picture assets/bg/darkroom.png {
+#     play_bgm assets/audio/bgm_daily.ogg
+    show_bg 暗房
+    card "第二章 · 暗房"
+    narrate "摄影社有一间暗房，在天文馆地下一层，冬天很冷。"
+    narrate "顾星禾说，数码是备份，底片是证据。"
+
+    show_character 顾星禾
+    move 顾星禾 left
+    change_face 顾星禾 normal.png
+    show_character 沈砚
+    move 沈砚 right
+    change_face 沈砚 normal.png
+    say 顾星禾 "显影液、停显、定影。顺序不能错。"
+    say 沈砚 "我、我记住了。"
+    say 顾星禾 "你别紧张。这才三盆。"
+    say 沈砚 "我上次讲错一句话，被人在群里说了一个星期。"
+    change_face 顾星禾 surprise.png
+    say 顾星禾 "哪句？"
+    say 沈砚 "……我说「这台赤道仪是七十六年前的」。"
+    say 沈砚 "其实楼是七十六年，机器是三十一年。"
+    say 沈砚 "我说错了。"
+    change_face 顾星禾 normal.png
+    say 顾星禾 "……后来你改了吗。"
+    say 沈砚 "改了。改了四遍。"
+    say 沈砚 "改完那天晚上我把稿子背到三点。"
+    say 沈砚 "……第二天还是没人听。"
+
+    narrate "红灯底下，纸在显影液里慢慢浮出图像。"
+    show_cg assets/cg/darkroom_print.png
+    narrate "先是圆顶的轮廓，然后是星星，一点一点亮起来。"
+    hide_cg
+    change_face 沈砚 surprise.png
+    say 沈砚 "……出来了。"
+    say 顾星禾 "嗯。"
+    change_face 顾星禾 sad.png
+    say 顾星禾 "你知道我为什么拍星星吗。"
+    say 沈砚 "因为好看？"
+    say 顾星禾 "因为我初二那年，班里组织看流星雨。"
+    say 顾星禾 "四十几个人，只有我一个人报了这个项目。"
+    say 顾星禾 "老师说要凑够五个人才开。所以那年没开。"
+    say 顾星禾 "我一个人在楼顶站到十一点。"
+    say 顾星禾 "……我拍了三张照片，都是黑的。"
+    change_face 顾星禾 happy.png
+    say 顾星禾 "但那天晚上我记住了那种黑。"
+    say 顾星禾 "以后我拍的所有星星，都是从那三张黑照片开始拍的。"
+
+    change_face 沈砚 normal.png
+    say 沈砚 "……学姐。"
+    say 顾星禾 "嗯？"
+    say 沈砚 "那你现在有四十几个人了。"
+    say 沈砚 "天文馆最多的一天，来了五百多个。"
+    change_face 顾星禾 surprise.png
+    say 顾星禾 "……"
+    say 顾星禾 "沈砚。"
+    say 沈砚 "在、在。"
+    say 顾星禾 "你讲得挺好的。"
+    say 沈砚 "我结巴。"
+    say 顾星禾 "讲得好的意思是，我听得进去。"
+
+    choice 沈砚 "要不要问她一件事？" {
+        "「学姐，明年你还拍吗？」", jump t2_next
+        "「那三张黑照片还在吗？」", jump t2_black
+    }
+
+    @t2_next
+    say 沈砚 "学姐，明年你还拍吗。"
+    change_face 顾星禾 normal.png
+    say 顾星禾 "拍。"
+    say 顾星禾 "……而且明年我得换个人帮我拿反光板了。"
+    say 沈砚 "谁？"
+    say 顾星禾 "你啊。"
+    change_face 沈砚 surprise.png
+    say 沈砚 "诶？"
+    say 顾星禾 "你不用挑了，就这么定了。"
+    jump t2_end
+
+    @t2_black
+    say 沈砚 "那三张黑照片，还在吗。"
+    change_face 顾星禾 normal.png
+    say 顾星禾 "在。"
+    say 顾星禾 "洗出来了，放在相册第一页。"
+    say 顾星禾 "……三张全黑，什么都看不见。"
+    say 沈砚 "那你为什么留着。"
+    change_face 顾星禾 happy.png
+    say 顾星禾 "因为那天晚上，我是抬头的那个人。"
+    say 顾星禾 "相片是证据。它证明我抬过头。"
+    jump t2_end
+
+    @t2_end
+    change_face 顾星禾 normal.png
+    say 顾星禾 "行了，把这张晾上去。"
+    say 沈砚 "嗯。"
+    narrate "红灯光下，一张湿的照片被夹在绳子上。"
+    narrate "风从门缝里进来，照片轻轻晃了一下。"
+    game_end
+}
+
+# ============================================================
+# 第三章 · 同一页
+# ============================================================
+chapter 3 "第三章 · 同一页" picture assets/bg/planetarium_hall.png {
+#     play_bgm assets/audio/bgm_warm.ogg
+    show_bg 天文馆展厅
+    card "第三章 · 同一页"
+    narrate "九月一号，开学前一天。天文馆做了最后一场暑期讲解。"
+    narrate "讲解台是沈砚的，台下有六十几个人，最后一排坐着顾星禾。"
+
+    show_character 沈砚
+    move 沈砚 center
+    change_face 沈砚 normal.png
+    say 沈砚 "这栋楼是七十六年前盖的。"
+    say 沈砚 "盖它的那一年，这里就是一座观测站。"
+    say 沈砚 "第一位在这里记云的人，没有留下名字。"
+    say 沈砚 "……我们今天要讲的是，他之后的一百多个人。"
+    say 沈砚 "他们每个人只做了一件事——"
+    say 沈砚 "把自己那一天的天，记下来。"
+    play_se assets/audio/se_shutter.wav
+    # 观测战：讲台前的两个人，得先过自己心里那关
+    battle 噪点 {
+        win jump t3_speak_win
+        lose jump t3_speak_lose
+    }
+
+    @t3_speak_win
+    narrate "他把稿子折好，放进口袋里。今天没有用上。"
+    jump t3_speak_go
+
+    @t3_speak_lose
+    narrate "中间卡了一下。他停下来，深呼吸，然后接着讲。"
+    say 沈砚 "……没关系。停一下也可以。"
+    jump t3_speak_go
+
+    @t3_speak_go
+    narrate "他讲完，鞠了一躬。"
+    narrate "最后一排响了一下快门声，然后是掌声。"
+
+    show_character 顾星禾
+    move 顾星禾 right
+    change_face 顾星禾 happy.png
+    say 顾星禾 "沈砚。"
+    say 沈砚 "学姐，我、我今天一句都没结巴！"
+    say 顾星禾 "我数了，三处。"
+    change_face 沈砚 blush.png
+    say 沈砚 "……三处也是没结巴！"
+    say 顾星禾 "嗯。挺好的。"
+
+    show_bg 天文馆展厅
+    narrate "闭馆之后，她把云志的第二册摊在展柜上。"
+    narrate "今天是这一本记满的日子。"
+    say 顾星禾 "按规矩，最后一页要签名。"
+    say 沈砚 "签谁？"
+    change_face 顾星禾 normal.png
+    say 顾星禾 "以前是签一个人。"
+    say 顾星禾 "……今年我想签两个。"
+    say 沈砚 "可以吗。"
+    say 顾星禾 "可以。规矩是人定的。"
+    narrate "她把笔递过去，笔头对着他。"
+
+    choice 沈砚 "怎么签名？" {
+        "两个人并排写在最后一页。", jump t3_both
+        "让顾星禾先签，自己写在下面一行。", jump t3_below
+    }
+
+    @t3_both
+    say 沈砚 "……那我写在你旁边。"
+    narrate "两个名字并排写在最后一页，一个写得工整，一个有点歪。"
+    change_face 顾星禾 happy.png
+    say 顾星禾 "歪了。"
+    say 沈砚 "我手抖。"
+    say 顾星禾 "……没事。"
+    say 顾星禾 "歪的才是手写的。"
+    jump t3_end
+
+    @t3_below
+    say 沈砚 "学姐你先写。"
+    say 沈砚 "我写在下面一行。"
+    change_face 顾星禾 normal.png
+    say 顾星禾 "为什么。"
+    say 沈砚 "因为明年还有一行。"
+    say 沈砚 "……后年也有。"
+    change_face 顾星禾 happy.png
+    say 顾星禾 "……行。那我把行留宽一点。"
+    jump t3_end
+
+    @t3_end
+    show_bg 夏日天台
+    narrate "那天晚上，他们叫上了我。三个人爬上了天台。"
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    change_face 顾星禾 normal.png
+    say 顾星禾 "学长。"
+    say 吴鸿韬 "嗯。"
+    say 顾星禾 "第二册记满了。"
+    say 吴鸿韬 "……我知道。"
+    say 顾星禾 "第三册我买了。"
+    say 顾星禾 "……里面第一行，我留给你。"
+    change_face 吴鸿韬 surprise.png
+    say 吴鸿韬 "我不是守夜人了。"
+    say 顾星禾 "我也不要你写云。"
+    change_face 顾星禾 happy.png
+    say 顾星禾 "你就写一句：你看到的那个晚上，是什么样的。"
+    say 沈砚 "学、学长。"
+    say 沈砚 "我也想看那一行。"
+
+    narrate "我站在天台上，看了很久。"
+    play_se assets/audio/se_wind.wav
+    narrate "夏天的风从旧校舍那边吹过来，天文馆的灯还亮着。"
+    say 吴鸿韬 "……好。"
+    say 吴鸿韬 "我写。"
+    game_end
+}

@@ -1,0 +1,379 @@
+# ============================================================
+# 支线 · 签字的人（张誉腾线 · 4 章）
+#
+# 时间：第二部之后，他高三下的最后三个月（毕业之前）。
+# 位置：剧情树上挂在主线卷二第八章之后（requires star_festival_winter:8）。
+# 主题：他签过一张会伤害别人的纸；他一直在想"签字的人该不该抬头"。
+# ============================================================
+title "支线 · 签字的人"
+
+series 星屑祭典
+branch side
+order 15
+subtitle "张誉腾 · 签字的人"
+requires star_festival_winter:8
+
+init_character 吴鸿韬 assets/char/wu_hongtao_body.png #6FA8FF center
+init_character_face 吴鸿韬 assets/char/wu_hongtao_face
+init_character 张誉腾 assets/char/zhang_yuteng_body.png #E0B34C center
+init_character_face 张誉腾 assets/char/zhang_yuteng_face
+init_character 邵清和 assets/char/shao_qinghe_body.png #7FB3D5 left
+init_character_face 邵清和 assets/char/shao_qinghe_face
+init_character 顾星禾 assets/char/gu_xinghe_body.png #DA70D6 center
+init_character_face 顾星禾 assets/char/gu_xinghe_face
+
+init_bg 学生会室 assets/bg/student_council.png
+init_bg 走廊 assets/bg/corridor.png
+init_bg 办公室 assets/bg/faculty_room.png
+init_bg 天文馆展厅 assets/bg/planetarium_hall.png
+init_bg 操场 assets/bg/playground.png
+init_bg 街道 assets/bg/street.png
+
+# ---------------- 观测战（第三章：和那套说辞较劲）----------------
+init_battle 一纸驳回 "驳回意见" 155 13 10
+init_battle_party 一纸驳回 吴鸿韬 张誉腾
+
+# ============================================================
+# 第一章 · 第一志愿
+# ============================================================
+chapter 1 "第一章 · 第一志愿" picture assets/bg/student_council.png {
+#     play_bgm assets/audio/bgm_daily.ogg
+    show_bg 学生会室
+    card "第一章 · 第一志愿"
+    narrate "三月，学生会室的桌上摊着一张大表格。"
+    narrate "「高三毕业生去向登记」——两百多个名字，一栏一栏往下填。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 张誉腾
+    move 张誉腾 right
+    change_face 张誉腾 normal.png
+    say 张誉腾 "天文馆的社团登记表。放左边那摞。"
+    say 吴鸿韬 "……你在填这个？"
+    say 张誉腾 "最后一年了，得有人填。"
+    say 吴鸿韬 "你自己的呢。"
+    change_face 张誉腾 normal.png
+    say 张誉腾 "第一志愿，公共管理。"
+    say 吴鸿韬 "……你要去做公务员？"
+    say 张誉腾 "准确地说，是做「制定和审批的那一端」。"
+    change_face 张誉腾 sad.png
+    say 张誉腾 "去年那份拆楼提案，我签的时候二十岁不到。"
+    say 张誉腾 "批下来的那个人，我到现在没见过。"
+    say 张誉腾 "……我想坐到那张桌子后面看看。"
+
+    narrate "他把登记表翻过一页，笔尖停在「社团经历」那一栏。"
+    say 张誉腾 "吴鸿韬。"
+    say 吴鸿韬 "嗯。"
+    say 张誉腾 "高一那年，你是不是在走廊上摆过一张桌子招人。"
+    change_face 吴鸿韬 surprise.png
+    say 吴鸿韬 "……摆过。摆了三天。"
+    say 张誉腾 "我知道。"
+    say 张誉腾 "第二天下午我路过，桌上放着传单，人不在。"
+    say 张誉腾 "我在那儿站了大概五分钟。"
+    say 吴鸿韬 "……你站了五分钟？"
+    change_face 张誉腾 happy.png
+    say 张誉腾 "嗯。然后我去学生会报了名。"
+    say 张誉腾 "因为那边至少有人在。"
+
+    change_face 吴鸿韬 sad.png
+    say 吴鸿韬 "……你早说一年，我就不用一个人摆三天了。"
+    change_face 张誉腾 sad.png
+    say 张誉腾 "我心里想过。"
+    say 张誉腾 "想过去填那张表。"
+    say 张誉腾 "……然后我想，没有人的社团，去了也是白去。"
+    say 张誉腾 "所以我把那句话，写进了废部通知的草稿里。"
+
+    choice 吴鸿韬 "怎么接？" {
+        "「今年那张表，我补给你。」", jump s1_form
+        "「白去的是你，不是社团。」", jump s1_hard
+    }
+
+    @s1_form
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "今年那张表，我补给你。"
+    say 吴鸿韬 "社团经历那一栏，你自己写。"
+    change_face 张誉腾 surprise.png
+    say 张誉腾 "……我早就不算社员了。"
+    say 吴鸿韬 "天文社有顾问、有器材组、有观测记录组。"
+    say 吴鸿韬 "还缺一个「签字的人」。"
+    change_face 张誉腾 happy.png
+    say 张誉腾 "……你这话说得挺狠。"
+    jump s1_end
+
+    @s1_hard
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "白去的是你，不是社团。"
+    change_face 张誉腾 surprise.png
+    say 张誉腾 "……"
+    say 吴鸿韬 "社团那三天一直有人在。"
+    say 吴鸿韬 "没去的人是你。"
+    change_face 张誉腾 sad.png
+    say 张誉腾 "……我知道。"
+    say 张誉腾 "这句话我自己在心里说过很多遍。"
+    say 张誉腾 "……今天从别人嘴里听到，比我自己说难受。"
+    jump s1_end
+
+    @s1_end
+    narrate "他把登记表的笔帽扣上，扣了两次没扣住。"
+    say 张誉腾 "……我抽屉里有个东西，你大概想看。"
+    game_end
+}
+
+# ============================================================
+# 第二章 · 草稿纸
+# ============================================================
+chapter 2 "第二章 · 草稿纸" picture assets/bg/student_council.png {
+#     play_bgm assets/audio/bgm_tension.ogg
+    show_bg 学生会室
+    card "第二章 · 草稿纸"
+    narrate "他从最底下那个抽屉里拿出一张纸。"
+    narrate "纸已经很软了，折过很多次，边角起了毛。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 张誉腾
+    move 张誉腾 right
+    change_face 张誉腾 normal.png
+    narrate "纸上是同一个名字，写了三遍。"
+    narrate "「张誉腾」「张誉腾」「张誉腾」——第一遍很抖，第二遍好一点，第三遍很稳。"
+    say 吴鸿韬 "……这是。"
+    say 张誉腾 "签那张废部通知之前，我练的。"
+    say 张誉腾 "我以为写多几遍，手就不抖了。"
+    change_face 张誉腾 sad.png
+    say 张誉腾 "结果第三遍最稳。"
+    say 张誉腾 "……我到现在都记得，那一遍写得很漂亮。"
+    say 吴鸿韬 "……"
+    say 张誉腾 "我留着它，不是因为后悔。"
+    say 张誉腾 "是因为那是我第一次签一个会伤害别人的字。"
+    say 张誉腾 "我想记住那个手感。"
+
+    show_character 邵清和
+    move 邵清和 center
+    change_face 邵清和 normal.png
+    say 邵清和 "——记住是好事。"
+    say 张誉腾 "邵老师。"
+    say 邵清和 "我当顾问的那两年，你们交上来的每一张表，我都没签。"
+    say 邵清和 "不是不想签。是不敢。"
+    change_face 邵清和 sad.png
+    say 邵清和 "签字这件事，签的是你的手，赔的是别人的人生。"
+    say 邵清和 "……我赔过一次，赔了十年。"
+    say 张誉腾 "那老师，您后来为什么签了。"
+    change_face 邵清和 normal.png
+    say 邵清和 "因为有小孩站在我面前，说「台下要是没有人，明年就真的废部」。"
+    say 邵清和 "那时候我才知道，不签也是一种签。"
+
+    choice 吴鸿韬 "问张誉腾一个什么？" {
+        "「你签过最痛快的是哪一张？」", jump s2_best
+        "「如果再签一次废部通知呢？」", jump s2_again
+    }
+
+    @s2_best
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "你签过最痛快的一份，是哪一份。"
+    change_face 张誉腾 happy.png
+    say 张誉腾 "……去年冬天，历史建筑认定申请的受理单。"
+    say 张誉腾 "那份是我自己写的，自己按的红章。"
+    say 张誉腾 "章按下去的时候，我想——原来这两个字也能这么用。"
+    jump s2_end
+
+    @s2_again
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "如果再给你一张废部通知，你签吗。"
+    change_face 张誉腾 normal.png
+    say 张誉腾 "签。"
+    say 吴鸿韬 "……"
+    say 张誉腾 "学校有学校的规则，我是学生会会长。"
+    say 张誉腾 "但是我会先签一份「反对」。"
+    change_face 张誉腾 happy.png
+    say 张誉腾 "两份一起交上去，让他们自己挑。"
+    jump s2_end
+
+    @s2_end
+    hide_character 邵清和
+    say 张誉腾 "……吴鸿韬。"
+    say 吴鸿韬 "嗯。"
+    say 张誉腾 "六月毕业式。"
+    say 张誉腾 "你来吗。"
+    say 吴鸿韬 "我来。"
+    game_end
+}
+
+# ============================================================
+# 第三章 · 签字的人
+# ============================================================
+chapter 3 "第三章 · 签字的人" picture assets/bg/street.png {
+#     play_bgm assets/audio/bgm_tension.ogg
+    show_bg 街道
+    card "第三章 · 签字的人"
+    narrate "四月底，镇上的饭店里有一场饭局。"
+    narrate "张誉腾的爸爸请了几位「在外面做事的人」，也包括学校的一位副主任。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 张誉腾
+    move 张誉腾 right
+    change_face 张誉腾 normal.png
+    say 张誉腾 "……我本来不想来。"
+    say 吴鸿韬 "那你为什么在这儿。"
+    say 张誉腾 "我爸说，让我认认人。"
+    narrate "包间的门没有关严。里面的人在说话。"
+    narrate "「现在的孩子就爱搞没用的。前阵子还搞什么闭灯，说要关一小时的灯。」"
+    narrate "「影响多少生意？这条街的招牌，一天要交多少电费？」"
+    narrate "「张主任，您儿子那学校，管得还是松。」"
+    narrate "……没有反驳的声音。"
+
+    change_face 张誉腾 angry.png
+    say 张誉腾 "……"
+    say 吴鸿韬 "进去吗。"
+    say 张誉腾 "进去说什么。"
+    say 张誉腾 "我十七岁的时候，也是这么想的——他们说的都对。"
+    say 张誉腾 "牌匾要花钱，生意要交税，规则要有人执行。"
+    say 张誉腾 "……我背得出他们每一个理由。"
+    change_face 张誉腾 sad.png
+    say 张誉腾 "因为我就是照着那套理由，签的字。"
+
+    play_se assets/audio/se_door.wav
+    narrate "包间的门被推开了。"
+    narrate "「张誉腾？你怎么在外面站着，进来。」"
+    # 观测战：要顶回去的不是哪个人，是那套"你们说的都对"
+    battle 一纸驳回 {
+        win jump s3_room_win
+        lose jump s3_room_lose
+    }
+
+    @s3_room_win
+    narrate "他把准备好的那两页纸在门后捏紧，又松开。"
+    jump s3_room_go
+
+    @s3_room_lose
+    narrate "他站在门口，第一次发现自己准备好的话全都不合适。"
+    say 张誉腾 "……那就只说一句。"
+    jump s3_room_go
+
+    @s3_room_go
+    narrate "他站了两秒，然后进去了。"
+    narrate "我没有跟进去。我在走廊上听见他说话。"
+    narrate "「爸。我们学校那个闭灯，今年是我写的材料。」"
+    narrate "……安静了一下。"
+    narrate "「……坐下。」"
+    narrate "「我不坐了。我就是想说一句。」"
+    narrate "「你们说的都对。」"
+    narrate "「但是那条街上的小孩，这辈子可能只看见过一次真正的银河。」"
+    narrate "「那次是我办的。」"
+    narrate "门被关上了。我在外面站了很久。"
+
+    show_bg 操场
+    narrate "十点半，他从饭店里出来，领带歪了。"
+    show_character 张誉腾
+    move 张誉腾 center
+    change_face 张誉腾 normal.png
+    say 张誉腾 "……你怎么还在。"
+    say 吴鸿韬 "等你。"
+    say 张誉腾 "我以为你会回去。"
+    say 吴鸿韬 "你说过你要来毕业式。"
+    say 吴鸿韬 "我说过我会来。"
+    change_face 张誉腾 sad.png
+    say 张誉腾 "……我刚才那句话，我爸可能会记很久。"
+    say 吴鸿韬 "你会后悔吗。"
+    change_face 张誉腾 happy.png
+    say 张誉腾 "不会。"
+    say 张誉腾 "我签字的手，一直很稳。"
+    say 张誉腾 "今天晚上，我第一次觉得它稳得有意义。"
+    game_end
+}
+
+# ============================================================
+# 第四章 · 毕业式
+# ============================================================
+chapter 4 "第四章 · 毕业式" picture assets/bg/planetarium_hall.png {
+#     play_bgm assets/audio/bgm_warm.ogg
+    show_bg 天文馆展厅
+    card "第四章 · 毕业式"
+    narrate "六月，毕业式。张誉腾站在台上，代表毕业生讲话。"
+    narrate "稿子很短，短到台下的人有点意外。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    say 张誉腾 "「……最后，我要说一件事。」"
+    say 张誉腾 "「三年前，我填了一份废部通知。上面盖了学生会的章。」"
+    say 张誉腾 "「那不是一份体面的文件，但那份文件教会我一件事——」"
+    say 张誉腾 "「签字的人，也得抬头。」"
+    narrate "台下安静了三秒，然后有人开始鼓掌。"
+
+    show_character 张誉腾
+    move 张誉腾 right
+    change_face 张誉腾 normal.png
+    say 张誉腾 "学生会档案，交给下一任了。"
+    say 吴鸿韬 "嗯。"
+    say 张誉腾 "里面有六十七份受理单、三十四份驳回意见、一份历史建筑认定申请。"
+    say 张誉腾 "……还有一份废部通知的原件。"
+    say 吴鸿韬 "你没扔？"
+    change_face 张誉腾 sad.png
+    say 张誉腾 "留着。"
+    say 张誉腾 "以后每一届学生会换人，我都会让他们翻到那一页。"
+    say 张誉腾 "让他们看看，一份文件能压死多少人。"
+
+    show_bg 天文馆展厅
+    narrate "交接完，他一个人去了天文馆。"
+    narrate "展柜里并排躺着云志的第一本和第二册。"
+    narrate "他在柜子前面站了很久——久到我以为他不会说话了。"
+
+    show_character 顾星禾
+    move 顾星禾 center
+    change_face 顾星禾 normal.png
+    say 顾星禾 "张学长，展柜要关门了。"
+    say 张誉腾 "……再一分钟。"
+    say 顾星禾 "好。"
+    narrate "一分钟以后，他把一样东西递给我。"
+    narrate "那张折过很多次的草稿纸，上面写着三遍他的名字。"
+    say 张誉腾 "拿着。"
+    say 吴鸿韬 "为什么给我。"
+    change_face 张誉腾 happy.png
+    say 张誉腾 "下次你们要签名的时候，用背面。"
+    say 张誉腾 "……省一张纸。"
+
+    choice 吴鸿韬 "收下吗？" {
+        "收下，放进 097 的展柜里。", jump s4_keep
+        "还给他。这是他自己的东西。", jump s4_back
+    }
+
+    @s4_keep
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "我收下。"
+    say 吴鸿韬 "……我把它放在 097 旁边。"
+    change_face 张誉腾 surprise.png
+    say 张誉腾 "那本日志？"
+    say 吴鸿韬 "嗯。"
+    say 吴鸿韬 "一个人写了半行没写完，一个人写了三遍才敢写。"
+    say 吴鸿韬 "……放在一起挺合适。"
+    change_face 张誉腾 happy.png
+    say 张誉腾 "……随你。"
+    jump s4_end
+
+    @s4_back
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "还给你。"
+    say 吴鸿韬 "这是你自己的东西。"
+    change_face 张誉腾 surprise.png
+    say 张誉腾 "……"
+    say 吴鸿韬 "等哪天你真的不抖了，再交出去。"
+    change_face 张誉腾 happy.png
+    say 张誉腾 "……行。"
+    say 张誉腾 "那我先揣着。"
+    jump s4_end
+
+    @s4_end
+    hide_character 顾星禾
+    narrate "他走出天文馆的时候，回头看了一眼圆顶。"
+    narrate "六月的光很亮，圆顶的铜被晒得发黄。"
+    say 张誉腾 "喂，吴鸿韬。"
+    say 吴鸿韬 "嗯。"
+    say 张誉腾 "今年的秋天，我不在了。"
+    say 张誉腾 "……你们要是办观测会，给我留个位置。"
+    say 吴鸿韬 "留着。"
+    game_end
+}

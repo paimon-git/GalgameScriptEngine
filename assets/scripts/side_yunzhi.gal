@@ -1,0 +1,347 @@
+# ============================================================
+# 支线 · 云志（黎璘线 · 3 章）
+#
+# 时间：第二部《雪夜》之后，天文馆挂牌的那个春天。
+# 位置：剧情树上挂在主线卷二第八章之后（requires star_festival_winter:8）。
+# 主题：她记了十年的云，到底是替谁记的。
+# ============================================================
+title "支线 · 云志"
+
+series 星屑祭典
+branch side
+order 12
+subtitle "黎璘 · 云志"
+requires star_festival_winter:8
+
+# ---------------- 角色 ----------------
+init_character 吴鸿韬 assets/char/wu_hongtao_body.png #6FA8FF center
+init_character_face 吴鸿韬 assets/char/wu_hongtao_face
+init_character 黎璘 assets/char/li_lin_body.png #FF8FB0 right
+init_character_face 黎璘 assets/char/li_lin_face
+init_character 邵清和 assets/char/shao_qinghe_body.png #7FB3D5 left
+init_character_face 邵清和 assets/char/shao_qinghe_face
+init_character 顾星禾 assets/char/gu_xinghe_body.png #DA70D6 center
+init_character_face 顾星禾 assets/char/gu_xinghe_face
+
+# ---------------- 背景 ----------------
+init_bg 旧刊室 assets/bg/library_old.png
+init_bg 走廊 assets/bg/corridor.png
+init_bg 活动室 assets/bg/clubroom.png
+init_bg 街道 assets/bg/street.png
+init_bg 春天天文馆 assets/bg/spring_observatory.png
+init_bg 观测台 assets/bg/observatory.png
+
+# ---------------- 观测战（第三章：和断掉的那三十年较劲）----------------
+init_battle 云志的空白 "空白" 140 12 10
+init_battle_party 云志的空白 吴鸿韬 黎璘
+
+# ============================================================
+# 第一章 · 最后一页的签名
+# ============================================================
+chapter 1 "第一章 · 最后一页的签名" picture assets/bg/library_old.png {
+#     play_bgm assets/audio/bgm_daily.ogg
+    show_bg 旧刊室
+    card "第一章 · 最后一页的签名"
+    narrate "天文馆开馆以后，旧刊室要搬一次家。"
+    narrate "黎璘在图书馆委员会的排班表上，把自己的名字填在了最下面一行。"
+
+    show_character 黎璘
+    move 黎璘 center
+    change_face 黎璘 normal.png
+    say 黎璘 "……一千三百箱。"
+    say 黎璘 "这本能留着吗。"
+    narrate "她手上是一本旧观测日志。硬壳封皮被水泡过，颜色像晒退的旧校服。"
+    play_se assets/audio/se_page.wav
+    narrate "翻开第一页，日期是五十一年前的九月。"
+
+    show_cg assets/cg/old_logbook.png
+    narrate "她翻得很快，快到自己都没意识到是在找什么。"
+    narrate "然后她停住了。"
+    narrate "最后一页的右下角，有一个签名。字很小，笔画很稳——"
+    narrate "「黎秀兰」。"
+    hide_cg
+
+    change_face 黎璘 surprise.png
+    say 黎璘 "……"
+    say 黎璘 "不会吧。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "搬完了吗？顾星禾在楼下等了二十分钟。"
+    say 黎璘 "……吴鸿韬。"
+    say 吴鸿韬 "嗯？"
+    say 黎璘 "我奶奶叫什么名字，你知道吗。"
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "……黎秀兰。"
+    say 吴鸿韬 "你三年级的时候说过一次。"
+    say 黎璘 "你居然记得。"
+    say 吴鸿韬 "……我记东西不太好，但我记人。"
+
+    narrate "她把那本日志递过去，翻到最后一页。"
+    narrate "吴鸿韬看了很久，久到楼下的顾星禾又喊了一声。"
+    change_face 吴鸿韬 surprise.png
+    say 吴鸿韬 "……这是云志。"
+    say 黎璘 "什么是云志。"
+
+    show_character 邵清和
+    move 邵清和 left
+    change_face 邵清和 normal.png
+    say 邵清和 "——建校那年立下的规矩。"
+    say 邵清和 "每天记一次云：云量、风、能见度。一天不落。"
+    say 邵清和 "这条记录，从七十六年前一直连到今天。"
+    say 黎璘 "……那为什么没人告诉我。"
+    change_face 邵清和 sad.png
+    say 邵清和 "因为记云的人从来不说。"
+    say 邵清和 "周老师记了三十一年，我记了七年，思远记了四年。"
+    say 邵清和 "这上面没有名字，只有日期。"
+    say 邵清和 "唯一的名字，写在每一本的最后。"
+
+    change_face 黎璘 sad.png
+    say 黎璘 "……我记了十年。"
+    say 黎璘 "我一直以为，我是在替他记。"
+    change_face 吴鸿韬 surprise.png
+    say 吴鸿韬 "……"
+    say 黎璘 "我一直以为，是我自己想记。"
+    say 黎璘 "原来不是。"
+    say 黎璘 "原来我们家的人，已经记过一遍了。"
+
+    choice 吴鸿韬 "怎么回答她？" {
+        "「那你是替你自己记的。」", jump y1_self
+        "「你接着往下记就行。」", jump y1_next
+    }
+
+    @y1_self
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "你是替你自己记的。"
+    say 吴鸿韬 "你记的那十年，和这本不是一个十年。"
+    change_face 黎璘 surprise.png
+    say 黎璘 "……什么意思。"
+    say 吴鸿韬 "这本停在四十年前。"
+    say 吴鸿韬 "中间那段，是空的。"
+    jump y1_end
+
+    @y1_next
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "那就接着往下记。"
+    say 吴鸿韬 "这本的最后一行不是句号，是日期。"
+    say 吴鸿韬 "日期后面本来就该有下一页。"
+    change_face 黎璘 normal.png
+    say 黎璘 "……你什么时候变得这么会说话了。"
+    say 吴鸿韬 "跟你学的。"
+    jump y1_end
+
+    @y1_end
+    hide_character 邵清和
+    change_face 黎璘 normal.png
+    say 黎璘 "……我想回一趟家。"
+    say 吴鸿韬 "现在？"
+    say 黎璘 "现在。"
+    game_end
+}
+
+# ============================================================
+# 第二章 · 奶奶的云
+# ============================================================
+chapter 2 "第二章 · 奶奶的云" picture assets/bg/street.png {
+#     play_bgm assets/audio/bgm_warm.ogg
+    show_bg 街道
+    card "第二章 · 奶奶的云"
+    narrate "从图书馆到镇东的老屋，要走二十分钟。"
+    narrate "路上要经过整条装上了路灯的新街。"
+
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    show_character 黎璘
+    move 黎璘 right
+    change_face 黎璘 normal.png
+    say 黎璘 "以前这条路没有灯。"
+    say 黎璘 "我小时候在这条路上数过星星。数到一半就到家了。"
+    say 吴鸿韬 "现在呢。"
+    say 黎璘 "现在数到三就到头了。"
+    narrate "她抬头看了一眼。路灯把天空照成一整片均匀的灰白色。"
+
+    show_bg 活动室
+    narrate "奶奶没有跟她讲太久。"
+    narrate "老人把日志翻到中间，手指停在一页上：「你看这儿。」"
+    narrate "那一页的角落里，写着一句话。"
+    narrate "「今年镇上装了第一排路灯，云看得见颜色了，星星看不见了。」"
+    narrate "落款是同一个名字。"
+
+    change_face 黎璘 normal.png
+    say 黎璘 "……奶奶说，那年她三十岁。"
+    say 黎璘 "她说镇上的规矩是：谁看见星星少了，谁就得记下来。"
+    say 黎璘 "因为「少了」这件事，你不在那天记，就永远说不清是什么时候少的。"
+    say 吴鸿韬 "……"
+    change_face 黎璘 sad.png
+    say 黎璘 "她说她记了十一年，后来搬家，就把本子交出去了。"
+    say 黎璘 "再后来镇上换了两排灯、三排灯，谁也没有再来收。"
+    say 黎璘 "本子就一直躺在旧刊室里。"
+
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "所以你那十年……"
+    say 黎璘 "是我自己在记。"
+    change_face 黎璘 happy.png
+    say 黎璘 "我知道。"
+    say 黎璘 "我今天才知道，原来这是我家的旧毛病。"
+    say 吴鸿韬 "……这不是毛病。"
+    say 黎璘 "我知道。"
+
+    narrate "她把笔记摊在桌上。本子中间有五十一年的空白。"
+    narrate "和十年前那次一样——有人看见星星少了，就把它记下来。"
+    narrate "中间那五十年，是没有人记的。"
+
+    choice 黎璘 "中间那五十年怎么办？" {
+        "「补不回来。但能接着写。」", jump y2_keep
+        "「把它做成展柜，让所有人看见。」", jump y2_show
+    }
+
+    @y2_keep
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "补不回来。"
+    say 吴鸿韬 "五十年的空白，谁也没办法补。"
+    say 吴鸿韬 "但本子还在。接着写就是。"
+    change_face 黎璘 happy.png
+    say 黎璘 "……嗯。"
+    jump y2_end
+
+    @y2_show
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "把它摆到天文馆的展柜里去。"
+    say 吴鸿韬 "让每个进馆的人都看见那五十年的空白。"
+    change_face 黎璘 surprise.png
+    say 黎璘 "……空白也展？"
+    say 吴鸿韬 "空白才是最该看的。"
+    say 吴鸿韬 "不然别人以为，这栋楼是自己活下来的。"
+    jump y2_end
+
+    @y2_end
+    change_face 黎璘 normal.png
+    say 黎璘 "鸿韬。"
+    say 吴鸿韬 "嗯？"
+    say 黎璘 "明天陪我去天文馆一趟。"
+    say 吴鸿韬 "……好。"
+    game_end
+}
+
+# ============================================================
+# 第三章 · 接下去
+# ============================================================
+chapter 3 "第三章 · 接下去" picture assets/bg/spring_observatory.png {
+#     play_bgm assets/audio/bgm_starry.ogg
+    show_bg 春天天文馆
+    card "第三章 · 接下去"
+    narrate "天文馆的展厅里，新做了一排玻璃柜。"
+    narrate "最中间那格，放着周老师的手稿。"
+
+    show_character 邵清和
+    move 邵清和 left
+    change_face 邵清和 normal.png
+    show_character 黎璘
+    move 黎璘 right
+    change_face 黎璘 normal.png
+    say 邵清和 "……你确定要放在这儿？"
+    say 黎璘 "确定。"
+    say 邵清和 "这本一放进来，你奶奶的名字就挂在墙上了。"
+    say 黎璘 "她不知道。"
+    say 黎璘 "但那个名字本来就在上面。"
+
+    # 观测战：要和空掉的那三十年比一场
+    battle 云志的空白 {
+        win jump y3_case_win
+        lose jump y3_case_lose
+    }
+
+    @y3_case_win
+    narrate "玻璃柜的钥匙卡了三次才对上锁孔。她的手指是稳的。"
+    jump y3_case_go
+
+    @y3_case_lose
+    narrate "她的手一直在抖，展签写了三遍才写成。"
+    say 黎璘 "……写歪了。"
+    say 吴鸿韬 "歪的才是手写的。"
+    jump y3_case_go
+
+    @y3_case_go
+    narrate "她把那本旧日志放进玻璃柜，摆在周老师的手稿左边。"
+    narrate "两本之间，隔着三十年没有人记的空白。"
+
+    show_character 顾星禾
+    move 顾星禾 center
+    change_face 顾星禾 happy.png
+    play_se assets/audio/se_click.wav
+    say 顾星禾 "拍好了！"
+    say 顾星禾 "展签要不要写点什么？玻璃柜下面那个小牌子。"
+    say 黎璘 "……写一句话就行。"
+    say 顾星禾 "哪句？"
+    change_face 黎璘 happy.png
+    say 黎璘 "「这里曾经有人，把看不见的东西记了下来。」"
+    change_face 顾星禾 surprise.png
+    say 顾星禾 "……好。我这就去印。"
+    hide_character 顾星禾
+
+    show_bg 观测台
+    narrate "傍晚，圆顶的观测窗开了。"
+    show_character 吴鸿韬
+    move 吴鸿韬 left
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "……你在写什么？"
+    change_face 黎璘 normal.png
+    say 黎璘 "日记。"
+    say 吴鸿韬 "今天有云吗。"
+    say 黎璘 "有一点。"
+    say 吴鸿韬 "你写了十年，不腻吗。"
+    change_face 黎璘 happy.png
+    say 黎璘 "不腻。"
+    say 黎璘 "以前我以为我在等一个晴天。"
+    say 黎璘 "后来我发现，记阴天比记晴天有用。"
+    say 黎璘 "晴天天天都有，阴天才需要有人替它说话。"
+
+    narrate "她合上本子，在最后一页写下今天。"
+    narrate "签名的位置空着。"
+
+    choice 吴鸿韬 "签谁的名字？" {
+        "「写你自己的。」", jump y3_self
+        "「两个人的名字一起签。」", jump y3_both
+    }
+
+    @y3_self
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "写你自己的。"
+    say 吴鸿韬 "这本是你开的头。"
+    change_face 黎璘 normal.png
+    say 黎璘 "……嗯。"
+    narrate "她写下三个字。写完，把笔递过来。"
+    say 黎璘 "下一页给你。"
+    say 吴鸿韬 "……我不会写。"
+    say 黎璘 "你会看云。我看着你写。"
+    jump y3_end
+
+    @y3_both
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "一起签。"
+    change_face 黎璘 surprise.png
+    say 黎璘 "……这是我们家的本子。"
+    say 吴鸿韬 "它现在在天文馆的柜子里。"
+    say 吴鸿韬 "天文馆是我们所有人的。"
+    change_face 黎璘 blush.png
+    say 黎璘 "……那你就写吧。"
+    narrate "两个名字并排写在最后一页，一高一低，像两条刻度线。"
+    jump y3_end
+
+    @y3_end
+    change_face 吴鸿韬 normal.png
+    say 吴鸿韬 "黎璘。"
+    say 黎璘 "嗯？"
+    say 吴鸿韬 "十年以前，你在替谁记云？"
+    change_face 黎璘 happy.png
+    say 黎璘 "以前我不知道。"
+    say 黎璘 "现在知道了——我在替这栋楼记。"
+    say 黎璘 "它活了七十六年，总要有人给它写日记。"
+    hide_character 邵清和
+    narrate "圆顶慢慢转过去，对着天顶。"
+    narrate "展厅的玻璃柜里，两本观测日志安静地并排躺着。"
+    narrate "中间那三十年没有人记的空白，也一起展着。"
+    game_end
+}
